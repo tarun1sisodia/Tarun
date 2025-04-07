@@ -1,55 +1,76 @@
-const { validationResult, body } = require('express-validator');
+const { validationResult, check } = require('express-validator');
 
-// Middleware to check validation results
-const validate = (req, res, next) => {
+// Middleware to handle validation errors
+const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
+  
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+  
   next();
 };
 
-// Registration validation rules
+// User registration validation
 const registerValidation = [
-  body('email').isEmail().withMessage('Please provide a valid email'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('name').notEmpty().withMessage('Name is required'),
-  body('bloodType').optional().isIn(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
-    .withMessage('Invalid blood type'),
-  validate
+  check('email', 'Please include a valid email').isEmail(),
+  check('password', 'Password must be at least 6 characters').isLength({ min: 6 }),
+  check('name', 'Name is required').not().isEmpty(),
+  check('bloodType', 'Valid blood type is required').isIn(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+  check('location.city', 'City is required').not().isEmpty(),
+  check('location.state', 'State is required').not().isEmpty(),
+  handleValidationErrors
 ];
 
-// Login validation rules
+// Login validation
 const loginValidation = [
-  body('email').isEmail().withMessage('Please provide a valid email'),
-  body('password').notEmpty().withMessage('Password is required'),
-  validate
+  check('email', 'Please include a valid email').isEmail(),
+  check('password', 'Password is required').exists(),
+  handleValidationErrors
 ];
 
-// Request creation validation rules
+// Blood request validation
 const requestValidation = [
-  body('patientName').notEmpty().withMessage('Patient name is required'),
-  body('bloodType').isIn(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
-    .withMessage('Invalid blood type'),
-  body('unitsNeeded').isInt({ min: 1 }).withMessage('At least 1 unit is required'),
-  body('hospital.name').notEmpty().withMessage('Hospital name is required'),
-  body('urgency').optional().isIn(['low', 'medium', 'high', 'critical'])
-    .withMessage('Invalid urgency level'),
-  validate
+  check('patient.name', 'Patient name is required').not().isEmpty(),
+  check('patient.age', 'Valid patient age is required').isInt({ min: 0, max: 120 }),
+  check('patient.gender', 'Valid gender is required').isIn(['male', 'female', 'other']),
+  check('patient.bloodType', 'Valid blood type is required').isIn(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+  check('hospital.name', 'Hospital name is required').not().isEmpty(),
+  check('hospital.address', 'Hospital address is required').not().isEmpty(),
+  check('hospital.city', 'Hospital city is required').not().isEmpty(),
+  check('hospital.state', 'Hospital state is required').not().isEmpty(),
+  check('unitsNeeded', 'Units needed must be a positive number').isInt({ min: 1 }),
+  check('urgency', 'Valid urgency level is required').optional().isIn(['low', 'medium', 'high', 'critical']),
+  handleValidationErrors
 ];
 
-// Donation validation rules
+// Donation validation
 const donationValidation = [
-  body('hospital.name').notEmpty().withMessage('Hospital name is required'),
-  body('donationDate').isISO8601().toDate().withMessage('Valid donation date is required'),
-  body('units').isInt({ min: 1 }).withMessage('At least 1 unit is required'),
-  validate
+  check('hospital.name', 'Hospital name is required').not().isEmpty(),
+  check('hospital.city', 'Hospital city is required').not().isEmpty(),
+  check('hospital.state', 'Hospital state is required').not().isEmpty(),
+  check('bloodType', 'Valid blood type is required').isIn(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+  check('units', 'Units must be a positive number').optional().isInt({ min: 1 }),
+  check('donationDate', 'Valid donation date is required').optional().isISO8601(),
+  handleValidationErrors
+];
+
+// Profile update validation
+const profileUpdateValidation = [
+  check('name', 'Name is required').optional().not().isEmpty(),
+  check('phone', 'Valid phone number is required').optional().isMobilePhone(),
+  check('bloodType', 'Valid blood type is required').optional().isIn(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+  check('location.city', 'City is required').optional().not().isEmpty(),
+  check('location.state', 'State is required').optional().not().isEmpty(),
+  check('isDonor', 'isDonor must be a boolean').optional().isBoolean(),
+  handleValidationErrors
 ];
 
 module.exports = {
-  validate,
   registerValidation,
   loginValidation,
   requestValidation,
-  donationValidation
+  donationValidation,
+  profileUpdateValidation,
+  handleValidationErrors
 };

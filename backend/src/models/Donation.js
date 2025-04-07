@@ -1,68 +1,107 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const donationSchema = new mongoose.Schema({
+const donationSchema = new Schema({
   donor: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
   request: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Request'
   },
   hospital: {
-    name: String,
-    address: String,
-    city: String,
-    state: String
+    name: {
+      type: String,
+      required: true
+    },
+    address: {
+      type: String
+    },
+    city: {
+      type: String,
+      required: true
+    },
+    state: {
+      type: String,
+      required: true
+    }
   },
-  donationDate: {
-    type: Date,
-    required: true,
-    default: Date.now
+  bloodType: {
+    type: String,
+    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    required: true
   },
   units: {
     type: Number,
-    required: true,
     default: 1,
     min: 1
   },
-  verified: {
-    type: Boolean,
-    default: false
+  donationDate: {
+    type: Date,
+    default: Date.now
   },
-  verificationDocument: String,
-  notes: String
+  certificate: {
+    issued: {
+      type: Boolean,
+      default: false
+    },
+    url: String,
+    issuedAt: Date
+  },
+  notes: {
+    type: String
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
 }, { timestamps: true });
 
 // Post-save hook to update user donation count and request status
 donationSchema.post('save', async function(doc) {
   try {
-    // Update donor's donation count
+    // Update donor's donation count and last donation date
     const User = mongoose.model('User');
     const donor = await User.findById(doc.donor);
+    
     if (donor) {
-      await donor.updateDonationCount();
+      donor.donationCount += doc.units;
+      donor.lastDonation = doc.donationDate;
+      await donor.save();
     }
     
-    // Update request status if applicable
+    // If donation is linked to a request, update request status
     if (doc.request) {
       const Request = mongoose.model('Request');
       const request = await Request.findById(doc.request);
       
       if (request) {
-        // Count verified donations for this request
-        const Donation = mongoose.model('Donation');
-        const donationCount = await Donation.countDocuments({
-          request: request._id,
-          verified: true
-        });
+        // Update the matched donor status to 'donated'
+        const matchedDonor = request.matchedDonors.find(match => 
+          match.donor.toString() === doc.donor.toString()
+        );
         
-        // If enough donations, mark request as fulfilled
-        if (donationCount >= request.unitsNeeded) {
-          request.status = 'fulfilled';
-          await request.save();
+        if (matchedDonor) {
+          matchedDonor.status = 'donated';
         }
+        
+        // Increment units received
+        request.unitsReceived += doc.units;
+        
+        // Check if request is fulfilled
+        if (request.unitsReceived >= request.unitsNeeded) {
+          request.status = 'fulfilled';
+        } else if (request.status === 'pending') {
+          request.status = 'in-progress';
+        }
+        
+        await request.save();
       }
     }
   } catch (error) {
@@ -70,4 +109,6 @@ donationSchema.post('save', async function(doc) {
   }
 });
 
-module.exports = mongoose.model('Donation', donationSchema);
+const Donation = mongoose.model('Donation', donationSchema);
+
+module.exports = Donation;

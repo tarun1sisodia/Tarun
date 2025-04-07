@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-// Create transporter
+// Create reusable transporter
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: process.env.EMAIL_PORT,
@@ -14,125 +14,133 @@ const transporter = nodemailer.createTransport({
 // Send welcome email
 const sendWelcomeEmail = async (user) => {
   try {
-    const info = await transporter.sendMail({
-      from: `"BloodConnect" <${process.env.EMAIL_USER}>`,
+    await transporter.sendMail({
+      from: `"BloodConnect" <${process.env.EMAIL_FROM}>`,
       to: user.email,
       subject: 'Welcome to BloodConnect',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Welcome to BloodConnect, ${user.name}!</h2>
-          <p>Thank you for joining our community of blood donors and recipients.</p>
-          <p>Your account has been created successfully. You can now log in and start using our platform.</p>
-          <p>If you have any questions, please don't hesitate to contact us.</p>
+          <h2 style="color: #e53e3e;">Welcome to BloodConnect!</h2>
+          <p>Hello ${user.name},</p>
+          <p>Thank you for joining BloodConnect. Your registration is complete, and you can now start using our platform to connect with blood donors and recipients.</p>
+          <p>Here's what you can do:</p>
+          <ul>
+            <li>Find blood donors in your area</li>
+            <li>Create blood donation requests</li>
+            <li>Volunteer to donate blood</li>
+            <li>Track your donation history</li>
+          </ul>
+          <p>If you have any questions, feel free to reply to this email.</p>
           <p>Best regards,<br>The BloodConnect Team</p>
         </div>
       `
     });
     
-    return info;
+    console.log(`Welcome email sent to ${user.email}`);
+    return true;
   } catch (error) {
-    console.error('Email sending error:', error);
-    throw error;
+    console.error('Error sending welcome email:', error);
+    return false;
   }
 };
 
 // Send request confirmation email
 const sendRequestConfirmationEmail = async (user, request) => {
   try {
-    const info = await transporter.sendMail({
-      from: `"BloodConnect" <${process.env.EMAIL_USER}>`,
+    await transporter.sendMail({
+      from: `"BloodConnect" <${process.env.EMAIL_FROM}>`,
       to: user.email,
       subject: 'Blood Request Confirmation',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Blood Request Confirmation</h2>
-          <p>Dear ${user.name},</p>
-          <p>Your blood request for ${request.patientName} has been successfully created.</p>
-          <p><strong>Details:</strong></p>
+          <h2 style="color: #e53e3e;">Blood Request Confirmation</h2>
+          <p>Hello ${user.name},</p>
+          <p>Your blood request has been successfully created and is now active on our platform.</p>
+          <p><strong>Request Details:</strong></p>
           <ul>
-            <li>Blood Type: ${request.bloodType}</li>
+            <li>Patient: ${request.patient.name}</li>
+            <li>Blood Type: ${request.patient.bloodType}</li>
             <li>Units Needed: ${request.unitsNeeded}</li>
-            <li>Hospital: ${request.hospital.name}</li>
+            <li>Hospital: ${request.hospital.name}, ${request.hospital.city}</li>
             <li>Urgency: ${request.urgency}</li>
           </ul>
-          <p>We will notify you when we find matching donors.</p>
+          <p>We will notify you when donors are matched with your request.</p>
           <p>Best regards,<br>The BloodConnect Team</p>
         </div>
       `
     });
     
-    return info;
+    console.log(`Request confirmation email sent to ${user.email}`);
+    return true;
   } catch (error) {
-    console.error('Email sending error:', error);
-    throw error;
+    console.error('Error sending request confirmation email:', error);
+    return false;
   }
 };
 
 // Send donor match notification
 const sendDonorMatchEmail = async (donor, request) => {
   try {
-    const info = await transporter.sendMail({
-      from: `"BloodConnect" <${process.env.EMAIL_USER}>`,
+    await transporter.sendMail({
+      from: `"BloodConnect" <${process.env.EMAIL_FROM}>`,
       to: donor.email,
-      subject: 'Blood Donation Match Found',
+      subject: 'Blood Donation Request Match',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Blood Donation Match</h2>
-          <p>Dear ${donor.name},</p>
-          <p>We have found a match for your blood type (${donor.bloodType})!</p>
+          <h2 style="color: #e53e3e;">Blood Donation Match Found</h2>
+          <p>Hello ${donor.name},</p>
+          <p>We've found a blood donation request that matches your blood type (${donor.bloodType}).</p>
           <p><strong>Request Details:</strong></p>
           <ul>
-            <li>Patient: ${request.patientName}</li>
-            <li>Blood Type Needed: ${request.bloodType}</li>
+            <li>Blood Type Needed: ${request.patient.bloodType}</li>
             <li>Hospital: ${request.hospital.name}, ${request.hospital.city}</li>
             <li>Urgency: ${request.urgency}</li>
           </ul>
-          <p>If you are available to donate, please log in to your account and confirm your availability.</p>
-          <p>Thank you for your generosity!</p>
+          <p>If you're available to donate, please log in to your account and confirm your participation.</p>
+          <p>Your donation can save a life!</p>
           <p>Best regards,<br>The BloodConnect Team</p>
         </div>
       `
     });
     
-    return info;
+    console.log(`Donor match email sent to ${donor.email}`);
+    return true;
   } catch (error) {
-    console.error('Email sending error:', error);
-    throw error;
+    console.error('Error sending donor match email:', error);
+    return false;
   }
 };
 
-// Send requester notification when donor volunteers
-const sendRequesterNotificationEmail = async (requester, donor, request) => {
+// Send donation confirmation email
+const sendDonationConfirmationEmail = async (donor, donation) => {
   try {
-    const info = await transporter.sendMail({
-      from: `"BloodConnect" <${process.env.EMAIL_USER}>`,
-      to: requester.email,
-      subject: 'Donor Found for Your Blood Request',
+    await transporter.sendMail({
+      from: `"BloodConnect" <${process.env.EMAIL_FROM}>`,
+      to: donor.email,
+      subject: 'Thank You for Your Blood Donation',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Donor Found!</h2>
-          <p>Dear ${requester.name},</p>
-          <p>Good news! A donor has volunteered for your blood request.</p>
-          <p><strong>Donor Details:</strong></p>
+          <h2 style="color: #e53e3e;">Thank You for Your Donation!</h2>
+          <p>Hello ${donor.name},</p>
+          <p>Thank you for your recent blood donation. Your generosity helps save lives!</p>
+          <p><strong>Donation Details:</strong></p>
           <ul>
-            <li>Name: ${donor.name}</li>
-            <li>Blood Type: ${donor.bloodType}</li>
+            <li>Date: ${new Date(donation.donationDate).toLocaleDateString()}</li>
+            <li>Blood Type: ${donation.bloodType}</li>
+            <li>Units: ${donation.units}</li>
+            <li>Hospital: ${donation.hospital.name}, ${donation.hospital.city}</li>
           </ul>
-          <p><strong>Request Details:</strong></p>
-          <ul>
-            <li>Patient: ${request.patientName}</li>
-            <li>Hospital: ${request.hospital.name}</li>
-          </ul>
-          <p>You can contact the donor through our platform.</p>
+          <p>Your donation count has been updated in your profile.</p>
           <p>Best regards,<br>The BloodConnect Team</p>
         </div>
       `
     });
     
-    return info;
+    console.log(`Donation confirmation email sent to ${donor.email}`);
+    return true;
   } catch (error) {
-    console.error('Email sending error:', error);
-    throw error;
+    console.error('Error sending donation confirmation email:', error);
+    return false;
   }
 };
 
@@ -140,5 +148,5 @@ module.exports = {
   sendWelcomeEmail,
   sendRequestConfirmationEmail,
   sendDonorMatchEmail,
-  sendRequesterNotificationEmail
+  sendDonationConfirmationEmail
 };

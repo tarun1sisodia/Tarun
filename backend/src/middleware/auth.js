@@ -1,46 +1,79 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const { createClient } = require('@supabase/supabase-js');
+const User = require('../models/User');
 
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Middleware to verify JWT token
+// Middleware to authenticate user using JWT token
 const auth = async (req, res, next) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    // Get token from header
+    const authHeader = req.header('Authorization');
     
-    if (!token) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ message: 'Authentication required' });
     }
     
-    // Verify token with Supabase
-    const { data, error } = await supabase.auth.getUser(token);
+    const token = authHeader.replace('Bearer ', '');
     
-    if (error || !data.user) {
+    // Verify token with Supabase
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    
+    if (error || !user) {
       return res.status(401).json({ message: 'Invalid or expired token' });
     }
     
     // Find user in MongoDB
-    const user = await User.findOne({ supabaseId: data.user.id });
+    const mongoUser = await User.findOne({ supabaseId: user.id });
     
-    if (!user) {
+    if (!mongoUser) {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    // Attach user to request
-    req.user = user;
-    req.supabaseUser = data.user;
+    // Set user in request
+    req.user = mongoUser;
+    req.supabaseUser = user;
     req.token = token;
     
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
-    res.status(401).json({ message: 'Authentication failed' });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
-module.exports = auth;
+// Middleware to ensure user exists in MongoDB (used after Supabase auth)
+const ensureUserInMongoDB = async (req, res, next) => {
+  try {
+    if (!req.supabaseUser) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+    
+    // Check if user exists in MongoDB
+    let user = await User.findOne({ supabaseId: req.supabaseUser.id });
+    
+    // If user doesn't exist, create a basic record
+    if (!user) {
+      user = new User({
+        supabaseId: req.supabaseUser.id,
+        email: req.supabaseUser.email,
+        name: req.supabaseUser.user_metadata?.name || 'New User',
+        profileComplete: false
+      });
+      
+      await user.save();
+    }
+    
+    // Update req.user with MongoDB user
+    req.user = user;
+    
+    next();
+  } catch (error) {
+    console.error('ensureUserInMongoDB error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { auth, ensureUserInMongoDB };
