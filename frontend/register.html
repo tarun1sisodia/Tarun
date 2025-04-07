@@ -1,0 +1,39 @@
+<form id="registerForm" class="space-y-4">
+    <!-- Input fields for name, email, password, etc. -->
+    <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md font-medium">
+      Create Account
+    </button>
+  </form>
+  
+  <script type="module">
+    import authService from './assets/js/services/auth.js';
+    import { showSuccess, showError } from './assets/js/utils/toast.js';
+  
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      // other fields...
+  
+      if (password !== confirmPassword) {
+        showError('Passwords do not match');
+        return;
+      }
+  
+      try {
+        await authService.register({
+          name,
+          email,
+          password,
+          // pass along other fields
+        });
+        showSuccess('Registration successful! Redirecting...');
+        setTimeout(() => window.location.href = 'index.html', 2000);
+      } catch (error) {
+        showError(error.message || 'Registration failed. Please try again.');
+      }
+    });
+  </script>
+  

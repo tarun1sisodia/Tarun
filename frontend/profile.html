@@ -1,0 +1,11 @@
+<script type="module">
+    import { requireAuth, updateAuthUI } from './assets/js/utils/authcheck.js';
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      // If user is not authenticated, requireAuth() will redirect to login
+      requireAuth();
+      updateAuthUI();
+      // Load profile data after auth verification...
+    });
+  </script>
+  
