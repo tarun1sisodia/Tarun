@@ -3,7 +3,18 @@ const User = require('../models/User');
 
 // Initialize Supabase client
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_KEY;
+
+// Debug
+console.log('Auth middleware - Supabase URL:', supabaseUrl);
+console.log('Auth middleware - Supabase Key available:', !!supabaseKey);
+
+// Make sure we have valid configuration
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Missing Supabase configuration in auth middleware');
+  throw new Error('Supabase configuration missing');
+}
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Middleware to authenticate user using JWT token

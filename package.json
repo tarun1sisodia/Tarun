@@ -1,0 +1,28 @@
+{
+  "name": "bloodconnect",
+  "version": "1.0.0",
+  "description": "Blood donation platform connecting donors with recipients",
+  "main": "start.js",
+  "scripts": {
+    "start": "node start.js",
+    "backend": "nodemon backend/src/server.js",
+    "frontend": "cd frontend && npx serve -s -p 8081",
+    "dev": "node start.js"
+  },
+  "keywords": [
+    "blood",
+    "donation",
+    "healthcare",
+    "mongodb",
+    "express",
+    "supabase"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
