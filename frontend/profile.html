@@ -1,11 +1,922 @@
-<script type="module">
-    import { requireAuth, updateAuthUI } from './assets/js/utils/authcheck.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - BloodConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-red-600 font-bold text-2xl">BloodConnect</a>
+            
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-gray-700 hover:text-red-600">Home</a>
+                <a href="donors.html" class="text-gray-700 hover:text-red-600">Donors</a>
+                <a href="requests.html" class="text-gray-700 hover:text-red-600">Requests</a>
+                <a href="about.html" class="text-gray-700 hover:text-red-600">About</a>
+                <a href="faq.html" class="text-gray-700 hover:text-red-600">FAQ</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Auth buttons - will be toggled by JS -->
+                <div id="auth-buttons" class="hidden">
+                    <a href="login.html" class="text-gray-700 hover:text-red-600">Login</a>
+                    <a href="register.html" class="ml-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Register</a>
+                </div>
+                
+                <!-- User menu - hidden by default, shown when logged in -->
+                <div id="user-menu" class="relative">
+                    <button id="user-menu-button" class="flex items-center text-gray-700 hover:text-red-600">
+                        <span id="user-name">User</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    
+                    <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                        <a href="profile.html" class="block px-4 py-2 text-gray-700 bg-gray-100">Profile</a>
+                        <a href="#" id="logout-button" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </nav>
+        
+        <!-- Mobile menu - hidden by default -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 py-2 bg-white">
+            <a href="index.html" class="block py-2 text-gray-700">Home</a>
+            <a href="donors.html" class="block py-2 text-gray-700">Donors</a>
+            <a href="requests.html" class="block py-2 text-gray-700">Requests</a>
+            <a href="about.html" class="block py-2 text-gray-700">About</a>
+            <a href="faq.html" class="block py-2 text-gray-700">FAQ</a>
+        </div>
+    </header>
+
+    <!-- Profile Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h1 class="text-3xl font-bold mb-8 text-gray-800">My Profile</h1>
+                
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <!-- Profile Header -->
+                    <div class="bg-red-600 text-white p-6">
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="w-24 h-24 bg-white rounded-full overflow-hidden mb-4 md:mb-0 md:mr-6">
+                                <img id="profile-image" src="assets/images/default-avatar.jpg" alt="Profile" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h2 id="profile-name" class="text-2xl font-bold">Loading...</h2>
+                                <p id="profile-email" class="text-white text-opacity-90">Loading...</p>
+                                <div class="flex items-center mt-2">
+                                    <span id="profile-blood-type" class="bg-white text-red-600 px-3 py-1 rounded-full font-bold">A+</span>
+                                    <span id="profile-donor-status" class="ml-3 bg-green-500 text-white px-3 py-1 rounded-full text-sm">Active Donor</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Tabs -->
+                    <div class="border-b">
+                        <div class="flex">
+                            <button id="tab-personal" class="tab-button px-6 py-3 font-medium text-gray-700 border-b-2 border-red-600">Personal Info</button>
+                            <button id="tab-donations" class="tab-button px-6 py-3 font-medium text-gray-500 hover:text-gray-700">Donation History</button>
+                            <button id="tab-requests" class="tab-button px-6 py-3 font-medium text-gray-500 hover:text-gray-700">My Requests</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab Content -->
+                    <div class="p-6">
+                        <!-- Personal Info Tab -->
+                        <div id="content-personal" class="tab-content">
+                            <form id="profile-form" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                        <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                        <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="blood-type" class="block text-sm font-medium text-gray-700 mb-1">Blood Type</label>
+                                        <select id="blood-type" name="bloodType" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                            <option value="A+">A+</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B-">B-</option>
+                                            <option value="AB+">AB+</option>
+                                            <option value="AB-">AB-</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="is-donor" class="block text-sm font-medium text-gray-700 mb-1">Donor Status</label>
+                                        <select id="is-donor" name="isDonor" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                            <option value="true">Active Donor</option>
+                                            <option value="false">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-800 mb-3">Location</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                            <input type="text" id="city" name="location.city" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                            <input type="text" id="state" name="location.state" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-800 mb-3">Medical Information</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+                                            <input type="number" id="weight" name="medicalInfo.weight" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        </div>
+                                        
+                                        <div>
+                                            <label for="height" class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+                                            <input type="number" id="height" name="medicalInfo.height" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        </div>
+                                        
+                                        <div class="md:col-span-2">
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="has-medical-conditions" name="medicalInfo.hasMedicalConditions" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                                <label for="has-medical-conditions" class="ml-2 block text-sm text-gray-700">I have medical conditions that might affect blood donation</label>
+                                            </div>
+                                            
+                                            <div id="medical-conditions-details" class="mt-3 hidden">
+                                                <label for="medical-conditions" class="block text-sm font-medium text-gray-700 mb-1">Please specify your medical conditions</label>
+                                                <textarea id="medical-conditions" name="medicalInfo.medicalConditionsDetails" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-end">
+                                    <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Donation History Tab -->
+                        <div id="content-donations" class="tab-content hidden">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-lg font-medium text-gray-800">Your Donation History</h3>
+                                <button id="record-donation-btn" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700">Record New Donation</button>
+                            </div>
+                            
+                            <div id="donation-stats" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <p class="text-sm text-gray-500">Total Donations</p>
+                                    <p id="total-donations" class="text-2xl font-bold text-gray-800">0</p>
+                                  </div>
+                                
+                                  <div class="bg-gray-50 p-4 rounded-lg">
+                                      <p class="text-sm text-gray-500">Last Donation</p>
+                                      <p id="last-donation" class="text-2xl font-bold text-gray-800">Never</p>
+                                  </div>
+                                  
+                                  <div class="bg-gray-50 p-4 rounded-lg">
+                                      <p class="text-sm text-gray-500">Donation Status</p>
+                                      <p id="donation-status" class="text-2xl font-bold text-green-600">Eligible</p>
+                                  </div>
+                              </div>
+                              
+                              <div class="overflow-x-auto">
+                                  <table class="min-w-full divide-y divide-gray-200">
+                                      <thead class="bg-gray-50">
+                                          <tr>
+                                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hospital</th>
+                                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
+                                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Request</th>
+                                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody id="donations-table-body" class="bg-white divide-y divide-gray-200">
+                                          <!-- Donation records will be loaded here -->
+                                          <tr class="text-center">
+                                              <td colspan="5" class="px-6 py-4 text-gray-500">Loading donation history...</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                              
+                              <div id="no-donations" class="hidden text-center py-8">
+                                  <p class="text-gray-500 mb-4">You haven't recorded any donations yet.</p>
+                                  <button id="record-first-donation-btn" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700">Record Your First Donation</button>
+                              </div>
+                          </div>
+                          
+                          <!-- My Requests Tab -->
+                          <div id="content-requests" class="tab-content hidden">
+                              <div class="flex justify-between items-center mb-6">
+                                  <h3 class="text-lg font-medium text-gray-800">Your Blood Requests</h3>
+                                  <a href="create-request.html" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700">Create New Request</a>
+                              </div>
+                              
+                              <div class="space-y-4" id="requests-container">
+                                  <!-- Requests will be loaded here -->
+                                  <p class="text-center text-gray-500 py-8">Loading your requests...</p>
+                              </div>
+                              
+                              <div id="no-requests" class="hidden text-center py-8">
+                                  <p class="text-gray-500 mb-4">You haven't created any blood requests yet.</p>
+                                  <a href="create-request.html" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700">Create Your First Request</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
   
-    document.addEventListener('DOMContentLoaded', () => {
-      // If user is not authenticated, requireAuth() will redirect to login
-      requireAuth();
-      updateAuthUI();
-      // Load profile data after auth verification...
-    });
-  </script>
+      <!-- Record Donation Modal -->
+      <div id="donation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+          <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
+              <div class="p-6">
+                  <div class="flex justify-between items-center mb-4">
+                      <h3 class="text-lg font-medium text-gray-800">Record Blood Donation</h3>
+                      <button id="close-donation-modal" class="text-gray-400 hover:text-gray-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                      </button>
+                  </div>
+                  
+                  <form id="donation-form" class="space-y-4">
+                      <div>
+                          <label for="donation-date" class="block text-sm font-medium text-gray-700 mb-1">Donation Date</label>
+                          <input type="date" id="donation-date" name="donationDate" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                      </div>
+                      
+                      <div>
+                          <label for="hospital-name" class="block text-sm font-medium text-gray-700 mb-1">Hospital/Blood Bank Name</label>
+                          <input type="text" id="hospital-name" name="hospital.name" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                      </div>
+                      
+                      <div class="grid grid-cols-2 gap-4">
+                          <div>
+                              <label for="hospital-city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                              <input type="text" id="hospital-city" name="hospital.city" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                          </div>
+                          
+                          <div>
+                              <label for="hospital-state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                              <input type="text" id="hospital-state" name="hospital.state" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                          </div>
+                      </div>
+                      
+                      <div>
+                          <label for="donation-units" class="block text-sm font-medium text-gray-700 mb-1">Units Donated</label>
+                          <input type="number" id="donation-units" name="units" min="1" value="1" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                      </div>
+                      
+                      <div>
+                          <label for="donation-notes" class="block text-sm font-medium text-gray-700 mb-1">Notes (Optional)</label>
+                          <textarea id="donation-notes" name="notes" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"></textarea>
+                      </div>
+                      
+                      <div class="flex justify-end">
+                          <button type="button" id="cancel-donation" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 mr-2 hover:bg-gray-50">Cancel</button>
+                          <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700">Record Donation</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
   
+      <!-- Footer -->
+      <footer class="bg-gray-800 text-white py-12 mt-16">
+          <div class="container mx-auto px-4">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                  <div>
+                      <h3 class="text-xl font-bold mb-4">BloodConnect</h3>
+                      <p class="text-gray-400">Connecting blood donors with recipients since 2023. Our mission is to ensure that no one suffers due to blood shortage.</p>
+                  </div>
+                  
+                  <div>
+                      <h4 class="font-bold mb-4">Quick Links</h4>
+                      <ul class="space-y-2">
+                          <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                          <li><a href="donors.html" class="text-gray-400 hover:text-white">Donors</a></li>
+                          <li><a href="requests.html" class="text-gray-400 hover:text-white">Requests</a></li>
+                          <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+                          <li><a href="faq.html" class="text-gray-400 hover:text-white">FAQ</a></li>
+                      </ul>
+                  </div>
+                  
+                  <div>
+                      <h4 class="font-bold mb-4">Contact Us</h4>
+                      <ul class="space-y-2 text-gray-400">
+                          <li class="flex items-start">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                              </svg>
+                              <span>123 Main Street, New Delhi, India</span>
+                          </li>
+                          <li class="flex items-start">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                              </svg>
+                              <span>info@bloodconnect.org</span>
+                          </li>
+                          <li class="flex items-start">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                              </svg>
+                              <span>+91 123-456-7890</span>
+                          </li>
+                      </ul>
+                  </div>
+                  
+                  <div>
+                      <h4 class="font-bold mb-4">Follow Us</h4>
+                      <div class="flex space-x-4">
+                          <a href="#" class="text-gray-400 hover:text-white">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                              </svg>
+                          </a>
+                          <a href="#" class="text-gray-400 hover:text-white">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                              </svg>
+                          </a>
+                          <a href="#" class="text-gray-400 hover:text-white">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                              </svg>
+                          </a>
+                          <a href="#" class="text-gray-400 hover:text-white">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                              </svg>
+                          </a>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                  <p>&copy; 2023 BloodConnect. All rights reserved.</p>
+              </div>
+          </div>
+      </footer>
+  
+      <!-- Toast Container -->
+      <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
+  
+      <!-- Scripts -->
+      <script src="assets/js/config.js"></script>
+      <script src="assets/js/utils/toast.js"></script>
+      <script src="assets/js/utils/authCheck.js"></script>
+      <script src="assets/js/services/api.js"></script>
+      <script src="assets/js/services/auth.js"></script>
+      <script src="assets/js/main.js"></script>
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              // Check if user is authenticated
+              if (!authService.isAuthenticated()) {
+                  window.location.href = 'login.html?redirect=profile.html';
+                  return;
+              }
+              
+              // Tab switching functionality
+              const tabButtons = document.querySelectorAll('.tab-button');
+              const tabContents = document.querySelectorAll('.tab-content');
+              
+              tabButtons.forEach(button => {
+                  button.addEventListener('click', function() {
+                      // Remove active class from all buttons
+                      tabButtons.forEach(btn => {
+                          btn.classList.remove('border-red-600', 'text-gray-700');
+                          btn.classList.add('text-gray-500');
+                      });
+                      
+                      // Add active class to clicked button
+                      this.classList.add('border-red-600', 'text-gray-700');
+                      this.classList.remove('text-gray-500');
+                      
+                      // Hide all tab contents
+                      tabContents.forEach(content => {
+                          content.classList.add('hidden');
+                      });
+                      
+                      // Show the corresponding tab content
+                      const tabId = this.id.replace('tab-', 'content-');
+                      document.getElementById(tabId).classList.remove('hidden');
+                  });
+              });
+              
+              // Medical conditions checkbox toggle
+              const hasMedicalConditions = document.getElementById('has-medical-conditions');
+              const medicalConditionsDetails = document.getElementById('medical-conditions-details');
+              
+              hasMedicalConditions.addEventListener('change', function() {
+                  if (this.checked) {
+                      medicalConditionsDetails.classList.remove('hidden');
+                  } else {
+                      medicalConditionsDetails.classList.add('hidden');
+                  }
+              });
+              
+              // Donation modal functionality
+              const donationModal = document.getElementById('donation-modal');
+              const recordDonationBtn = document.getElementById('record-donation-btn');
+              const recordFirstDonationBtn = document.getElementById('record-first-donation-btn');
+              const closeDonationModal = document.getElementById('close-donation-modal');
+              const cancelDonation = document.getElementById('cancel-donation');
+              
+              function openDonationModal() {
+                  donationModal.classList.remove('hidden');
+                  document.body.classList.add('overflow-hidden');
+              }
+              
+              function closeDonationModal() {
+                  donationModal.classList.add('hidden');
+                  document.body.classList.remove('overflow-hidden');
+              }
+              
+              recordDonationBtn.addEventListener('click', openDonationModal);
+              recordFirstDonationBtn.addEventListener('click', openDonationModal);
+              closeDonationModal.addEventListener('click', closeDonationModal);
+              cancelDonation.addEventListener('click', closeDonationModal);
+              
+              // Close modal when clicking outside
+              donationModal.addEventListener('click', function(e) {
+                  if (e.target === donationModal) {
+                      closeDonationModal();
+                  }
+              });
+              
+              // Load user profile data
+              loadUserProfile();
+              
+              // Load donation history
+                   // Load donation history
+                   loadDonationHistory();
+            
+            // Load user requests
+            loadUserRequests();
+            
+            // Handle profile form submission
+            const profileForm = document.getElementById('profile-form');
+            profileForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateUserProfile();
+            });
+            
+            // Handle donation form submission
+            const donationForm = document.getElementById('donation-form');
+            donationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                recordDonation();
+            });
+        });
+        
+        // Load user profile data
+        async function loadUserProfile() {
+            try {
+                const response = await fetch(`${API_URL}/api/users/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${authService.getToken()}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load profile');
+                }
+                
+                const data = await response.json();
+                const user = data.user;
+                
+                // Update profile header
+                document.getElementById('profile-name').textContent = user.name;
+                document.getElementById('profile-email').textContent = user.email;
+                document.getElementById('profile-blood-type').textContent = user.bloodType;
+                
+                // Update donor status badge
+                const donorStatusBadge = document.getElementById('profile-donor-status');
+                if (user.isDonor) {
+                    donorStatusBadge.textContent = 'Active Donor';
+                    donorStatusBadge.classList.add('bg-green-500');
+                    donorStatusBadge.classList.remove('bg-gray-500');
+                } else {
+                    donorStatusBadge.textContent = 'Inactive';
+                    donorStatusBadge.classList.add('bg-gray-500');
+                    donorStatusBadge.classList.remove('bg-green-500');
+                }
+                
+                // Fill form fields
+                document.getElementById('name').value = user.name || '';
+                document.getElementById('phone').value = user.phone || '';
+                document.getElementById('blood-type').value = user.bloodType || 'A+';
+                document.getElementById('is-donor').value = user.isDonor ? 'true' : 'false';
+                
+                if (user.location) {
+                    document.getElementById('city').value = user.location.city || '';
+                    document.getElementById('state').value = user.location.state || '';
+                }
+                
+                if (user.medicalInfo) {
+                    document.getElementById('weight').value = user.medicalInfo.weight || '';
+                    document.getElementById('height').value = user.medicalInfo.height || '';
+                    
+                    const hasMedicalConditions = user.medicalInfo.hasMedicalConditions || false;
+                    document.getElementById('has-medical-conditions').checked = hasMedicalConditions;
+                    
+                    if (hasMedicalConditions) {
+                        document.getElementById('medical-conditions-details').classList.remove('hidden');
+                        document.getElementById('medical-conditions').value = user.medicalInfo.medicalConditionsDetails || '';
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showToast('error', 'Failed to load profile data');
+            }
+        }
+        
+        // Update user profile
+        async function updateUserProfile() {
+            try {
+                const formData = new FormData(document.getElementById('profile-form'));
+                const userData = {
+                    name: formData.get('name'),
+                    phone: formData.get('phone'),
+                    bloodType: formData.get('bloodType'),
+                    isDonor: formData.get('isDonor') === 'true',
+                    location: {
+                        city: formData.get('location.city'),
+                        state: formData.get('location.state')
+                    },
+                    medicalInfo: {
+                        weight: formData.get('medicalInfo.weight') ? Number(formData.get('medicalInfo.weight')) : null,
+                        height: formData.get('medicalInfo.height') ? Number(formData.get('medicalInfo.height')) : null,
+                        hasMedicalConditions: document.getElementById('has-medical-conditions').checked,
+                        medicalConditionsDetails: formData.get('medicalInfo.medicalConditionsDetails') || ''
+                    }
+                };
+                
+                const response = await fetch(`${API_URL}/api/users/me`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authService.getToken()}`
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to update profile');
+                }
+                
+                const data = await response.json();
+                showToast('success', 'Profile updated successfully');
+                
+                // Update profile header with new data
+                document.getElementById('profile-name').textContent = data.user.name;
+                document.getElementById('profile-blood-type').textContent = data.user.bloodType;
+                
+                // Update donor status badge
+                const donorStatusBadge = document.getElementById('profile-donor-status');
+                if (data.user.isDonor) {
+                    donorStatusBadge.textContent = 'Active Donor';
+                    donorStatusBadge.classList.add('bg-green-500');
+                    donorStatusBadge.classList.remove('bg-gray-500');
+                } else {
+                    donorStatusBadge.textContent = 'Inactive';
+                    donorStatusBadge.classList.add('bg-gray-500');
+                    donorStatusBadge.classList.remove('bg-green-500');
+                }
+                
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showToast('error', 'Failed to update profile');
+            }
+        }
+        
+        // Load donation history
+        async function loadDonationHistory() {
+            try {
+                const response = await fetch(`${API_URL}/api/donations/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${authService.getToken()}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load donations');
+                }
+                
+                const data = await response.json();
+                const donations = data.donations || [];
+                
+                // Update donation stats
+                document.getElementById('total-donations').textContent = donations.length;
+                
+                if (donations.length > 0) {
+                    // Sort donations by date (newest first)
+                    donations.sort((a, b) => new Date(b.donationDate) - new Date(a.donationDate));
+                    
+                    // Format last donation date
+                    const lastDonationDate = new Date(donations[0].donationDate);
+                    document.getElementById('last-donation').textContent = lastDonationDate.toLocaleDateString();
+                    
+                    // Check eligibility (3 months since last donation)
+                    const threeMonthsAgo = new Date();
+                    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+                    
+                    const isEligible = lastDonationDate < threeMonthsAgo;
+                    const donationStatus = document.getElementById('donation-status');
+                    
+                    if (isEligible) {
+                        donationStatus.textContent = 'Eligible';
+                        donationStatus.classList.add('text-green-600');
+                        donationStatus.classList.remove('text-red-600');
+                    } else {
+                        donationStatus.textContent = 'Not Eligible Yet';
+                        donationStatus.classList.add('text-red-600');
+                        donationStatus.classList.remove('text-green-600');
+                    }
+                    
+                    // Populate donations table
+                    const tableBody = document.getElementById('donations-table-body');
+                    tableBody.innerHTML = '';
+                    
+                    donations.forEach(donation => {
+                        const row = document.createElement('tr');
+                        
+                        // Format date
+                        const donationDate = new Date(donation.donationDate);
+                        const formattedDate = donationDate.toLocaleDateString();
+                        
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap">${formattedDate}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${donation.hospital.name}, ${donation.hospital.city}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${donation.units}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                ${donation.request ? `<a href="requests.html?id=${donation.request}" class="text-red-600 hover:underline">View Request</a>` : 'N/A'}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="text-blue-600 hover:text-blue-800 mr-3" onclick="viewDonationDetails('${donation._id}')">
+                                    View
+                                </button>
+                            </td>
+                        `;
+                        
+                        tableBody.appendChild(row);
+                    });
+                    
+                    // Show table, hide empty state
+                    document.getElementById('no-donations').classList.add('hidden');
+                } else {
+                    // No donations, show empty state
+                    document.getElementById('donations-table-body').innerHTML = '';
+                    document.getElementById('no-donations').classList.remove('hidden');
+                    document.getElementById('last-donation').textContent = 'Never';
+                    
+                    const donationStatus = document.getElementById('donation-status');
+                    donationStatus.textContent = 'Eligible';
+                    donationStatus.classList.add('text-green-600');
+                    donationStatus.classList.remove('text-red-600');
+                }
+                
+            } catch (error) {
+                console.error('Error loading donations:', error);
+                showToast('error', 'Failed to load donation history');
+            }
+        }
+        
+        // Record a new donation
+        async function recordDonation() {
+            try {
+                const formData = new FormData(document.getElementById('donation-form'));
+                const donationData = {
+                    donationDate: formData.get('donationDate'),
+                    hospital: {
+                        name: formData.get('hospital.name'),
+                        city: formData.get('hospital.city'),
+                        state: formData.get('hospital.state')
+                    },
+                    units: Number(formData.get('units')),
+                    notes: formData.get('notes')
+                };
+                
+                const response = await fetch(`${API_URL}/api/donations`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authService.getToken()}`
+                    },
+                    body: JSON.stringify(donationData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to record donation');
+                }
+                
+                // Close modal
+                document.getElementById('donation-modal').classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+                
+                // Reset form
+                document.getElementById('donation-form').reset();
+                
+                // Show success message
+                showToast('success', 'Donation recorded successfully');
+                
+                // Reload donation history
+                loadDonationHistory();
+                
+            } catch (error) {
+                console.error('Error recording donation:', error);
+                showToast('error', 'Failed to record donation');
+            }
+        }
+        
+        // Load user's blood requests
+        async function loadUserRequests() {
+            try {
+                const response = await fetch(`${API_URL}/api/requests/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${authService.getToken()}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load requests');
+                }
+                
+                const data = await response.json();
+                const requests = data.requests || [];
+                
+                const requestsContainer = document.getElementById('requests-container');
+                
+                if (requests.length > 0) {
+                    requestsContainer.innerHTML = '';
+                    
+                    requests.forEach(request => {
+                        // Format date
+                        const createdDate = new Date(request.createdAt);
+                        const formattedDate = createdDate.toLocaleDateString();
+                        
+                        // Determine status badge color
+                        let statusColor = 'gray';
+                        if (request.status === 'pending') statusColor = 'yellow';
+                        if (request.status === 'in-progress') statusColor = 'blue';
+                        if (request.status === 'fulfilled') statusColor = 'green';
+                        if (request.status === 'cancelled') statusColor = 'red';
+                        
+                        // Determine urgency badge color
+                        let urgencyColor = 'gray';
+                        if (request.urgency === 'low') urgencyColor = 'gray';
+                        if (request.urgency === 'medium') urgencyColor = 'yellow';
+                        if (request.urgency === 'high') urgencyColor = 'orange';
+                        if (request.urgency === 'critical') urgencyColor = 'red';
+                        
+                        const requestCard = document.createElement('div');
+                        requestCard.className = 'bg-white rounded-lg shadow-sm overflow-hidden';
+                        requestCard.innerHTML = `
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="flex space-x-2 mb-2">
+                                            <span class="inline-block px-2 py-1 bg-${urgencyColor}-100 text-${urgencyColor}-800 rounded text-sm font-semibold">${request.urgency.charAt(0).toUpperCase() + request.urgency.slice(1)}</span>
+                                            <span class="inline-block px-2 py-1 bg-${statusColor}-100 text-${statusColor}-800 rounded text-sm font-semibold">${request.status.charAt(0).toUpperCase() + request.status.slice(1)}</span>
+                                        </div>
+                                        <h3 class="font-bold text-lg">${request.patient.bloodType} Blood Needed</h3>
+                                        <p class="text-gray-600">For ${request.patient.name}, ${request.patient.age} years</p>
+                                    </div>
+                                    <span class="text-sm text-gray-500">${formattedDate}</span>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <p class="text-gray-700"><strong>Hospital:</strong> ${request.hospital.name}, ${request.hospital.city}</p>
+                                    <p class="text-gray-700"><strong>Units:</strong> ${request.unitsReceived}/${request.unitsNeeded} received</p>
+                                    <p class="text-gray-700"><strong>Matched Donors:</strong> ${request.matchedDonors ? request.matchedDonors.length : 0}</p>
+                                </div>
+                                
+                                <div class="flex justify-end space-x-2">
+                                       <a href="requests.html?id=${request._id}" class="text-blue-600 hover:text-blue-800 font-medium">View Details</a>
+                                    ${request.status !== 'fulfilled' && request.status !== 'cancelled' ? 
+                                        `<button onclick="findDonors('${request._id}')" class="ml-4 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">Find Donors</button>` : ''}
+                                </div>
+                            </div>
+                        `;
+                        
+                        requestsContainer.appendChild(requestCard);
+                    });
+                    
+                    // Hide empty state
+                    document.getElementById('no-requests').classList.add('hidden');
+                } else {
+                    // No requests, show empty state
+                    requestsContainer.innerHTML = '';
+                    document.getElementById('no-requests').classList.remove('hidden');
+                }
+                
+            } catch (error) {
+                console.error('Error loading requests:', error);
+                showToast('error', 'Failed to load blood requests');
+            }
+        }
+        
+        // View donation details
+        function viewDonationDetails(donationId) {
+            // Redirect to donation details page
+            window.location.href = `donation-details.html?id=${donationId}`;
+        }
+        
+        // Find donors for a request
+        async function findDonors(requestId) {
+            try {
+                const response = await fetch(`${API_URL}/api/match/${requestId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authService.getToken()}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to find donors');
+                }
+                
+                const data = await response.json();
+                showToast('success', data.message || 'Donor matching initiated');
+                
+                // Redirect to request details page
+                window.location.href = `requests.html?id=${requestId}`;
+                
+            } catch (error) {
+                console.error('Error finding donors:', error);
+                showToast('error', 'Failed to find matching donors');
+            }
+        }
+        
+        // Show toast notification
+        function showToast(type, message) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type} animate-fade-in-up`;
+            
+            const icon = type === 'success' ? 
+                '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>' :
+                '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>';
+            
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">${icon}</div>
+                    <div class="ml-3 font-medium">${message}</div>
+                </div>
+                <button class="ml-4 flex-shrink-0">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            `;
+            
+            const toastContainer = document.getElementById('toast-container');
+            toastContainer.appendChild(toast);
+            
+            // Add click event to close button
+            toast.querySelector('button').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.add('animate-fade-out-down');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
