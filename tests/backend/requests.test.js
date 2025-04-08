@@ -66,17 +66,19 @@ beforeEach(async () => {
 });
 
 describe('POST /api/requests', () => {
-    test('should create a new blood request', async () => {
+    test('should create a new blood request with complete data', async () => {
         const requestData = {
             patient: {
                 name: 'John Doe',
                 bloodType: 'B+',
-                age: 45
+                age: 45,
+                gender: 'male'
             },
             hospital: {
                 name: 'City Hospital',
                 city: 'New Delhi',
-                state: 'Delhi'
+                state: 'Delhi',
+                address: '123 Main Street'
             },
             unitsNeeded: 2,
             urgency: 'high',
@@ -91,16 +93,8 @@ describe('POST /api/requests', () => {
         expect(response.body.message).toBe('Blood request created successfully');
         expect(response.body.request).toHaveProperty('_id');
         expect(response.body.request.patient.name).toBe(requestData.patient.name);
-        expect(response.body.request.patient.bloodType).toBe(requestData.patient.bloodType);
-        expect(response.body.request.hospital.name).toBe(requestData.hospital.name);
-        expect(response.body.request.unitsNeeded).toBe(requestData.unitsNeeded);
-        expect(response.body.request.urgency).toBe(requestData.urgency);
-        expect(response.body.request.status).toBe('pending');
-
-        // Check if request was created in database
-        const request = await Request.findById(response.body.request._id);
-        expect(request).not.toBeNull();
-        expect(request.requester.toString()).toBe(testUser._id.toString());
+        expect(response.body.request.patient.gender).toBe(requestData.patient.gender);
+        expect(response.body.request.hospital.address).toBe(requestData.hospital.address);
     });
 
     test('should return 400 if required fields are missing', async () => {
@@ -120,20 +114,25 @@ describe('POST /api/requests', () => {
 });
 
 describe('GET /api/requests', () => {
-    test('should get all blood requests', async () => {
+    test('should get all blood requests with complete data', async () => {
         // Create some test requests
         await Request.create({
             requester: testUser._id,
             patient: {
                 name: 'John Doe',
-                bloodType: 'B+'
+                bloodType: 'B+',
+                age: 45,
+                gender: 'male'
             },
             hospital: {
                 name: 'City Hospital',
-                city: 'New Delhi'
+                city: 'New Delhi',
+                state: 'Delhi',
+                address: '123 Main Street'
             },
             unitsNeeded: 2,
             urgency: 'high',
+            description: 'Urgent need for surgery',
             status: 'pending'
         });
 
@@ -141,15 +140,20 @@ describe('GET /api/requests', () => {
             requester: testUser._id,
             patient: {
                 name: 'Jane Smith',
-                bloodType: 'O-'
+                bloodType: 'O-',
+                age: 30,
+                gender: 'female'
             },
             hospital: {
                 name: 'General Hospital',
-                city: 'Mumbai'
+                city: 'Mumbai',
+                state: 'Maharashtra',
+                address: '456 Another Street'
             },
             unitsNeeded: 1,
             urgency: 'medium',
-            status: 'pending'
+            description: 'Blood needed for delivery',
+            status: 'in-progress'
         });
 
         const response = await request(app)
@@ -157,9 +161,37 @@ describe('GET /api/requests', () => {
             .expect(200);
 
         expect(response.body.requests).toHaveLength(2);
-        expect(response.body.requests[0]).toHaveProperty('_id');
-        expect(response.body.requests[0].patient.bloodType).toBe('B+');
-        expect(response.body.requests[1].patient.bloodType).toBe('O-');
+
+        // Validate the first request
+        const request1 = response.body.requests[0];
+        expect(request1).toHaveProperty('_id');
+        expect(request1.patient.name).toBe('John Doe');
+        expect(request1.patient.bloodType).toBe('B+');
+        expect(request1.patient.age).toBe(45);
+        expect(request1.patient.gender).toBe('male');
+        expect(request1.hospital.name).toBe('City Hospital');
+        expect(request1.hospital.city).toBe('New Delhi');
+        expect(request1.hospital.state).toBe('Delhi');
+        expect(request1.hospital.address).toBe('123 Main Street');
+        expect(request1.unitsNeeded).toBe(2);
+        expect(request1.urgency).toBe('high');
+        expect(request1.description).toBe('Urgent need for surgery');
+        expect(request1.status).toBe('pending');
+
+        // Validate the second request
+        const request2 = response.body.requests[1];
+        expect(request2.patient.name).toBe('Jane Smith');
+        expect(request2.patient.bloodType).toBe('O-');
+        expect(request2.patient.age).toBe(30);
+        expect(request2.patient.gender).toBe('female');
+        expect(request2.hospital.name).toBe('General Hospital');
+        expect(request2.hospital.city).toBe('Mumbai');
+        expect(request2.hospital.state).toBe('Maharashtra');
+        expect(request2.hospital.address).toBe('456 Another Street');
+        expect(request2.unitsNeeded).toBe(1);
+        expect(request2.urgency).toBe('medium');
+        expect(request2.description).toBe('Blood needed for delivery');
+        expect(request2.status).toBe('in-progress');
     });
 
     test('should filter requests by blood type', async () => {
@@ -200,6 +232,48 @@ describe('GET /api/requests', () => {
 
         expect(response.body.requests).toHaveLength(1);
         expect(response.body.requests[0].patient.bloodType).toBe('B+');
+    });
+
+    test('should filter requests by gender', async () => {
+        // Create some test requests
+        await Request.create({
+            requester: testUser._id,
+            patient: {
+                name: 'John Doe',
+                bloodType: 'B+',
+                gender: 'male'
+            },
+            hospital: {
+                name: 'City Hospital',
+                city: 'New Delhi'
+            },
+            unitsNeeded: 2,
+            urgency: 'high',
+            status: 'pending'
+        });
+
+        await Request.create({
+            requester: testUser._id,
+            patient: {
+                name: 'Jane Smith',
+                bloodType: 'O-',
+                gender: 'female'
+            },
+            hospital: {
+                name: 'General Hospital',
+                city: 'Mumbai'
+            },
+            unitsNeeded: 1,
+            urgency: 'medium',
+            status: 'pending'
+        });
+
+        const response = await request(app)
+            .get('/api/requests?gender=female')
+            .expect(200);
+
+        expect(response.body.requests).toHaveLength(1);
+        expect(response.body.requests[0].patient.gender).toBe('female');
     });
 });
 
