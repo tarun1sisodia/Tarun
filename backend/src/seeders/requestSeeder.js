@@ -118,8 +118,8 @@ async function seedDatabase() {
         }
 
         // Clear existing requests
-        await Request.deleteMany({});
-        console.log('Cleared existing requests');
+        // await Request.deleteMany({});
+        // console.log('Cleared existing requests');
 
         // Add requester to each request
         const requestsWithRequester = sampleRequests.map(request => ({
