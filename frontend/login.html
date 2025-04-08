@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body class="bg-gray-50">
     <!-- Header/Navigation -->
     <header class="bg-white shadow-sm">
@@ -25,13 +27,17 @@
                     <form id="login-form" class="space-y-6">
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" name="email" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                            <input type="email" id="email" name="email" required
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
                         </div>
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <input type="password" id="password" name="password" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                            <input type="password" id="password" name="password" required
+                                autocomplete="current-password"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
                         </div>
-                        <button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700">Login</button>
+                        <button type="submit"
+                            class="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700">Login</button>
                     </form>
                     <div class="mt-6 text-center">
                         <a href="register.html" class="text-red-600 hover:underline">Don't have an account? Register</a>
@@ -41,26 +47,38 @@
         </div>
     </section>
 
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
+
     <!-- Scripts -->
     <script src="assets/js/config.js"></script>
+    <script src="assets/js/utils/toast.js"></script>
+    <script src="assets/js/utils/authcheck.js"></script>
+    <script src="assets/js/services/api.js"></script>
     <script src="assets/js/services/auth.js"></script>
+    <script src="assets/js/main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const loginForm = document.getElementById('login-form');
-            loginForm.addEventListener('submit', async function(e) {
+            const toast = new Toast();
+
+            loginForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
 
                 try {
                     const response = await authService.login({ email, password });
-                    alert('Login successful!');
-                    window.location.href = 'index.html';
+                    toast.success('Login successful!');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
                 } catch (error) {
-                    alert(error.message || 'Login failed. Please try again.');
+                    toast.error(error.message || 'Login failed. Please try again.');
                 }
             });
         });
     </script>
 </body>
+
 </html>

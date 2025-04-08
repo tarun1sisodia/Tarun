@@ -17,4 +17,9 @@ router.get('/donors', userController.getDonors);
 // Get user by ID
 router.get('/:id', userController.getUserById);
 
+//Get Current user profile 
+// router.get('/profile', auth, userController.getProfile);
+// Add this line to create an alias
+router.get('/me', auth, userController.getProfile);
+
 module.exports = router;
