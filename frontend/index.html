@@ -80,7 +80,7 @@
                 <p class="text-xl mb-6">Connect with blood donors and recipients in your area. Every donation can save
                     up to three lives.</p>
                 <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="register.html"
+                    <a href="register.html" id="become-donor-btn"
                         class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 text-center">Become
                         a Donor</a>
                     <a href="emergency.html"
@@ -394,6 +394,26 @@
     <script>
         // Initialize counter animation
         document.addEventListener('DOMContentLoaded', function () {
+            //Get the "Become a Donor" Button
+            const becomeDonorBtn = document.getElementById('become-donor-btn');
+            //Check if the user is logged in
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            // If user is logged in, show a welcome message
+            if (token && user) {
+                //Welcome Back message for user
+                // const welcomeMessage = document.createElement('div');
+                // welcomeMessage.textContent = `Welcome back, ${user.name}!`;
+                // welcomeMessage.className = 'text-green-600 font-semibold mb-4';
+                // document.body.prepend(welcomeMessage);
+                // User is authenticated, change the button to redirect to donor profile or donation page
+
+
+                becomeDonorBtn.href = 'donor-profile.html'; // or any other appropriate page
+                becomeDonorBtn.textContent = 'My Profile'; // Change text to reflect authenticated state
+            }
+
             // Fetch statistics
             fetch(API_URL + '/api/stats')
                 .then(response => response.json())
