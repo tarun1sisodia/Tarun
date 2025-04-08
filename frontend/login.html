@@ -57,28 +57,8 @@
     <script src="assets/js/services/api.js"></script>
     <script src="assets/js/services/auth.js"></script>
     <script src="assets/js/main.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const loginForm = document.getElementById('login-form');
-            const toast = new Toast();
+    <script type="module" src="assets/js/pages/login.js"></script>
 
-            loginForm.addEventListener('submit', async function (e) {
-                e.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-
-                try {
-                    const response = await authService.login({ email, password });
-                    toast.success('Login successful!');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
-                } catch (error) {
-                    toast.error(error.message || 'Login failed. Please try again.');
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>
