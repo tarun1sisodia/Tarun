@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node start.js",
     "backend": "nodemon backend/src/server.js",
-    "frontend": "cd frontend && npx serve -s -p 8081",
+    "frontend": "cd frontend && npx serve -p 8081",
     "dev": "node start.js"
   },
   "keywords": [
