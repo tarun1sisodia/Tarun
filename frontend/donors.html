@@ -1,164 +1,736 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donors - BloodConnect</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/donors.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Blood Donors - BloodConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
-    <!-- Header -->
-    <header class="header-primary">
-        <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">
-                    <i class="fas fa-tint"></i>
-                    <span>BloodConnect</span>
-                </a>
-                <nav class="nav-primary">
-                    <a href="index.html">Home</a>
-                    <a href="about.html">About</a>
-                    <a href="donor.html">Donor</a>
-                    <a href="requests.html">Requests</a>
-                    <a href="contact.html">Contact</a>
-                </nav>
+
+<body class="bg-gray-50">
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-red-600 font-bold text-2xl">BloodConnect</a>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-gray-700 hover:text-red-600">Home</a>
+                <a href="donors.html" class="text-gray-700 hover:text-red-600 font-semibold">Donors</a>
+                <a href="requests.html" class="text-gray-700 hover:text-red-600">Requests</a>
+                <a href="about.html" class="text-gray-700 hover:text-red-600">About</a>
+                <a href="faq.html" class="text-gray-700 hover:text-red-600">FAQ</a>
             </div>
+
+            <div class="flex items-center space-x-4">
+                <!-- Auth buttons - will be toggled by JS -->
+                <div id="auth-buttons">
+                    <a href="login.html" class="text-gray-700 hover:text-red-600">Login</a>
+                    <a href="register.html"
+                        class="ml-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Register</a>
+                </div>
+
+                <!-- User menu - hidden by default, shown when logged in -->
+                <div id="user-menu" class="hidden relative">
+                    <button id="user-menu-button" class="flex items-center text-gray-700 hover:text-red-600">
+                        <span id="user-name">User</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <div id="user-dropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                        <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="#" id="logout-button"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobile menu - hidden by default -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 py-2 bg-white">
+            <a href="index.html" class="block py-2 text-gray-700">Home</a>
+            <a href="donors.html" class="block py-2 text-gray-700">Donors</a>
+            <a href="requests.html" class="block py-2 text-gray-700">Requests</a>
+            <a href="about.html" class="block py-2 text-gray-700">About</a>
+            <a href="faq.html" class="block py-2 text-gray-700">FAQ</a>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="donors-page">
-        <div class="container">
-            <div class="page-header">
-                <h1 class="page-title">Donors</h1>
-                <button class="btn btn-primary" id="addDonorBtn">
-                    <i class="fas fa-plus"></i>
-                    <span>Add New Donor</span>
+    <!-- Page Header -->
+    <section class="bg-red-600 text-white py-12">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold mb-2">Blood Donors</h1>
+            <p class="text-lg">Find blood donors in your area or register as a donor yourself.</p>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="py-8 bg-white shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap gap-4 items-center">
+                <select id="blood-type-filter"
+                    class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <option value="">All Blood Types</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+
+                <input type="text" id="location-filter" placeholder="City or State"
+                    class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+
+                <button id="apply-filters" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                    Apply Filters
                 </button>
-            </div>
 
-            <!-- Filters -->
-            <div class="filters-section">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search donors...">
+                <div class="ml-auto">
+                    <a href="register.html" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 guest-only">
+                        Register as Donor
+                    </a>
                 </div>
-                <div class="filter-group">
-                    <select id="bloodTypeFilter">
-                        <option value="">All Blood Types</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
-                    </select>
-                    <select id="statusFilter">
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Donors List -->
-            <div class="donors-list" id="donorsList">
-                <!-- Donor cards will be dynamically inserted here -->
-            </div>
-
-            <!-- No Results Message -->
-            <div class="no-results" id="noResults" style="display: none;">
-                <i class="fas fa-search"></i>
-                <p>No donors found matching your criteria</p>
             </div>
         </div>
-    </main>
+    </section>
+
+    <!-- Blood Type Info -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                <h2 class="text-xl font-bold mb-4">Blood Type Compatibility</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Blood Type
+                                </th>
+                                <th
+                                    class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Can Donate To
+                                </th>
+                                <th
+                                    class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Can Receive From
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200">A+</td>
+                                <td class="py-2 px-4 border-b border-gray-200">A+, AB+</td>
+                                <td class="py-2 px-4 border-b border-gray-200">A+, A-, O+, O-</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200">A-</td>
+                                <td class="py-2 px-4 border-b border-gray-200">A+, A-, AB+, AB-</td>
+                                <td class="py-2 px-4 border-b border-gray-200">A-, O-</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200">B+</td>
+                                <td class="py-2 px-4 border-b border-gray-200">B+, AB+</td>
+                                <td class="py-2 px-4 border-b border-gray-200">B+, B-, O+, O-</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200">B-</td>
+                                <td class="py-2 px-4 border-b border-gray-200">B+, B-, AB+, AB-</td>
+                                <td class="py-2 px-4 border-b border-gray-200">B-, O-</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200">AB+</td>
+                                <td class="py-2 px-4 border-b border-gray-200">AB+ only</td>
+                                <td class="py-2 px-4 border-b border-gray-200">All blood types</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200">AB-</td>
+                                <td class="py-2 px-4 border-b border-gray-200">AB+, AB-</td>
+                                <td class="py-2 px-4 border-b border-gray-200">A-, B-, AB-, O-</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200">O+</td>
+                                <td class="py-2 px-4 border-b border-gray-200">A+, B+, AB+, O+</td>
+                                <td class="py-2 px-4 border-b border-gray-200">O+, O-</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200">O-</td>
+                                <td class="py-2 px-4 border-b border-gray-200">All blood types</td>
+                                <td class="py-2 px-4 border-b border-gray-200">O- only</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donors List -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-6">Available Donors</h2>
+
+            <div id="donors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Donors will be loaded here -->
+                <div class="animate-pulse">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
+                        <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                        <div class="h-8 bg-gray-200 rounded w-1/3"></div>
+                    </div>
+                </div>
+                <div class="animate-pulse">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
+                        <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                        <div class="h-8 bg-gray-200 rounded w-1/3"></div>
+                    </div>
+                </div>
+                <div class="animate-pulse">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
+                        <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                        <div class="h-8 bg-gray-200 rounded w-1/3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="no-donors" class="text-center py-8 hidden">
+                <p class="text-gray-500 text-lg">No donors found matching your criteria.</p>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button id="load-more" class="bg-gray-200 text-gray-800 px-6 py-2 rounded hover:bg-gray-300 hidden">
+                    Load More
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donor Detail Modal -->
+    <div id="donor-detail-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800" id="detail-title">Donor Details</h2>
+                    <button id="close-donor-modal" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="donor-details" class="space-y-4">
+                    <!-- Details will be loaded here -->
+                    <div class="animate-pulse">
+                        <div class="flex items-center mb-4">
+                            <div class="h-16 w-16 bg-gray-200 rounded-full mr-4"></div>
+                            <div>
+                                <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                                <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                            </div>
+                        </div>
+                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
+                        <div class="h-4 bg-gray-200 rounded w-4/5 mb-2"></div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <button id="contact-donor-button"
+                        class="w-full bg-red-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Contact Donor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
-    <footer class="footer-primary">
-        <div class="container">
-            <div class="footer-content">
-                <div class="social-links">
-                    <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+    <footer class="bg-gray-800 text-white py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">BloodConnect</h3>
+                    <p class="text-gray-400">Connecting blood donors with recipients since 2023. Our mission is to
+                        ensure that no one suffers due to blood shortage.</p>
                 </div>
-                <p>Contact us at: <a href="mailto:info@bloodconnect.com">info@bloodconnect.com</a></p>
-                <a href="register.html" class="btn btn-outline">Get Involved</a>
+
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="donors.html" class="text-gray-400 hover:text-white">Donors</a></li>
+                        <li><a href="requests.html" class="text-gray-400 hover:text-white">Requests</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="faq.html" class="text-gray-400 hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>123 Main Street, New Delhi, India</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span>info@bloodconnect.org</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            <span>+91 123-456-7890</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                <p>&copy; 2023 BloodConnect. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Add/Edit Donor Modal -->
-    <div class="modal" id="donorModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Add New Donor</h2>
-                <button class="close-btn" id="closeModalBtn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="donorForm" class="donor-form">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="bloodType">Blood Type</label>
-                    <select id="bloodType" name="bloodType" required>
-                        <option value="">Select Blood Type</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="lastDonation">Last Donation Date</label>
-                    <input type="date" id="lastDonation" name="lastDonation">
-                </div>
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select id="status" name="status" required>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline" id="cancelBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Donor</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
 
     <!-- Scripts -->
-    <script src="js/main.js"></script>
-    <script src="js/donors.js"></script>
-</body>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/utils/toast.js"></script>
+    <script src="assets/js/utils/authCheck.js"></script>
+    <script src="assets/js/services/api.js"></script>
+    <script src="assets/js/services/auth.js"></script>
+    <script src="assets/js/main.js"></script>
     <script>
-        // Initialize donor list and filters
-        document.addEventListener('DOMContentLoaded', function() {
-            // Code to fetch and display donors
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize toast
+            const toast = new Toast();
+
+            // DOM elements
+            const donorsContainer = document.getElementById('donors-container');
+            const noDonorsMessage = document.getElementById('no-donors');
+            const loadMoreButton = document.getElementById('load-more');
+            const donorDetailModal = document.getElementById('donor-detail-modal');
+            const closeDonorModalBtn = document.getElementById('close-donor-modal');
+            const applyFiltersBtn = document.getElementById('apply-filters');
+            const contactDonorButton = document.getElementById('contact-donor-button');
+
+            // Filters
+            const bloodTypeFilter = document.getElementById('blood-type-filter');
+            const locationFilter = document.getElementById('location-filter');
+
+            // Current page for pagination
+            let currentPage = 1;
+            let hasMoreDonors = false;
+            let currentDonorId = null;
+
+            // Load donors on page load
+            loadDonors();
+
+            // Apply filters
+            applyFiltersBtn.addEventListener('click', function () {
+                currentPage = 1;
+                loadDonors(true);
+            });
+
+            // Load more donors
+            loadMoreButton.addEventListener('click', function () {
+                currentPage++;
+                loadDonors(false);
+            });
+
+            // Close donor detail modal
+            closeDonorModalBtn.addEventListener('click', function () {
+                donorDetailModal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function (event) {
+                if (event.target === donorDetailModal) {
+                    donorDetailModal.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }
+            });
+
+            // Contact donor button
+            contactDonorButton.addEventListener('click', function () {
+                if (!authService.isAuthenticated()) {
+                    toast.warning('Please login to contact donors');
+                    setTimeout(() => {
+                        window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
+                    }, 2000);
+                    return;
+                }
+
+                if (!currentDonorId) return;
+
+                // In a real app, this would open a contact form or messaging system
+                toast.info('Contact functionality will be implemented in a future update.');
+            });
+
+            // Load donors function
+            async function loadDonors(reset = false) {
+                try {
+                    // Show loading state
+                    if (reset) {
+                        donorsContainer.innerHTML = `
+                            <div class="animate-pulse">
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
+                                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                                    <div class="h-8 bg-gray-200 rounded w-1/3"></div>
+                                </div>
+                            </div>
+                            <div class="animate-pulse">
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
+                                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                                    <div class="h-8 bg-gray-200 rounded w-1/3"></div>
+                                </div>
+                            </div>
+                            <div class="animate-pulse">
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
+                                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                                    <div class="h-8 bg-gray-200 rounded w-1/3"></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // Build filters
+                    const filters = {};
+                    if (bloodTypeFilter.value) filters.bloodType = bloodTypeFilter.value;
+                    if (locationFilter.value) filters.location = locationFilter.value;
+
+                    // Add pagination
+                    filters.page = currentPage;
+                    filters.limit = 9;
+
+                    // Fetch donors
+                    const response = await usersAPI.getDonors(filters);
+                    const donors = response.donors;
+
+                    // Check if there are more donors
+                    hasMoreDonors = donors.length === filters.limit;
+
+                    // Update UI
+                    if (reset) {
+                        donorsContainer.innerHTML = '';
+                    }
+
+                    if (donors.length === 0 && currentPage === 1) {
+                        noDonorsMessage.classList.remove('hidden');
+                        loadMoreButton.classList.add('hidden');
+                        return;
+                    } else {
+                        noDonorsMessage.classList.add('hidden');
+                    }
+
+                    // Show/hide load more button
+                    if (hasMoreDonors) {
+                        loadMoreButton.classList.remove('hidden');
+                    } else {
+                        loadMoreButton.classList.add('hidden');
+                    }
+
+                    // Render donors
+                    donors.forEach(donor => {
+                        const donorCard = document.createElement('div');
+                        donorCard.className = 'bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow';
+
+                        // Get initials for avatar
+                        const initials = donor.name.split(' ').map(n => n[0]).join('').toUpperCase();
+
+                        // Get blood type badge color
+                        const bloodTypeColor = getBloodTypeColor(donor.bloodType);
+
+                        donorCard.innerHTML = `
+                            <div class="flex items-center mb-4">
+                                <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xl font-bold mr-4">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg">${donor.name}</h3>
+                                    <span class="inline-block px-2 py-1 ${bloodTypeColor} rounded text-sm font-semibold">
+                                        ${donor.bloodType}
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                ${donor.location ? `${donor.location.city}, ${donor.location.state}` : 'Location not specified'}
+                            </p>
+                            <p class="text-gray-600 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Last donation: ${donor.lastDonation ? formatDate(donor.lastDonation) : 'No previous donations'}
+                            </p>
+                            <button class="view-donor-details text-red-600 font-semibold hover:text-red-700" data-id="${donor._id}">
+                                View Profile →
+                            </button>
+                        `;
+
+                        donorsContainer.appendChild(donorCard);
+
+                        // Add event listener to view details button
+                        const viewDetailsBtn = donorCard.querySelector('.view-donor-details');
+                        viewDetailsBtn.addEventListener('click', () => {
+                            openDonorDetails(donor._id);
+                        });
+                    });
+                } catch (error) {
+                    console.error('Load donors error:', error);
+                    toast.error('Failed to load donors');
+                }
+            }
+
+            // Open donor details
+            async function openDonorDetails(donorId) {
+                try {
+                    currentDonorId = donorId;
+
+                    // Show loading state
+                    document.getElementById('donor-details').innerHTML = `
+                        <div class="animate-pulse">
+                            <div class="flex items-center mb-4">
+                                <div class="h-16 w-16 bg-gray-200 rounded-full mr-4"></div>
+                                <div>
+                                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+                                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                                </div>
+                            </div>
+                            <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-4/5 mb-2"></div>
+                        </div>
+                    `;
+
+                    // Show modal
+                    donorDetailModal.classList.remove('hidden');
+                    document.body.classList.add('overflow-hidden');
+
+                    // Fetch donor details
+                    const donor = await usersAPI.getUserById(donorId);
+
+                    // Update modal title
+                    document.getElementById('detail-title').textContent = `${donor.name}'s Profile`;
+
+                    // Get initials for avatar
+                    const initials = donor.name.split(' ').map(n => n[0]).join('').toUpperCase();
+
+                    // Get blood type badge color
+                    const bloodTypeColor = getBloodTypeColor(donor.bloodType);
+
+                    // Format date
+                    const joinDate = new Date(donor.createdAt);
+                    const formattedJoinDate = joinDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    // Update donor details
+                    document.getElementById('donor-details').innerHTML = `
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xl font-bold mr-4">
+                                ${initials}
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">${donor.name}</h3>
+                                <span class="inline-block px-2 py-1 ${bloodTypeColor} rounded text-sm font-semibold">
+                                    ${donor.bloodType}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <p class="text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                ${donor.location ? `${donor.location.city}, ${donor.location.state}` : 'Location not specified'}
+                            </p>
+                            
+                            <p class="text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Last donation: ${donor.lastDonation ? formatDate(donor.lastDonation) : 'No previous donations'}
+                            </p>
+                            
+                            <p class="text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                Total donations: ${donor.donationCount || 0}
+                            </p>
+                            
+                            <p class="text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Member since: ${formattedJoinDate}
+                            </p>
+                            
+                            <p class="text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Status: ${donor.isEligible ? '<span class="text-green-600">Available to donate</span>' : '<span class="text-yellow-600">Currently not eligible</span>'}
+                            </p>
+                        </div>
+                    `;
+
+                    // Update contact button based on authentication
+                    if (!authService.isAuthenticated()) {
+                        contactDonorButton.textContent = 'Login to Contact Donor';
+                    } else {
+                        contactDonorButton.textContent = 'Contact Donor';
+                    }
+                } catch (error) {
+                    console.error('Get donor details error:', error);
+                    toast.error('Failed to load donor details');
+                    donorDetailModal.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }
+            }
+
+            // Helper functions
+            function getBloodTypeColor(bloodType) {
+                switch (bloodType) {
+                    case 'A+':
+                    case 'A-':
+                        return 'bg-red-100 text-red-800';
+                    case 'B+':
+                    case 'B-':
+                        return 'bg-blue-100 text-blue-800';
+                    case 'AB+':
+                    case 'AB-':
+                        return 'bg-purple-100 text-purple-800';
+                    case 'O+':
+                    case 'O-':
+                        return 'bg-green-100 text-green-800';
+                    default:
+                        return 'bg-gray-100 text-gray-800';
+                }
+            }
+
+            function formatDate(dateString) {
+                if (!dateString) return 'N/A';
+
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffTime = Math.abs(now - date);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays <= 30) {
+                    return `${diffDays} days ago`;
+                } else {
+                    return date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            }
         });
     </script>
 </body>
+
 </html>
