@@ -10,6 +10,7 @@ router.post('/', auth, requestValidation, requestController.createRequest);
 
 // Get all blood requests (public)
 router.get('/', requestController.getAllRequests);
+// router.get('/', auth, requestController.getAllRequests);
 
 // Get request by ID
 router.get('/:id', requestController.getRequestById);
