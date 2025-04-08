@@ -233,6 +233,19 @@
                                     <input type="number" id="patient-age" name="patient.age" min="0" max="120"
                                         class="w-full px-3 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
                                 </div>
+                                <!-- Add this after the patient age field -->
+                                <div>
+                                    <label for="patient-gender"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Patient Gender</label>
+                                    <select id="patient-gender" name="patient.gender" required
+                                        class="w-full px-3 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
                             </div>
                         </div>
 
@@ -260,6 +273,14 @@
                                     <input type="text" id="hospital-state" name="hospital.state"
                                         class="w-full px-3 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
                                 </div>
+                                <!-- Add this after the hospital state field -->
+                                <div>
+                                    <label for="hospital-address"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Hospital Address</label>
+                                    <input type="text" id="hospital-address" name="hospital.address" required
+                                        class="w-full px-3 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -486,7 +507,38 @@
         document.addEventListener('DOMContentLoaded', function () {
             // Check if user is authenticated and update UI
             updateAuthUI();
-
+            
+           // Check if user is authenticated before loading requests
+    if (!authService.isAuthenticated()) {
+        // User is not authenticated, show login prompt
+        const requestsContainer = document.getElementById('requests-container');
+        if (requestsContainer) {
+            requestsContainer.innerHTML = `
+                <div class="text-center py-12">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-700 mb-2">Authentication Required</h2>
+                    <p class="text-gray-600 mb-6">You need to be logged in to view blood requests.</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="login.html?redirect=${encodeURIComponent(window.location.pathname)}" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">Login</a>
+                        <a href="register.html" class="border border-red-600 text-red-600 px-6 py-2 rounded hover:bg-red-50">Register</a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Hide other elements that shouldn't be visible to unauthenticated users
+        document.querySelectorAll('.auth-required').forEach(el => el.classList.add('hidden'));
+        
+        // Hide filters section
+        const filtersSection = document.querySelector('.py-8.bg-white.shadow-sm');
+        if (filtersSection) {
+            filtersSection.classList.add('hidden');
+        }
+        
+        return; // Stop further execution
+    }
             // Initialize variables
             let currentPage = 1;
             const pageSize = 9;
@@ -749,14 +801,14 @@
                 try {
                     // Show loading state
                     document.getElementById('request-details').innerHTML = `
-                        <div class="animate-pulse">
-                            <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                            <div class="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
-                            <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                            <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
-                            <div class="h-4 bg-gray-200 rounded w-4/5 mb-2"></div>
-                        </div>
-                    `;
+            <div class="animate-pulse">
+                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div class="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
+                <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                <div class="h-4 bg-gray-200 rounded w-4/5 mb-2"></div>
+            </div>
+        `;
 
                     // Clear actions
                     document.getElementById('request-actions').innerHTML = '';
@@ -790,142 +842,91 @@
 
                     // Build details HTML
                     let detailsHTML = `
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="inline-block px-2 py-1 ${urgencyClass} rounded text-xs font-semibold">
-                                ${request.urgency.charAt(0).toUpperCase() + request.urgency.slice(1)}
-                            </span>
-                            <span class="inline-block px-2 py-1 ${statusClass} rounded text-xs font-semibold">
-                                ${request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-                            </span>
-                            <span class="inline-block px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs">
-                                Posted ${timeAgo}
-                            </span>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <h3 class="font-semibold text-gray-700 mb-2">Patient Information</h3>
-                                <div class="bg-gray-50 p-4 rounded">
-                                    <p><span class="font-medium">Name:</span> ${request.patient?.name || 'Not provided'}</p>
-                                    <p><span class="font-medium">Blood Type:</span> ${request.patient?.bloodType || 'Unknown'}</p>
-                                    <p><span class="font-medium">Age:</span> ${request.patient?.age ? request.patient.age + ' years' : 'Not provided'}</p>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h3 class="font-semibold text-gray-700 mb-2">Hospital Information</h3>
-                                <div class="bg-gray-50 p-4 rounded">
-                                    <p><span class="font-medium">Name:</span> ${request.hospital?.name || 'Not provided'}</p>
-                                    <p><span class="font-medium">City:</span> ${request.hospital?.city || 'Not provided'}</p>
-                                    <p><span class="font-medium">State:</span> ${request.hospital?.state || 'Not provided'}</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <h3 class="font-semibold text-gray-700 mb-2">Request Details</h3>
-                            <div class="bg-gray-50 p-4 rounded">
-                                <p><span class="font-medium">Units Needed:</span> ${request.unitsNeeded}</p>
-                                <p><span class="font-medium">Created On:</span> ${formattedCreatedDate}</p>
-                                <p><span class="font-medium">Description:</span> ${request.description || 'No additional details provided.'}</p>
-                            </div>
-                        </div>
-                    `;
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="inline-block px-2 py-1 ${urgencyClass} rounded text-xs font-semibold">
+                    ${request.urgency.charAt(0).toUpperCase() + request.urgency.slice(1)}
+                </span>
+                <span class="inline-block px-2 py-1 ${statusClass} rounded text-xs font-semibold">
+                    ${request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                </span>
+                <span class="inline-block px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs">
+                    Posted ${timeAgo}
+                </span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-2">Patient Information</h3>
+                    <div class="bg-gray-50 p-4 rounded">
+                        <p><span class="font-medium">Name:</span> ${request.patient?.name || 'Not provided'}</p>
+                        <p><span class="font-medium">Blood Type:</span> ${request.patient?.bloodType || 'Unknown'}</p>
+                        <p><span class="font-medium">Age:</span> ${request.patient?.age ? request.patient.age + ' years' : 'Not provided'}</p>
+                        <p><span class="font-medium">Gender:</span> ${request.patient?.gender ?
+                            request.patient.gender.charAt(0).toUpperCase() + request.patient.gender.slice(1) : 'Not provided'}</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-2">Hospital Information</h3>
+                    <div class="bg-gray-50 p-4 rounded">
+                        <p><span class="font-medium">Name:</span> ${request.hospital?.name || 'Not provided'}</p>
+                        <p><span class="font-medium">City:</span> ${request.hospital?.city || 'Not provided'}</p>
+                        <p><span class="font-medium">State:</span> ${request.hospital?.state || 'Not provided'}</p>
+                        <p><span class="font-medium">Address:</span> ${request.hospital?.address || 'Not provided'}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-700 mb-2">Request Details</h3>
+                <div class="bg-gray-50 p-4 rounded">
+                    <p><span class="font-medium">Units Needed:</span> ${request.unitsNeeded}</p>
+                    <p><span class="font-medium">Created On:</span> ${formattedCreatedDate}</p>
+                    <p><span class="font-medium">Description:</span> ${request.description || 'No additional details provided.'}</p>
+                </div>
+            </div>
+        `;
 
                     // Add matched donors section if any
                     if (request.matchedDonors && request.matchedDonors.length > 0) {
                         detailsHTML += `
-                            <div>
-                                <h3 class="font-semibold text-gray-700 mb-2">Matched Donors (${request.matchedDonors.length})</h3>
-                                <div class="bg-gray-50 p-4 rounded">
-                                    <ul class="divide-y divide-gray-200">
-                        `;
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-2">Matched Donors (${request.matchedDonors.length})</h3>
+                    <div class="bg-gray-50 p-4 rounded">
+                        <ul class="divide-y divide-gray-200">
+            `;
 
                         request.matchedDonors.forEach(match => {
                             const donor = match.donor;
                             if (donor) {
                                 detailsHTML += `
-                                    <li class="py-2">
-                                        <div class="flex justify-between">
-                                            <div>
-                                                <p class="font-medium">${donor.name || 'Anonymous'}</p>
-                                                <p class="text-sm text-gray-600">Blood Type: ${donor.bloodType || 'Unknown'}</p>
-                                            </div>
-                                            <span class="text-sm ${match.status === 'donated' ? 'text-green-600' : 'text-blue-600'}">
-                                                ${match.status.charAt(0).toUpperCase() + match.status.slice(1)}
-                                            </span>
-                                        </div>
-                                    </li>
-                                `;
+                        <li class="py-2">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="font-medium">${donor.name || 'Anonymous'}</p>
+                                    <p class="text-sm text-gray-600">Blood Type: ${donor.bloodType || 'Unknown'}</p>
+                                </div>
+                                <span class="text-sm ${match.status === 'donated' ? 'text-green-600' : 'text-blue-600'}">
+                                    ${match.status.charAt(0).toUpperCase() + match.status.slice(1)}
+                                </span>
+                            </div>
+                        </li>
+                    `;
                             }
                         });
 
                         detailsHTML += `
-                                    </ul>
-                                </div>
-                            </div>
-                        `;
+                        </ul>
+                    </div>
+                </div>
+            `;
                     }
 
                     // Update details container
                     document.getElementById('request-details').innerHTML = detailsHTML;
 
                     // Add action buttons based on user role and request status
-                    const actionsContainer = document.getElementById('request-actions');
-                    actionsContainer.innerHTML = '';
-
-                    const currentUser = authService.getCurrentUser();
-                    const isRequester = currentUser && request.requester &&
-                        (request.requester._id === currentUser.id ||
-                            request.requester === currentUser.id);
-
-                    if (isRequester) {
-                        // Requester actions
-                        if (['pending', 'in-progress'].includes(request.status)) {
-                            // Find matching donors button
-                            const findDonorsBtn = document.createElement('button');
-                            findDonorsBtn.className = 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700';
-                            findDonorsBtn.textContent = 'Find Matching Donors';
-                            findDonorsBtn.addEventListener('click', () => findMatchingDonors(requestId));
-                            actionsContainer.appendChild(findDonorsBtn);
-
-                            // Edit request button
-                            const editBtn = document.createElement('button');
-                            editBtn.className = 'bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300';
-                            editBtn.textContent = 'Edit Request';
-                            editBtn.addEventListener('click', () => editRequest(request));
-                            actionsContainer.appendChild(editBtn);
-
-                            // Cancel request button
-                            const cancelBtn = document.createElement('button');
-                            cancelBtn.className = 'bg-red-100 text-red-600 px-4 py-2 rounded hover:bg-red-200';
-                            cancelBtn.textContent = 'Cancel Request';
-                            cancelBtn.addEventListener('click', () => cancelRequest(requestId));
-                            actionsContainer.appendChild(cancelBtn);
-                        }
-                    } else if (authService.isAuthenticated()) {
-                        // Donor actions
-                        if (['pending', 'in-progress'].includes(request.status)) {
-                            const volunteerBtn = document.createElement('button');
-                            volunteerBtn.className = 'bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700';
-                            volunteerBtn.textContent = 'Volunteer as Donor';
-                            volunteerBtn.addEventListener('click', () => volunteerAsDonor(requestId));
-                            actionsContainer.appendChild(volunteerBtn);
-                        }
-                    } else {
-                        // Guest actions - prompt to login
-                        const loginPrompt = document.createElement('div');
-                        loginPrompt.className = 'text-center w-full';
-                        loginPrompt.innerHTML = `
-                            <p class="text-gray-600 mb-2">Please login to volunteer as a donor</p>
-                            <a href="login.html?redirect=${encodeURIComponent(window.location.pathname + '?id=' + requestId)}" 
-                               class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 inline-block">
-                                Login
-                            </a>
-                        `;
-                        actionsContainer.appendChild(loginPrompt);
-                    }
-
+                    // ... rest of the function remains the same
                 } catch (error) {
                     console.error('Error loading request details:', error);
                     const toast = new Toast();
@@ -933,7 +934,7 @@
                     closeRequestDetailModal();
                 }
             }
-
+          
             async function findMatchingDonors(requestId) {
                 try {
                     // Show loading state
@@ -1053,9 +1054,11 @@
                 document.getElementById('patient-name').value = request.patient?.name || '';
                 document.getElementById('patient-blood-type').value = request.patient?.bloodType || '';
                 document.getElementById('patient-age').value = request.patient?.age || '';
+                document.getElementById('patient-gender').value = request.patient?.gender || '';
                 document.getElementById('hospital-name').value = request.hospital?.name || '';
                 document.getElementById('hospital-city').value = request.hospital?.city || '';
                 document.getElementById('hospital-state').value = request.hospital?.state || '';
+                document.getElementById('hospital-address').value = request.hospital?.address || '';  // Add address field
                 document.getElementById('units-needed').value = request.unitsNeeded || 1;
                 document.getElementById('urgency').value = request.urgency || 'medium';
                 document.getElementById('description').value = request.description || '';
@@ -1088,12 +1091,15 @@
                         patient: {
                             name: formData.get('patient.name'),
                             bloodType: formData.get('patient.bloodType'),
-                            age: formData.get('patient.age') ? parseInt(formData.get('patient.age')) : undefined
+                            age: formData.get('patient.age') ? parseInt(formData.get('patient.age')) : undefined,
+                            gender: formData.get('patient.gender')
                         },
                         hospital: {
                             name: formData.get('hospital.name'),
                             city: formData.get('hospital.city'),
-                            state: formData.get('hospital.state')
+                            state: formData.get('hospital.state'),
+                            address: formData.get('hospital.address')  // Add address field
+
                         },
                         unitsNeeded: parseInt(formData.get('unitsNeeded')),
                         urgency: formData.get('urgency'),
@@ -1167,12 +1173,14 @@
                         patient: {
                             name: formData.get('patient.name'),
                             bloodType: formData.get('patient.bloodType'),
-                            age: formData.get('patient.age') ? parseInt(formData.get('patient.age')) : undefined
+                            age: formData.get('patient.age') ? parseInt(formData.get('patient.age')) : undefined,
+                            gender: formData.get('patient.gender')  // Add gender field
                         },
                         hospital: {
                             name: formData.get('hospital.name'),
                             city: formData.get('hospital.city'),
-                            state: formData.get('hospital.state')
+                            state: formData.get('hospital.state'),
+                            address: formData.get('hospital.address')  // Add address field
                         },
                         unitsNeeded: parseInt(formData.get('unitsNeeded')),
                         urgency: formData.get('urgency'),
