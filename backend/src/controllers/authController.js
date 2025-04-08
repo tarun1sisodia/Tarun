@@ -6,10 +6,18 @@ const { sendWelcomeEmail } = require('../utils/emailSender');
 const register = async (req, res) => {
   try {
     const { email, password, name, bloodType, phone, location } = req.body;
-    
+
+    // Validate input
+    if (!email || !password || !name || !bloodType) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
     // Register user in Supabase
     const supabaseData = await registerUser(email, password, { name, bloodType });
-    
+    if (!supabaseData || !supabaseData.user) {
+      throw new Error('Failed to register user in Supabase');
+    }
+
     // Create user in MongoDB
     const user = new User({
       supabaseId: supabaseData.user.id,
@@ -19,12 +27,12 @@ const register = async (req, res) => {
       phone,
       location
     });
-    
+
     await user.save();
-    
+
     // Send welcome email
     await sendWelcomeEmail(user);
-    
+
     res.status(201).json({
       message: 'User registered successfully',
       user: {
@@ -43,17 +51,24 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
     // Login with Supabase
     const supabaseData = await loginUser(email, password);
-    
+    if (!supabaseData || !supabaseData.user) {
+      throw new Error('Invalid email or password');
+    }
+
     // Find user in MongoDB
     const user = await User.findOne({ supabaseId: supabaseData.user.id });
-    
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
+
     res.status(200).json({
       message: 'Login successful',
       token: supabaseData.session.access_token,
@@ -74,9 +89,14 @@ const login = async (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    
+
+    // Validate input
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
     await resetPassword(email);
-    
+
     res.status(200).json({ message: 'Password reset email sent' });
   } catch (error) {
     console.error('Password reset error:', error);
@@ -88,7 +108,11 @@ const forgotPassword = async (req, res) => {
 const getCurrentUser = async (req, res) => {
   try {
     const user = req.user;
-    
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     res.status(200).json({
       user: {
         id: user._id,

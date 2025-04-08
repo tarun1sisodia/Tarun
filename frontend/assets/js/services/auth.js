@@ -7,26 +7,36 @@ class AuthService extends API {
 
     // Register a new user
     async register(userData) {
-        const response = await this.post('/api/auth/register', userData);
-        
-        if (response.token) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('user', JSON.stringify(response.user));
+        try {
+            const response = await this.post('/api/auth/register', userData);
+            
+            if (response.token) {
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('user', JSON.stringify(response.user));
+            }
+            
+            return response;
+        } catch (error) {
+            console.error('Error during registration:', error);
+            throw new Error('Registration failed. Please try again later.');
         }
-        
-        return response;
     }
 
     // Login user
     async login(credentials) {
-        const response = await this.post('/api/auth/login', credentials);
-        
-        if (response.token) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('user', JSON.stringify(response.user));
+        try {
+            const response = await this.post('/api/auth/login', credentials);
+            
+            if (response.token) {
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('user', JSON.stringify(response.user));
+            }
+            
+            return response;
+        } catch (error) {
+            console.error('Error during login:', error);
+            throw new Error('Login failed. Please check your credentials and try again.');
         }
-        
-        return response;
     }
 
     // Logout user
@@ -49,7 +59,12 @@ class AuthService extends API {
 
     // Forgot password
     async forgotPassword(email) {
-        return this.post('/api/auth/forgot-password', { email });
+        try {
+            return await this.post('/api/auth/forgot-password', { email });
+        } catch (error) {
+            console.error('Error during password reset request:', error);
+            throw new Error('Failed to send password reset email. Please try again later.');
+        }
     }
 
     // Get current user from API
@@ -71,7 +86,7 @@ class AuthService extends API {
             if (error.message.includes('unauthorized')) {
                 this.logout();
             }
-            return null;
+            throw new Error('Failed to fetch current user. Please try again later.');
         }
     }
 }
