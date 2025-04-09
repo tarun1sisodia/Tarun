@@ -129,7 +129,51 @@
     <div id="toast-container"></div>
 
     <!-- Scripts -->
-    <script type="module" src="assets/js/pages/contact.js"></script>
+    <!-- Add this script tag at the end of your contact.html file, before the closing </body> tag -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            class ContactPage {
+                constructor() {
+                    this.contactForm = document.getElementById('contactForm');
+                    this.init();
+                }
+
+                init() {
+                    if (this.contactForm) {
+                        this.contactForm.addEventListener('submit', this.handleSubmit.bind(this));
+                    }
+                }
+
+                async handleSubmit(event) {
+                    event.preventDefault();
+
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const subject = document.getElementById('subject').value;
+                    const message = document.getElementById('message').value;
+
+                    try {
+                        const response = await api.post('/contact', {
+                            name,
+                            email,
+                            subject,
+                            message
+                        });
+
+                        toast.success('Message sent successfully!');
+                        this.contactForm.reset();
+                    } catch (error) {
+                        console.error('Error sending contact form:', error);
+                        toast.error(error.message || 'Failed to send message. Please try again later.');
+                    }
+                }
+            }
+
+            // Initialize the contact page
+            new ContactPage();
+        });
+    </script>
+
 </body>
 
 </html>
