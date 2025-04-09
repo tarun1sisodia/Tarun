@@ -39,6 +39,9 @@ BEFORE UPDATE ON contact_messages
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
+-- Disable RLS temporarily
+ALTER TABLE contact_messages DISABLE ROW LEVEL SECURITY;
+
 
 CREATE INDEX idx_contact_messages_user_id ON contact_messages(user_id);
 CREATE INDEX idx_contact_messages_status ON contact_messages(status);

@@ -380,7 +380,7 @@
 
                     try {
                         // Send the contact form data to the API
-                        const response = await api.post('/api/contact', {
+                        const response = await contactAPI.submitContactForm({
                             name,
                             email,
                             subject,
@@ -402,7 +402,8 @@
                     } catch (error) {
                         console.error('Error sending contact form:', error);
                         toast.error(error.message || 'Failed to send message. Please try again later.');
-                    } finally {
+                    }
+                    finally {
                         // Reset button state
                         submitButton.disabled = false;
                         submitButton.textContent = originalButtonText;

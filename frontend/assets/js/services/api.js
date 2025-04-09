@@ -242,9 +242,22 @@ class MatchAPI extends API {
     return this.post(`/api/match/volunteer/${requestId}`);
   }
 }
+// Add this to your api.js file
+// Contact API
+class ContactAPI extends API {
+  constructor(baseURL) {
+    super(baseURL);
+  }
+
+  // Submit contact form
+  async submitContactForm(data) {
+    return this.post('/api/contact', data);
+  }
+}
 
 // Initialize API services
 const usersAPI = new UsersAPI(API_URL);
 const requestsAPI = new RequestsAPI(API_URL);
 const donationsAPI = new DonationsAPI(API_URL);
 const matchAPI = new MatchAPI(API_URL);
+const contactAPI = new ContactAPI(API_URL);  // Add this line
