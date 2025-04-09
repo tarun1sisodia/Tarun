@@ -600,7 +600,7 @@
         // Ensure the profile image has a fallback
         async function loadUserProfile() {
             try {
-                const response = await fetch(`${API_URL}/api/users/me`, {
+                const response = await fetch(`${API_URL}/api/users/profile`, {
                     headers: {
                         'Authorization': `Bearer ${authService.getToken()}`
                     }
