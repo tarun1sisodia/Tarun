@@ -2,256 +2,287 @@
 
 /* Toast notifications */
 .toast {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-    border-radius: 0.375rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    margin-bottom: 0.75rem;
-    max-width: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 0.75rem;
+  max-width: 350px;
+}
+
+.toast.success {
+  background-color: #10b981;
+  color: white;
+}
+
+.toast.error {
+  background-color: #ef4444;
+  color: white;
+}
+
+.toast.info {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.toast.warning {
+  background-color: #f59e0b;
+  color: white;
+}
+
+/* Animations */
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease-out forwards;
+}
+
+.animate-fade-out-down {
+  animation: fadeOutDown 0.3s ease-in forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  .toast.success {
-    background-color: #10b981;
-    color: white;
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .toast.error {
-    background-color: #ef4444;
-    color: white;
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .toast.info {
-    background-color: #3b82f6;
-    color: white;
+
+  to {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  .toast.warning {
-    background-color: #f59e0b;
-    color: white;
-  }
-  
-  /* Animations */
-  .animate-fade-in-up {
-    animation: fadeInUp 0.3s ease-out forwards;
-  }
-  
-  .animate-fade-out-down {
-    animation: fadeOutDown 0.3s ease-in forwards;
-  }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeOutDown {
-    from {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    to {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-  }
-  
-  /* Blood type badges */
-  .blood-type-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-    width: 2.5rem;
-    height: 2.5rem;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .blood-type-A-pos { background-color: #dc2626; }
-  .blood-type-A-neg { background-color: #b91c1c; }
-  .blood-type-B-pos { background-color: #2563eb; }
-  .blood-type-B-neg { background-color: #1d4ed8; }
-  .blood-type-AB-pos { background-color: #7c3aed; }
-  .blood-type-AB-neg { background-color: #6d28d9; }
-  .blood-type-O-pos { background-color: #059669; }
-  .blood-type-O-neg { background-color: #047857; }
-  
+}
+
+/* Blood type badges */
+.blood-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: white;
+  font-weight: bold;
+}
+
+.blood-type-A-pos {
+  background-color: #dc2626;
+}
+
+.blood-type-A-neg {
+  background-color: #b91c1c;
+}
+
+.blood-type-B-pos {
+  background-color: #2563eb;
+}
+
+.blood-type-B-neg {
+  background-color: #1d4ed8;
+}
+
+.blood-type-AB-pos {
+  background-color: #7c3aed;
+}
+
+.blood-type-AB-neg {
+  background-color: #6d28d9;
+}
+
+.blood-type-O-pos {
+  background-color: #059669;
+}
+
+.blood-type-O-neg {
+  background-color: #047857;
+}
+
 /* Form focus styles */
-input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: #ef4444;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Custom button styles */
+.btn-primary {
+  background-color: #dc2626;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #b91c1c;
+}
+
+.btn-secondary {
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #fee2e2;
+}
+
+/* Profile page styles */
+.profile-stat {
+  text-align: center;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.profile-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.profile-stat-label {
+  color: #4b5563;
+  font-size: 0.875rem;
+}
+
+/* Request card styles */
+.request-card {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.request-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.request-card-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.request-card-body {
+  padding: 1rem;
+}
+
+.request-card-footer {
+  padding: 1rem;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+/* Urgency badges */
+.urgency-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.urgency-critical {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.urgency-high {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+
+.urgency-medium {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.urgency-low {
+  background-color: #ecfdf5;
+  color: #065f46;
+}
+
+/* Donor card styles */
+.donor-card {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.donor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Mobile menu styles */
+@media (max-width: 768px) {
+  .mobile-menu-open {
+    display: block;
   }
-  
-  /* Custom button styles */
-  .btn-primary {
-    background-color: #dc2626;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-weight: 600;
-    transition: background-color 0.2s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
-  
-  .btn-primary:hover {
-    background-color: #b91c1c;
+
+  .grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }
-  
-  .btn-secondary {
-    border: 1px solid #dc2626;
-    color: #dc2626;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-weight: 600;
-    transition: background-color 0.2s;
+}
+
+/* Utility classes */
+.text-red-primary {
+  color: #dc2626;
+}
+
+.bg-red-primary {
+  background-color: #dc2626;
+}
+
+.border-red-primary {
+  border-color: #dc2626;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 3px solid #dc2626;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .btn-secondary:hover {
-    background-color: #fee2e2;
+
+  100% {
+    transform: rotate(360deg);
   }
-  
-  /* Profile page styles */
-  .profile-stat {
-    text-align: center;
-    padding: 1rem;
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  }
-  
-  .profile-stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #dc2626;
-  }
-  
-  .profile-stat-label {
-    color: #4b5563;
-    font-size: 0.875rem;
-  }
-  
-  /* Request card styles */
-  .request-card {
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .request-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  .request-card-header {
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .request-card-body {
-    padding: 1rem;
-  }
-  
-  .request-card-footer {
-    padding: 1rem;
-    border-top: 1px solid #e5e7eb;
-    background-color: #f9fafb;
-  }
-  
-  /* Urgency badges */
-  .urgency-badge {
-    display: inline-block;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-  
-  .urgency-critical {
-    background-color: #fee2e2;
-    color: #b91c1c;
-  }
-  
-  .urgency-high {
-    background-color: #ffedd5;
-    color: #c2410c;
-  }
-  
-  .urgency-medium {
-    background-color: #fef3c7;
-    color: #b45309;
-  }
-  
-  .urgency-low {
-    background-color: #ecfdf5;
-    color: #065f46;
-  }
-  
-  /* Donor card styles */
-  .donor-card {
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .donor-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  /* Mobile menu styles */
-  @media (max-width: 768px) {
-    .mobile-menu-open {
-      display: block;
-    }
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 640px) {
-    .container {
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-    
-    .grid {
-      grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-    }
-  }
-  
-  /* Utility classes */
-  .text-red-primary {
-    color: #dc2626;
-  }
-  
-  .bg-red-primary {
-    background-color: #dc2626;
-  }
-  
-  .border-red-primary {
-    border-color: #dc2626;
-  }
-  
-  /* Loading spinner */
-  .spinner {
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top: 3px solid #dc2626;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
+}
