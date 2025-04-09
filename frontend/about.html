@@ -391,8 +391,36 @@
     <script src="assets/js/services/api.js"></script>
     <script src="assets/js/services/auth.js"></script>
     <script src="assets/js/main.js"></script>
-    <script type="module" src="assets/js/pages/about.js"></script>
+    <script>
+        // Initialize counter animation
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animate counters
+            animateCounter('donor-count', 250);
+            animateCounter('donation-count', 500);
+            animateCounter('lives-saved', 1500);
+            animateCounter('cities-count', 20);
 
+            // Counter animation function
+            function animateCounter(id, target) {
+                const counter = document.getElementById(id);
+                const duration = 2000; // 2 seconds
+                const steps = 50;
+                const stepTime = duration / steps;
+                const increment = target / steps;
+                let current = 0;
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    counter.textContent = Math.floor(current);
+
+                    if (current >= target) {
+                        counter.textContent = target;
+                        clearInterval(timer);
+                    }
+                }, stepTime);
+            }
+        });
+    </script>
 </body>
 
 </html>
