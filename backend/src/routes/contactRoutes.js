@@ -1,9 +1,10 @@
 const express = require('express');
-const router = express.Router();
 const contactController = require('../controllers/contactController');
-const auth = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
-// Submit contact form - requires authentication
-router.post('/', auth, contactController.submitContactForm);
+const router = express.Router();
+
+// Create a new contact message
+router.post('/', auth, contactController.createContact);
 
 module.exports = router;
