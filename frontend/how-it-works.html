@@ -1,101 +1,1180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How It Works - BloodConnect</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/how-it-works.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Technical Presentation - BloodConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/presentation.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
-    <!-- Header -->
-    <header class="header-primary">
-        <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">
-                    <i class="fas fa-tint"></i>
-                    <span>BloodConnect</span>
-                </a>
-                <nav class="main-nav">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="about.html" class="nav-link">About</a>
-                    <a href="donors.html" class="nav-link">Donors</a>
-                    <a href="requests.html" class="nav-link">Requests</a>
-                    <a href="contact.html" class="nav-link">Contact</a>
-                </nav>
-            </div>
-        </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="how-it-works-page">
-        <div class="container">
-            <div class="page-intro">
-                <h1 class="page-title">How It Works</h1>
-                <p class="page-description">
-                    Learn about the blood donation process and how you can make a difference
-                </p>
-            </div>
+<body class="bg-gray-900 text-white overflow-hidden">
+    <!-- Navigation Controls -->
+    <div class="fixed top-4 right-4 z-50 flex space-x-4">
+        <button id="prev-slide" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <button id="next-slide" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+        <a href="index.html" class="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+        </a>
+    </div>
 
-            <!-- Process Steps -->
-            <div class="steps-grid" id="stepsGrid">
-                <!-- Steps will be dynamically inserted here -->
-            </div>
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
+        <div id="progress-bar" class="h-full bg-red-600 transition-all duration-300" style="width: 0%"></div>
+    </div>
 
-            <!-- Eligibility Section -->
-            <div class="eligibility-section">
-                <h2 class="section-title">Eligibility Requirements</h2>
-                <div class="eligibility-grid">
-                    <div class="eligibility-card">
-                        <h3>You can donate if you:</h3>
-                        <ul>
-                            <li>Are at least 18 years old</li>
-                            <li>Weigh at least 50 kg</li>
-                            <li>Are in good health</li>
-                            <li>Have not donated blood in the last 56 days</li>
-                            <li>Have no recent tattoos or piercings</li>
-                        </ul>
+    <!-- Three.js Canvas Background -->
+    <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
+
+    <!-- Presentation Container -->
+    <div id="presentation-container" class="w-full h-screen overflow-hidden">
+        <!-- Slide 1: Introduction -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="1">
+            <div class="text-center max-w-4xl mx-auto px-4">
+                <h1 class="text-6xl font-bold mb-6 text-red-500">BloodConnect</h1>
+                <h2 class="text-3xl mb-8">A Technical Deep Dive</h2>
+                <p class="text-xl text-gray-300 mb-12">Connecting blood donors with recipients through modern web
+                    technology</p>
+                <div class="animate-bounce mt-16">
+                    <p class="text-gray-400">Scroll or use arrow keys to navigate</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto mt-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Project Overview -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="2">
+            <div class="max-w-5xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Project Overview</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Mission</h3>
+                        <p class="text-gray-300">BloodConnect aims to solve the critical problem of blood shortage by
+                            connecting donors and recipients efficiently.</p>
                     </div>
-                    <div class="eligibility-card">
-                        <h3>You cannot donate if you:</h3>
-                        <ul>
-                            <li>Have any blood-borne diseases</li>
-                            <li>Are pregnant or recently gave birth</li>
-                            <li>Have taken certain medications recently</li>
-                            <li>Have traveled to high-risk areas</li>
-                            <li>Have had recent surgery</li>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Key Features</h3>
+                        <ul class="text-gray-300 list-disc list-inside">
+                            <li>Real-time donor matching</li>
+                            <li>Secure authentication</li>
+                            <li>Comprehensive data visualization</li>
                         </ul>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Call to Action -->
-            <div class="cta-section">
-                <a href="appointments.html" class="btn btn-primary">
-                    Schedule Your Donation
-                </a>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer-primary">
-        <div class="container">
-            <div class="footer-content">
-                <div class="social-links">
-                    <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <!-- Slide 3: Tech Stack -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="3">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-12 text-center">Our Tech Stack</h2>
+                <div id="tech-stack-container" class="relative h-96">
+                    <!-- 3D tech stack visualization will be rendered here by Three.js -->
                 </div>
-                <p>Contact us at: <a href="mailto:info@bloodconnect.com">info@bloodconnect.com</a></p>
-                <a href="register.html" class="btn btn-outline">Get Involved</a>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+                    <div class="bg-gray-800 p-4 rounded-lg text-center">
+                        <p class="text-gray-300">Node.js</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg text-center">
+                        <p class="text-gray-300">React</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg text-center">
+                        <p class="text-gray-300">MongoDB</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg text-center">
+                        <p class="text-gray-300">Tailwind CSS</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </footer>
+        </section>
+
+        <!-- Slide 4: Architecture -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="4">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">System Architecture</h2>
+                <div class="architecture-diagram mb-8">
+                    <!-- SVG Architecture Diagram -->
+                    <svg id="architecture-svg" class="w-full max-w-4xl mx-auto" viewBox="0 0 800 400">
+                        <!-- Add your architecture SVG content here -->
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Authentication Flow -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="5">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Authentication Flow</h2>
+                <pre class="bg-gray-800 p-6 rounded-lg text-gray-300">
+                    <code class="language-javascript rounded-lg text-sm">
+        <!-- Slide 3: Tech Stack -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="3">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-12 text-center">Our Tech Stack</h2>
+                <div id="tech-stack-container" class="relative h-96">
+                    <!-- 3D tech stack visualization will be rendered here by Three.js -->
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+                    <div class="bg-gray-800 p-4 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-400">Frontend</h3>
+                        <p class="text-gray-300">HTML5, CSS3, JavaScript, Tailwind CSS</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold mb-2 text-green-400">Backend</h3>
+                        <p class="text-gray-300">Node.js, Express.js, MongoDB</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold mb-2 text-purple-400">Authentication</h3>
+                        <p class="text-gray-300">Supabase Auth, JWT</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold mb-2 text-yellow-400">Database</h3>
+                        <p class="text-gray-300">MongoDB, Supabase (PostgreSQL)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Architecture -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="4">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">System Architecture</h2>
+                <div class="architecture-diagram mb-8">
+                    <!-- SVG Architecture Diagram -->
+                    <svg id="architecture-svg" class="w-full max-w-4xl mx-auto" viewBox="0 0 800 400"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <!-- Client -->
+                        <rect x="50" y="150" width="150" height="100" rx="10" fill="#374151" stroke="#f87171"
+                            stroke-width="2" class="architecture-element" data-index="0" />
+                        <text x="125" y="185" text-anchor="middle" fill="white" font-weight="bold"
+                            font-size="16">Client</text>
+                        <text x="125" y="210" text-anchor="middle" fill="#d1d5db" font-size="12">HTML, CSS, JS</text>
+                        <text x="125" y="230" text-anchor="middle" fill="#d1d5db" font-size="12">Tailwind CSS</text>
+
+                        <!-- API Server -->
+                        <rect x="325" y="150" width="150" height="100" rx="10" fill="#374151" stroke="#60a5fa"
+                            stroke-width="2" class="architecture-element" data-index="1" />
+
+                        <text x="400" y="185" text-anchor="middle" fill="white" font-weight="bold" font-size="16">API
+                            Server</text>
+                        <text x="400" y="210" text-anchor="middle" fill="#d1d5db" font-size="12">Node.js</text>
+                        <text x="400" y="230" text-anchor="middle" fill="#d1d5db" font-size="12">Express.js</text>
+
+                        <!-- Databases -->
+                        <rect x="600" y="80" width="150" height="80" rx="10" fill="#374151" stroke="#34d399"
+                            stroke-width="2" class="architecture-element" data-index="2" />
+                        <text x="675" y="115" text-anchor="middle" fill="white" font-weight="bold"
+                            font-size="16">MongoDB</text>
+                        <text x="675" y="140" text-anchor="middle" fill="#d1d5db" font-size="12">User Data,
+                            Requests</text>
+
+                        <rect x="600" y="240" width="150" height="80" rx="10" fill="#374151" stroke="#a78bfa"
+                            stroke-width="2" class="architecture-element" data-index="3" />
+                        <text x="675" y="275" text-anchor="middle" fill="white" font-weight="bold"
+                            font-size="16">Supabase</text>
+                        <text x="675" y="300" text-anchor="middle" fill="#d1d5db" font-size="12">Auth, Contact
+                            Forms</text>
+
+                        <!-- Connections -->
+                        <path d="M200 200 L325 200" stroke="#d1d5db" stroke-width="2" marker-end="url(#arrowhead)"
+                            class="architecture-connection" data-index="0" />
+                        <path d="M475 180 L600 120" stroke="#d1d5db" stroke-width="2" marker-end="url(#arrowhead)"
+                            class="architecture-connection" data-index="1" />
+                        <path d="M475 220 L600 280" stroke="#d1d5db" stroke-width="2" marker-end="url(#arrowhead)"
+                            class="architecture-connection" data-index="2" />
+
+                        <!-- Arrow Marker -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#d1d5db" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Hybrid Database Approach</h3>
+                        <p class="text-gray-300">We use a hybrid database approach with MongoDB for core application
+                            data and Supabase
+                            (PostgreSQL) for authentication and specific features like contact forms. This gives us
+                            flexibility and
+                            leverages the strengths of both systems.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">RESTful API Design</h3>
+                        <p class="text-gray-300">Our backend follows RESTful principles with clear endpoint
+                            organization, middleware for
+                            authentication and validation, and consistent error handling across all routes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Authentication Flow -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="5">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Authentication Flow</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <div class="bg-gray-800 p-6 rounded-lg mb-8">
+                            <h3 class="text-2xl font-semibold mb-4 text-red-400">Supabase Auth Integration</h3>
+                            <p class="text-gray-300">We leverage Supabase's authentication system for secure user
+                                management,
+                                with JWT tokens for session handling and API authorization.</p>
+                        </div>
+                        <div class="auth-flow-diagram">
+                            <!-- Auth Flow Diagram -->
+                            <div class="relative h-64 bg-gray-800 rounded-lg p-4">
+                                <div id="auth-flow-animation" class="w-full h-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Auth Middleware</h3>
+                        <pre><code class="language-javascript rounded-lg text-sm">
+                                                    const auth = async (req, res, next) => {
+                                                      try {
+                                                        // Get token from header
+                                                        const authHeader = req.header('Authorization');
+                                                        
+                                                        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                                                          return res.status(401).json({ 
+                                                            message: 'Authentication required' 
+                                                          });
+                                                        }
+                                                        
+                                                        const token = authHeader.replace('Bearer ', '');
+                                                        
+                                                        // Verify token with Supabase
+                                                        const { data: { user }, error } = 
+                                                          await supabase.auth.getUser(token);
+                                                        
+                                                        if (error || !user) {
+                                                          return res.status(401).json({ 
+                                                            message: 'Invalid or expired token' 
+                                                          });
+                                                        }
+                                                        
+                                                        // Find user in MongoDB
+                                                        const mongoUser = await User.findOne({ 
+                                                          supabaseId: user.id 
+                                                        });
+                                                        
+                                                        if (!mongoUser) {
+                                                          return res.status(404).json({ 
+                                                            message: 'User not found' 
+                                                          });
+                                                        }
+                                                        
+                                                        // Set user in request
+                                                        req.user = mongoUser;
+                                                        req.supabaseUser = user;
+                                                        req.token = token;
+                                                        
+                                                        next();
+                                                      } catch (error) {
+                                                        console.error('Auth middleware error:', error);
+                                                        res.status(500).json({ message: 'Server error' });
+                                                      }
+                                                    };
+                                                                            </code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Data Flow -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="6">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Data Flow</h2>
+                <div class="data-flow-container relative h-96 mb-8">
+                    <!-- 3D data flow visualization will be rendered here by Three.js -->
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-400">Request Creation</h3>
+                        <ol class="text-gray-300 space-y-2 list-decimal pl-5">
+                            <li>User submits blood request form</li>
+                            <li>Frontend validates input</li>
+                            <li>API endpoint creates request in MongoDB</li>
+                            <li>Matching algorithm finds potential donors</li>
+                            <li>Notifications sent to matching donors</li>
+                        </ol>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-green-400">Donor Matching</h3>
+                        <ol class="text-gray-300 space-y-2 list-decimal pl-5">
+                            <li>System identifies compatible blood types</li>
+                            <li>Location-based filtering applied</li>
+                            <li>Donor availability checked</li>
+                            <li>Matched donors notified</li>
+                            <li>Donor confirms willingness to donate</li>
+                        </ol>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-purple-400">Contact Form</h3>
+                        <ol class="text-gray-300 space-y-2 list-decimal pl-5">
+                            <li>User submits contact form</li>
+                            <li>Auth middleware verifies user</li>
+                            <li>Data validated by backend</li>
+                            <li>Message stored in Supabase</li>
+                            <li>Confirmation shown to user</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Frontend Architecture -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="7">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Frontend Architecture</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <div class="bg-gray-800 p-6 rounded-lg mb-6">
+                            <h3 class="text-2xl font-semibold mb-4 text-red-400">Component Structure</h3>
+                            <p class="text-gray-300">Our frontend uses a modular approach with reusable components and
+                                services
+                                for API communication, authentication, and UI utilities.</p>
+                        </div>
+                        <div class="frontend-structure">
+                            <!-- Frontend Structure Tree -->
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <pre class="text-gray-300 text-sm overflow-auto" style="max-height: 300px;">
+                                                    frontend/
+                                                    ├── assets/
+                                                    │   ├── css/
+                                                    │   │   ├── styles.css
+                                                    │   │   └── presentation.css
+                                                    │   ├── js/
+                                                    │   │   ├── config.js
+                                                    │   │   ├── main.js
+                                                    │   │   ├── presentation.js
+                                                    │   │   ├── three-animations.js
+                                                    │   │   ├── services/
+                                                    │   │   │   ├── api.js
+                                                    │   │   │   ├── auth.js
+                                                    │   │   │   └── ...
+                                                    │   │   └── utils/
+                                                    │   │       ├── toast.js
+                                                    │   │       ├── authCheck.js
+                                                    │   │       └── ...
+                                                    │   └── images/
+                                                    ├── index.html
+                                                    ├── login.html
+                                                    ├── register.html
+                                                    ├── donors.html
+                                                    ├── requests.html
+                                                    ├── contact.html
+                                                    ├── faq.html
+                                                    ├── about.html
+                                                    ├── profile.html
+                                                    └── how-it-works.html
+                                                                                    </pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Auth Service Implementation</h3>
+                        <pre><code class="language-javascript rounded-lg text-sm">
+                                                    class AuthService extends API {
+                                                        constructor(baseURL) {
+                                                            super(baseURL);
+                                                        }
+                                                    
+                                                        // Register a new user
+                                                        async register(userData) {
+                                                            try {
+                                                                const response = await this.post('/api/auth/register', userData);
+                                                                
+                                                                if (response.token) {
+                                                                    localStorage.setItem('token', response.token);
+                                                                    localStorage.setItem('user', JSON.stringify(response.user));
+                                                                }
+                                                                
+                                                                return response;
+                                                            } catch (error) {
+                                                                console.error('Error during registration:', error);
+                                                                throw new Error('Registration failed. Please try again later.');
+                                                            }
+                                                        }
+                                                    
+                                                        // Login user
+                                                        async login(credentials) {
+                                                            try {
+                                                                const response = await this.post('/api/auth/login', credentials);
+                                                                
+                                                                if (response.token) {
+                                                                    localStorage.setItem('token', response.token);
+                                                                    localStorage.setItem('user', JSON.stringify(response.user));
+                                                                }
+                                                                
+                                                                return response;
+                                                            } catch (error) {
+                                                                console.error('Error during login:', error);
+                                                                throw new Error('Login failed. Please check your credentials.');
+                                                            }
+                                                        }
+                                                    
+                                                        // Check if user is authenticated
+                                                        isAuthenticated() {
+                                                            return !!this.getToken();
+                                                        }
+                                                    }
+                                                                            </code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Backend Architecture -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="8">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Backend Architecture</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Server Structure</h3>
+                        <div class="bg-gray-800 p-4 rounded-lg">
+                            <pre class="text-gray-300 text-sm overflow-auto" style="max-height: 300px;">
+                                                    backend/
+                                                    ├── src/
+                                                    │   ├── controllers/
+                                                    │   │   ├── authController.js
+                                                    │   │   ├── requestController.js
+                                                    │   │   ├── contactController.js
+                                                    │   │   └── ...
+                                                    │   ├── middleware/
+                                                    │   │   ├── auth.js
+                                                    │   │   ├── validation.js
+                                                    │   │   ├── rateLimit.js
+                                                    │   │   └── ...
+                                                    │   ├── models/
+                                                    │   │   ├── User.js
+                                                    │   │   ├── Request.js
+                                                    │   │   └── ...
+                                                    │   ├── routes/
+                                                    │   │   ├── authRoutes.js
+                                                    │   │   ├── requestsRoutes.js
+                                                    │   │   ├── contactRoutes.js
+                                                    │   │   └── ...
+                                                    │   ├── utils/
+                                                    │   │   ├── supabase.js
+                                                    │   │   ├── emailSender.js
+                                                    │   │   └── ...
+                                                    │   └── server.js
+                                                    ├── .env
+                                                    └── package.json
+                                                                                </pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Express Server Setup</h3>
+                        <pre><code class="language-javascript rounded-lg text-sm">
+                                                    // Initialize Express app
+                                                    const app = express();
+                                                    
+                                                    // Middleware
+                                                    app.use(express.json());
+                                                    app.use(cors({
+                                                      origin: process.env.FRONTEND_URL || 'http://localhost:8081',
+                                                      credentials: true
+                                                    }));
+                                                    
+                                                    // Apply rate limiting to all requests
+                                                    app.use('/api', apiLimiter);
+                                                    
+                                                    // API Routes
+                                                    app.use('/api/auth', authRoutes);
+                                                    app.use('/api/users', usersRoutes);
+                                                    app.use('/api/requests', requestsRoutes);
+                                                    app.use('/api/donations', donationRoutes);
+                                                    app.use('/api/match', matchRoutes);
+                                                    app.use('/api/stats', statsRoutes);
+                                                    app.use('/api/contact', contactRoutes);
+                                                    
+                                                    // Health check route
+                                                    app.get('/health', (req, res) => {
+                                                    res.status(200).json({
+                                                    status: 'ok',
+                                                    message: 'Server is running'
+                                                    });
+                                                    });
+                                                    
+                                                    // Serve static assets in production
+                                                    if (process.env.NODE_ENV === 'production') {
+                                                    app.use(express.static(path.join(__dirname, '../../frontend')));
+                                                    
+                                                    app.get('*', (req, res) => {
+                                                    res.sendFile(path.resolve(__dirname, '../../frontend', 'index.html'));
+                                                    });
+                                                    }
+                                                    
+                                                    // Error handling middleware
+                                                    app.use((err, req, res, next) => {
+                                                    console.error(err.stack);
+                                                    res.status(500).json({ message: 'Something went wrong!' });
+                                                    });
+                                                    </code></pre>
+                        <div class="bg-gray-800 p-6 rounded-lg mt-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-400">Key Features</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Modular route organization</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Centralized error handling</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Rate limiting for security</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Database Models -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="9">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Database Models</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">MongoDB Schema Design</h3>
+                        <pre><code class="language-javascript rounded-lg text-sm">
+                                                    // User Model
+                                                    const userSchema = new mongoose.Schema({
+                                                      supabaseId: {
+                                                        type: String,
+                                                        required: true,
+                                                        unique: true
+                                                      },
+                                                      name: {
+                                                        type: String,
+                                                        required: true
+                                                      },
+                                                      email: {
+                                                        type: String,
+                                                        required: true,
+                                                        unique: true
+                                                      },
+                                                      phone: String,
+                                                      bloodType: {
+                                                        type: String,
+                                                        enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
+                                                      },
+                                                      location: {
+                                                        city: String,
+                                                        state: String,
+                                                        country: String
+                                                      },
+                                                      isDonor: {
+                                                        type: Boolean,
+                                                        default: false
+                                                      },
+                                                      lastDonation: Date,
+                                                      donationCount: {
+                                                        type: Number,
+                                                        default: 0
+                                                      },
+                                                      profileComplete: {
+                                                        type: Boolean,
+                                                        default: false
+                                                      }
+                                                    }, { timestamps: true });
+                                                                            </code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Request Model</h3>
+                        <pre><code class="language-javascript rounded-lg text-sm">
+                                                    // Blood Request Model
+                                                    const requestSchema = new mongoose.Schema({
+                                                      requester: {
+                                                        type: mongoose.Schema.Types.ObjectId,
+                                                        ref: 'User',
+                                                        required: true
+                                                      },
+                                                      patient: {
+                                                        name: {
+                                                          type: String,
+                                                          required: true
+                                                        },
+                                                        age: Number,
+                                                        bloodType: {
+                                                          type: String,
+                                                          enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+                                                          required: true
+                                                        }
+                                                      },
+                                                      hospital: {
+                                                        name: {
+                                                          type: String,
+                                                          required: true
+                                                        },
+                                                        address: String,
+                                                        city: String,
+                                                        state: String
+                                                      },
+                                                      unitsNeeded: {
+                                                        type: Number,
+                                                        required: true,
+                                                        min: 1
+                                                      },
+                                                      urgency: {
+                                                        type: String,
+                                                        enum: ['low', 'medium', 'high', 'critical'],
+                                                        default: 'medium'
+                                                      },
+                                                      status: {
+                                                        type: String,
+                                                        enum: ['pending', 'in-progress', 'fulfilled', 'cancelled', 'expired'],
+                                                        default: 'pending'
+                                                      },
+                                                      description: String,
+                                                      matchedDonors: [{
+                                                        donor: {
+                                                          type: mongoose.Schema.Types.ObjectId,
+                                                          ref: 'User'
+                                                        },
+                                                        status: {
+                                                          type: String,
+                                                          enum: ['matched', 'contacted', 'confirmed', 'donated', 'cancelled'],
+                                                          default: 'matched'
+                                                        },
+                                                        matchedAt: {
+                                                          type: Date,
+                                                          default: Date.now
+                                                        }
+                                                      }],
+                                                      expiresAt: {
+                                                        type: Date,
+                                                        required: true
+                                                      }
+                                                    }, { timestamps: true });
+                                                                            </code></pre>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Supabase Tables</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-800 p-6 rounded-lg">
+                            <h4 class="text-xl font-semibold mb-2 text-purple-400">auth.users</h4>
+                            <p class="text-gray-300">Managed by Supabase Auth, stores user credentials and
+                                authentication data.
+                            </p>
+                        </div>
+                        <div class="bg-gray-800 p-6 rounded-lg">
+                            <h4 class="text-xl font-semibold mb-2 text-purple-400">contact_messages</h4>
+                            <p class="text-gray-300">Stores user contact form submissions with fields for name, email,
+                                subject,
+                                message, and status.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Security Features -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="10">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Security Features</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">JWT Authentication</h3>
+                        </div>
+                        <p class="text-gray-300">Secure JSON Web Tokens for authentication with proper expiration and
+                            signature
+                            verification.</p>
+                        <ul class="mt-4 text-gray-300 space-y-2">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Token-based authentication</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Secure storage in localStorage</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">Input Validation</h3>
+                        </div>
+                        <p class="text-gray-300">Comprehensive validation on both client and server side to prevent
+                            malicious
+                            inputs.</p>
+                        <ul class="mt-4 text-gray-300 space-y-2">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Form validation middleware</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Sanitization of user inputs</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">Rate Limiting</h3>
+                        </div>
+                        <p class="text-gray-300">Protection against brute force attacks and API abuse with rate limiting
+                            middleware.</p>
+                        <pre><code class="language-javascript text-sm">
+                                                                        const apiLimiter = rateLimit({
+                                                                          windowMs: 15 * 60 * 1000, // 15 minutes
+                                                                          max: 100, // limit each IP to 100 requests per windowMs
+                                                                          message: { message: 'Too many requests, please try again later.' }
+                                                                        });
+                                                                        
+                                                                        const authLimiter = rateLimit({
+                                                                          windowMs: 60 * 60 * 1000, // 1 hour
+                                                                          max: 10, // limit each IP to 10 auth requests per hour
+                                                                          message: { message: 'Too many authentication attempts, please try again later.' }
+                                                                        });
+                                                                                                </code></pre>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">Row Level Security</h3>
+                        </div>
+                        <p class="text-gray-300">Supabase's Row Level Security ensures users can only access their own
+                            data, providing
+                            an additional layer of protection.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">CORS Protection</h3>
+                        </div>
+                        <p class="text-gray-300">Cross-Origin Resource Sharing is properly configured to prevent
+                            unauthorized access
+                            from different domains.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Contact Form Implementation -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="11">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Contact Form Implementation</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Frontend Implementation</h3>
+                        <pre><code class="language-javascript rounded-lg text-sm">
+                                                                        document.addEventListener('DOMContentLoaded', function () {
+                                                                            const contactForm = document.getElementById('contactForm');
+                                                                            const authRequired = document.getElementById('auth-required');
+                                                                            const contactFormContainer = document.getElementById('contact-form-container');
+                                                                            const submitButton = document.getElementById('submit-button');
+                                                                            const toast = new Toast();
+                                                                        
+                                                                            // Check if user is authenticated
+                                                                            function checkAuth() {
+                                                                                if (authService.isAuthenticated()) {
+                                                                                    // User is logged in, show contact form
+                                                                                    authRequired.classList.add('hidden');
+                                                                                    contactFormContainer.classList.remove('hidden');
+                                                                        
+                                                                                    // Pre-fill form with user data if available
+                                                                                    const user = authService.getCurrentUser();
+                                                                                    if (user) {
+                                                                                        document.getElementById('name').value = user.name || '';
+                                                                                        document.getElementById('email').value = user.email || '';
+                                                                                    }
+                                                                                } else {
+                                                                                    // User is not logged in, show auth required message
+                                                                                    authRequired.classList.remove('hidden');
+                                                                                    contactFormContainer.classList.add('hidden');
+                                                                                }
+                                                                            }
+                                                                        
+                                                                            // Initial auth check
+                                                                            checkAuth();
+                                                                        
+                                                                            // Handle form submission
+                                                                            if (contactForm) {
+                                                                                contactForm.addEventListener('submit', async function (e) {
+                                                                                    e.preventDefault();
+                                                                        
+                                                                                    // Check authentication again
+                                                                                    if (!authService.isAuthenticated()) {
+                                                                                        toast.error('Please log in to send a message');
+                                                                                        return;
+                                                                                    }
+                                                                        
+                                                                                    const name = document.getElementById('name').value;
+                                                                                    const email = document.getElementById('email').value;
+                                                                                    const subject = document.getElementById('subject').value;
+                                                                                    const message = document.getElementById('message').value;
+                                                                        
+                                                                                    // Disable button and show loading state
+                                                                                    submitButton.disabled = true;
+                                                                                    const originalButtonText = submitButton.textContent;
+                                                                                    submitButton.innerHTML = '<span class="spinner mr-2"></span> Sending...';
+                                                                        
+                                                                                    try {
+                                                                                        // Send the contact form data to the API
+                                                                                        const response = await contactAPI.submitContactForm({
+                                                                                            name,
+                                                                                            email,
+                                                                                            subject,
+                                                                                            message
+                                                                                        });
+                                                                        
+                                                                                        // Show success message
+                                                                                        toast.success('Message sent successfully! We will get back to you soon.');
+                                                                        
+                                                                                        // Reset form
+                                                                                        contactForm.reset();
+                                                                        
+                                                                                        // Pre-fill name and email again
+                                                                                        const user = authService.getCurrentUser();
+                                                                                        if (user) {
+                                                                                            document.getElementById('name').value = user.name || '';
+                                                                                            document.getElementById('email').value = user.email || '';
+                                                                                        }
+                                                                                    } catch (error) {
+                                                                                        console.error('Error sending contact form:', error);
+                                                                                        toast.error(error.message || 'Failed to send message. Please try again later.');
+                                                                                    } finally {
+                                                                                        // Reset button state
+                                                                                        submitButton.disabled = false;
+                                                                                        submitButton.textContent = originalButtonText;
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                                                </code></pre>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Backend Controller</h3>
+                        <pre><code class="language-javascript rounded-lg text-sm">
+                                                                        const { supabase } = require('../utils/supabase');
+                                                                        
+                                                                        // Submit contact form
+                                                                        exports.createContact = async (req, res) => {
+                                                                            try {
+                                                                                // Ensure user is authenticated (this is already handled by auth middleware)
+                                                                                const { name, email, subject, message } = req.body;
+                                                                        
+                                                                                // Validate input
+                                                                                if (!name || !email || !subject || !message) {
+                                                                                    return res.status(400).json({ message: 'All fields are required' });
+                                                                                }
+                                                                        
+                                                                                // Insert into Supabase
+                                                                                const { data, error } = await supabase
+                                                                                    .from('contact_messages')
+                                                                                    .insert({
+                                                                                        user_id: req.supabaseUser.id,
+                                                                                        name,
+                                                                                        email,
+                                                                                        subject,
+                                                                                        message,
+                                                                                        status: 'unread'
+                                                                                    });
+                                                                        
+                                                                                if (error) {
+                                                                                    console.error('Supabase error:', error);
+                                                                                    return res.status(500).json({ message: 'Failed to submit contact form' });
+                                                                                }
+                                                                        
+                                                                                // Return success response
+                                                                                res.status(201).json({
+                                                                                    message: 'Contact form submitted successfully',
+                                                                                    data
+                                                                                });
+                                                                            } catch (error) {
+                                                                                console.error('Contact form submission error:', error);
+                                                                                res.status(500).json({ message: 'Server error' });
+                                                                            }
+                                                                        };
+                                                                                                </code></pre>
+                        <div class="bg-gray-800 p-6 rounded-lg mt-6">
+                            <h3 class="text-xl font-semibold mb-2 text-blue-400">Key Features</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Authentication required</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Input validation</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Error handling</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 12: Future Enhancements -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="12">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-8 text-center">Future Enhancements</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">Real-time Chat</h3>
+                        </div>
+                        <p class="text-gray-300">Implement real-time chat between donors and recipients using WebSockets
+                            for
+                            immediate communication.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">Advanced Geolocation</h3>
+                        </div>
+                        <p class="text-gray-300">Implement advanced geolocation features with distance-based matching
+                            and map visualization for
+                            donors and requests.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">Mobile App</h3>
+                        </div>
+                        <p class="text-gray-300">Develop native mobile applications using React Native for improved
+                            accessibility and push
+                            notifications.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">Hospital Integration</h3>
+                        </div>
+                        <p class="text-gray-300">Create API integrations with hospital systems for direct request
+                            creation and
+                            verification of donation completion.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            <h3 class="text-xl font-semibold text-red-400">Blockchain Verification</h3>
+                        </div>
+                        <p class="text-gray-300">Implement blockchain technology for transparent and immutable
+                            record-keeping of
+                            donations and requests.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 13: Conclusion -->
+        <section class="slide flex items-center justify-center h-screen" data-slide="13">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-4xl font-bold mb-8">Thank You!</h2>
+                <div class="bg-gray-800 p-8 rounded-lg mb-8">
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Project Summary</h3>
+                    <p class="text-gray-300 text-lg mb-6">
+                        BloodConnect is a comprehensive platform that leverages modern web technologies to connect blood
+                        donors
+                        with recipients in need. Our hybrid architecture combines the best of MongoDB and Supabase to
+                        create a
+                        secure, scalable, and user-friendly experience.
+                    </p>
+                    <p class="text-gray-300 text-lg">
+                        With features like authentication, blood request management, donor matching, and secure contact
+                        forms,
+                        we're building a solution that can help save lives by addressing the critical problem of blood
+                        shortage.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="index.html"
+                        class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">
+                        Back to Home
+                    </a>
+                    <a href="https://github.com/tarun1sisodia/Tarun" target="_blank"
+                        class="border border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-600 hover:text-white">
+                        View Source Code
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Scripts -->
-    <script src="js/main.js"></script>
-    <script src="js/how-it-works.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/three-animations.js"></script>
+    <script src="assets/js/presentation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM fully loaded');
+
+    // Check if libraries are loaded
+    console.log('Three.js loaded:', typeof THREE !== 'undefined');
+    console.log('GSAP loaded:', typeof gsap !== 'undefined');
+    console.log('Highlight.js loaded:', typeof hljs !== 'undefined');
+
+    // Check if our scripts are loaded
+    console.log('Presentation.js loaded:', typeof Presentation !== 'undefined');
+
+    // Force show the first slide if nothing is visible
+    setTimeout(function () {
+    const firstSlide = document.querySelector('.slide[data-slide="1"]');
+    if (firstSlide) {
+    console.log('Forcing first slide visibility');
+    document.querySelectorAll('.slide').forEach(slide => {
+    slide.style.opacity = '0';
+    slide.style.position = 'absolute';
+    });
+    firstSlide.style.opacity = '1';
+    firstSlide.style.position = 'relative';
+    firstSlide.style.zIndex = '10';
+    } else {
+    console.error('No slides found with data-slide attribute');
+    }
+    }, 1000);
+
+    // Initialize presentation manually
+    try {
+    console.log('Attempting to initialize presentation manually');
+    new Presentation();
+    } catch (e) {
+    console.error('Error initializing presentation:', e);
+    }
+    });
+    </script>
+
 </body>
-</html> 
+
+</html>

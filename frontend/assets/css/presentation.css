@@ -1,0 +1,170 @@
+
+/* General Slide Styles */
+.slide {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.slide::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Edge */
+}
+
+.slide.active {
+    opacity: 1;
+    z-index: 10;
+}
+
+/* Code Blocks */
+pre {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Architecture Diagram Animation */
+.architecture-element {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateY(20px);
+}
+
+.architecture-element.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.architecture-connection {
+    opacity: 0;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 1s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.architecture-connection.active {
+    opacity: 1;
+    stroke-dashoffset: 0;
+}
+
+/* 3D Tech Stack Container */
+#tech-stack-container {
+    perspective: 1000px;
+}
+
+/* Auth Flow Animation */
+#auth-flow-animation {
+    position: relative;
+}
+
+.auth-flow-step {
+    position: absolute;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    padding: 1rem;
+    background-color: rgba(55, 65, 81, 0.8);
+    border-radius: 0.5rem;
+    border-left: 4px solid #ef4444;
+}
+
+.auth-flow-step.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Data Flow Animation */
+.data-flow-container {
+    position: relative;
+}
+
+/* Navigation Controls */
+#prev-slide,
+#next-slide {
+    transition: transform 0.2s ease-in-out;
+}
+
+#prev-slide:hover,
+#next-slide:hover {
+    transform: scale(1.1);
+}
+
+/* Progress Bar */
+#progress-bar {
+    transition: width 0.3s ease-in-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .slide {
+        padding: 1rem;
+    }
+
+    h2 {
+        font-size: 1.75rem !important;
+    }
+
+    pre {
+        font-size: 0.8rem;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.slide-up {
+    animation: slideUp 0.5s ease-in-out forwards;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
