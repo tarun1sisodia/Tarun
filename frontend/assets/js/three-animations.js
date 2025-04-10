@@ -2,6 +2,8 @@
  * Three.js animations for the technical presentation
  */
 
+const THREE = require('three');
+
 // Tech Stack 3D Visualization
 function initTechStackVisualization() {
     console.log('Initializing Tech Stack Visualization');

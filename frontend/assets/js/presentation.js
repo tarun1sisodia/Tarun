@@ -81,22 +81,28 @@ class Presentation {
     }
   
     showSlide(slideNumber) {
-      console.log(`Showing slide ${slideNumber}`);
-      // Hide all slides by removing the active class
-      this.slides.forEach(slide => {
-        slide.classList.remove('active');
-      });
-  
-      // Find and show the target slide by its data-slide attribute
-      const currentSlide = document.querySelector(`.slide[data-slide="${slideNumber}"]`);
-      if (currentSlide) {
-        currentSlide.classList.add('active');
-        console.log(`Slide ${slideNumber} activated`);
-        // Trigger any slide-specific animations
-        this.triggerSlideAnimations(slideNumber);
-      } else {
-        console.warn(`Slide ${slideNumber} not found`);
-      }
+        console.log(`Showing slide ${slideNumber}`);
+        
+        // First, hide ALL slides completely
+        this.slides.forEach(slide => {
+            slide.classList.remove('active');
+            slide.style.display = 'none'; // Force hide all slides
+        });
+    
+        // Find and show the target slide by its data-slide attribute
+        const currentSlide = document.querySelector(`.slide[data-slide="${slideNumber}"]`);
+        if (currentSlide) {
+            currentSlide.style.display = ''; // Reset display property
+            // Small delay before adding active class for transition
+            setTimeout(() => {
+                currentSlide.classList.add('active');
+            }, 50);
+            console.log(`Slide ${slideNumber} activated`);
+            // Trigger any slide-specific animations
+            this.triggerSlideAnimations(slideNumber);
+        } else {
+            console.warn(`Slide ${slideNumber} not found`);
+        }
     }
   
     nextSlide() {
