@@ -6,13 +6,14 @@
 class Presentation {
     constructor() {
         this.currentSlide = 1;
-        this.totalSlides = document.querySelectorAll('.slide').length;
+        this.totalSlides = document.querySelectorAll('.slide').length || 12; // Default to 12 if not found
         this.slides = document.querySelectorAll('.slide');
         this.progressBar = document.getElementById('progress-bar');
         this.prevButton = document.getElementById('prev-slide');
         this.nextButton = document.getElementById('next-slide');
         this.isAnimating = false;
 
+        console.log(`Presentation initialized with ${this.totalSlides} slides`);
         this.init();
     }
 
@@ -26,10 +27,16 @@ class Presentation {
         // Add event listeners
         if (this.prevButton) {
             this.prevButton.addEventListener('click', () => this.prevSlide());
+            console.log('Prev button listener added');
+        } else {
+            console.warn('Prev button not found');
         }
 
         if (this.nextButton) {
             this.nextButton.addEventListener('click', () => this.nextSlide());
+            console.log('Next button listener added');
+        } else {
+            console.warn('Next button not found');
         }
 
         // Keyboard navigation
@@ -40,6 +47,7 @@ class Presentation {
                 this.prevSlide();
             }
         });
+        console.log('Keyboard navigation enabled');
 
         // Mouse wheel navigation
         document.addEventListener('wheel', (e) => {
@@ -51,6 +59,7 @@ class Presentation {
                 this.prevSlide();
             }
         }, { passive: true });
+        console.log('Mouse wheel navigation enabled');
 
         // Touch swipe navigation
         let touchStartX = 0;
@@ -64,6 +73,7 @@ class Presentation {
             touchEndX = e.changedTouches[0].screenX;
             this.handleSwipe(touchStartX, touchEndX);
         }, { passive: true });
+        console.log('Touch navigation enabled');
     }
 
     handleSwipe(touchStartX, touchEndX) {
@@ -75,6 +85,8 @@ class Presentation {
     }
 
     showSlide(slideNumber) {
+        console.log(`Showing slide ${slideNumber}`);
+
         // Hide all slides
         this.slides.forEach(slide => {
             slide.classList.remove('active');
@@ -84,9 +96,12 @@ class Presentation {
         const currentSlide = document.querySelector(`.slide[data-slide="${slideNumber}"]`);
         if (currentSlide) {
             currentSlide.classList.add('active');
+            console.log(`Slide ${slideNumber} activated`);
 
             // Trigger slide-specific animations
             this.triggerSlideAnimations(slideNumber);
+        } else {
+            console.warn(`Slide ${slideNumber} not found`);
         }
     }
 
@@ -95,6 +110,7 @@ class Presentation {
 
         this.isAnimating = true;
         this.currentSlide++;
+        console.log(`Moving to next slide: ${this.currentSlide}`);
         this.showSlide(this.currentSlide);
         this.updateProgress();
 
@@ -108,6 +124,7 @@ class Presentation {
 
         this.isAnimating = true;
         this.currentSlide--;
+        console.log(`Moving to previous slide: ${this.currentSlide}`);
         this.showSlide(this.currentSlide);
         this.updateProgress();
 
@@ -117,10 +134,14 @@ class Presentation {
     }
 
     updateProgress() {
-        if (!this.progressBar) return;
+        if (!this.progressBar) {
+            console.warn('Progress bar not found');
+            return;
+        }
 
         const progress = (this.currentSlide / this.totalSlides) * 100;
         this.progressBar.style.width = `${progress}%`;
+        console.log(`Progress updated: ${progress.toFixed(1)}%`);
 
         // Update navigation buttons
         if (this.prevButton) {
@@ -141,186 +162,98 @@ class Presentation {
     }
 
     triggerSlideAnimations(slideNumber) {
+        console.log(`Triggering animations for slide ${slideNumber}`);
+
+        // Generic animation for all slides
+        this.animateGenericSlide(slideNumber);
+
+        // Specific animations for certain slides
         switch (slideNumber) {
-            case 1:
-                // Title slide animations
-                this.animateTitleSlide();
-                break;
-            case 2:
-                // Problem statement animations
-                this.animateProblemSlide();
-                break;
             case 3:
                 // Tech stack animations
-                this.animateTechStackSlide();
-                break;
-            case 4:
-                // Architecture animations
-                this.animateArchitectureSlide();
-                break;
-            case 5:
-                // Auth flow animations
-                this.animateAuthFlowSlide();
+                if (typeof initTechStackVisualization === 'function') {
+                    console.log('Initializing tech stack visualization');
+                    setTimeout(() => initTechStackVisualization(), 300);
+                }
                 break;
             case 6:
                 // Data flow animations
-                this.animateDataFlowSlide();
+                if (typeof initDataFlowVisualization === 'function') {
+                    console.log('Initializing data flow visualization');
+                    setTimeout(() => initDataFlowVisualization(), 300);
+                }
                 break;
-            // Add more slide-specific animations as needed
         }
     }
 
-    animateTitleSlide() {
-        const title = document.querySelector('.slide[data-slide="1"] h1');
-        const subtitle = document.querySelector('.slide[data-slide="1"] p');
-        const buttons = document.querySelectorAll('.slide[data-slide="1"] a');
+    // Generic animation that works for all slides
+    animateGenericSlide(slideNumber) {
+        const slide = document.querySelector(`.slide[data-slide="${slideNumber}"]`);
+        if (!slide) return;
 
-        if (title) {
-            gsap.fromTo(title,
-                { opacity: 0, y: -30 },
-                { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
-            );
+        // Animate heading
+        const heading = slide.querySelector('h1, h2');
+        if (heading) {
+            try {
+                gsap.fromTo(heading,
+                    { opacity: 0, y: -20 },
+                    { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+                );
+            } catch (e) {
+                console.warn('GSAP animation failed for heading:', e);
+            }
         }
 
-        if (subtitle) {
-            gsap.fromTo(subtitle,
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: "power2.out" }
-            );
+        // Animate paragraphs
+        const paragraphs = slide.querySelectorAll('p');
+        if (paragraphs.length > 0) {
+            try {
+                gsap.fromTo(paragraphs,
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, duration: 0.5, delay: 0.3, stagger: 0.2, ease: "power2.out" }
+                );
+            } catch (e) {
+                console.warn('GSAP animation failed for paragraphs:', e);
+            }
         }
 
-        if (buttons && buttons.length > 0) {
-            gsap.fromTo(buttons,
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.5, delay: 0.6, stagger: 0.2, ease: "power2.out" }
-            );
-        }
-    }
-
-    animateProblemSlide() {
-        const title = document.querySelector('.slide[data-slide="2"] h2');
-        const cards = document.querySelectorAll('.slide[data-slide="2"] .problem-card');
-
-        if (title) {
-            gsap.fromTo(title,
-                { opacity: 0, y: -20 },
-                { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-            );
+        // Animate lists
+        const listItems = slide.querySelectorAll('li');
+        if (listItems.length > 0) {
+            try {
+                gsap.fromTo(listItems,
+                    { opacity: 0, x: -20 },
+                    { opacity: 1, x: 0, duration: 0.5, delay: 0.5, stagger: 0.1, ease: "power2.out" }
+                );
+            } catch (e) {
+                console.warn('GSAP animation failed for list items:', e);
+            }
         }
 
-        if (cards && cards.length > 0) {
-            gsap.fromTo(cards,
-                { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, duration: 0.5, delay: 0.3, stagger: 0.2, ease: "power2.out" }
-            );
-        }
-    }
-
-    animateTechStackSlide() {
-        const title = document.querySelector('.slide[data-slide="3"] h2');
-        const techItems = document.querySelectorAll('.slide[data-slide="3"] .tech-item');
-
-        if (title) {
-            gsap.fromTo(title,
-                { opacity: 0, y: -20 },
-                { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-            );
+        // Animate code blocks
+        const codeBlocks = slide.querySelectorAll('pre');
+        if (codeBlocks.length > 0) {
+            try {
+                gsap.fromTo(codeBlocks,
+                    { opacity: 0, scale: 0.95 },
+                    { opacity: 1, scale: 1, duration: 0.5, delay: 0.3, ease: "power2.out" }
+                );
+            } catch (e) {
+                console.warn('GSAP animation failed for code blocks:', e);
+            }
         }
 
-        if (techItems && techItems.length > 0) {
-            gsap.fromTo(techItems,
-                { opacity: 0, scale: 0.8 },
-                { opacity: 1, scale: 1, duration: 0.5, delay: 0.3, stagger: 0.1, ease: "back.out(1.7)" }
-            );
-        }
-
-        // Initialize 3D tech stack visualization if function exists
-        if (typeof initTechStackVisualization === 'function') {
-            initTechStackVisualization();
-        }
-    }
-
-    animateArchitectureSlide() {
-        const title = document.querySelector('.slide[data-slide="4"] h2');
-        const elements = document.querySelectorAll('.architecture-element');
-        const connections = document.querySelectorAll('.architecture-connection');
-
-        if (title) {
-            gsap.fromTo(title,
-                { opacity: 0, y: -20 },
-                { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-            );
-        }
-
-        // Animate architecture elements one by one
-        if (elements && elements.length > 0) {
-            elements.forEach((element, index) => {
-                setTimeout(() => {
-                    element.classList.add('active');
-                }, 500 + (index * 300));
-            });
-        }
-
-        // Animate connections after elements
-        if (connections && connections.length > 0) {
-            connections.forEach((connection, index) => {
-                setTimeout(() => {
-                    connection.classList.add('active');
-                }, 1500 + (index * 300));
-            });
-        }
-    }
-
-    animateAuthFlowSlide() {
-        const title = document.querySelector('.slide[data-slide="5"] h2');
-        const codeBlock = document.querySelector('.slide[data-slide="5"] pre');
-        const authFlowSteps = document.querySelectorAll('.auth-flow-step');
-
-        if (title) {
-            gsap.fromTo(title,
-                { opacity: 0, y: -20 },
-                { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-            );
-        }
-
-        if (codeBlock) {
-            gsap.fromTo(codeBlock,
-                { opacity: 0, x: 30 },
-                { opacity: 1, x: 0, duration: 0.5, delay: 0.3, ease: "power2.out" }
-            );
-        }
-
-        // Animate auth flow steps
-        if (authFlowSteps && authFlowSteps.length > 0) {
-            authFlowSteps.forEach((step, index) => {
-                setTimeout(() => {
-                    step.classList.add('active');
-                }, 800 + (index * 400));
-            });
-        }
-    }
-
-    animateDataFlowSlide() {
-        const title = document.querySelector('.slide[data-slide="6"] h2');
-        const cards = document.querySelectorAll('.slide[data-slide="6"] .bg-gray-800');
-
-        if (title) {
-            gsap.fromTo(title,
-                { opacity: 0, y: -20 },
-                { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-            );
-        }
-
-        if (cards && cards.length > 0) {
-            gsap.fromTo(cards,
-                { opacity: 0, y: 20 },
-                { opacity: 1, y: 0, duration: 0.5, delay: 0.3, stagger: 0.2, ease: "power2.out" }
-            );
-        }
-
-        // Initialize 3D data flow visualization if function exists
-        if (typeof initDataFlowVisualization === 'function') {
-            initDataFlowVisualization();
+        // Animate images
+        const images = slide.querySelectorAll('img');
+        if (images.length > 0) {
+            try {
+                gsap.fromTo(images,
+                    { opacity: 0, scale: 0.9 },
+                    { opacity: 1, scale: 1, duration: 0.5, delay: 0.3, ease: "power2.out" }
+                );
+            } catch (e) {
+                console.warn('GSAP animation failed for images:', e);
+            }
         }
     }
 }
@@ -328,9 +261,8 @@ class Presentation {
 // Initialize presentation when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing presentation');
-    const presentation = new Presentation();
 
-    // Initialize code highlighting
+    // Initialize code highlighting first
     if (window.hljs) {
         console.log('Initializing code highlighting');
         try {
@@ -341,4 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.warn('Highlight.js not loaded');
     }
+
+    // Initialize presentation
+    const presentation = new Presentation();
 });

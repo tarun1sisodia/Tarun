@@ -58,8 +58,7 @@
                     <p class="text-gray-400">Scroll or use arrow keys to navigate</p>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto mt-2" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 9l-7 7-7-7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </div>
             </div>
@@ -301,69 +300,69 @@
                                                       }
                                                     };
                                                                             </code></pre>
-                    </div>
+            </div>
+    </div>
+    </div>
+    </section>
+
+    <!-- Slide 6: Data Flow -->
+    <section class="slide flex items-center justify-center h-screen" data-slide="6">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8 text-center">Data Flow</h2>
+            <div class="data-flow-container relative h-96 mb-8">
+                <!-- 3D data flow visualization will be rendered here by Three.js -->
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-400">Request Creation</h3>
+                    <ol class="text-gray-300 space-y-2 list-decimal pl-5">
+                        <li>User submits blood request form</li>
+                        <li>Frontend validates input</li>
+                        <li>API endpoint creates request in MongoDB</li>
+                        <li>Matching algorithm finds potential donors</li>
+                        <li>Notifications sent to matching donors</li>
+                    </ol>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-green-400">Donor Matching</h3>
+                    <ol class="text-gray-300 space-y-2 list-decimal pl-5">
+                        <li>System identifies compatible blood types</li>
+                        <li>Location-based filtering applied</li>
+                        <li>Donor availability checked</li>
+                        <li>Matched donors notified</li>
+                        <li>Donor confirms willingness to donate</li>
+                    </ol>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-purple-400">Contact Form</h3>
+                    <ol class="text-gray-300 space-y-2 list-decimal pl-5">
+                        <li>User submits contact form</li>
+                        <li>Auth middleware verifies user</li>
+                        <li>Data validated by backend</li>
+                        <li>Message stored in Supabase</li>
+                        <li>Confirmation shown to user</li>
+                    </ol>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Slide 6: Data Flow -->
-        <section class="slide flex items-center justify-center h-screen" data-slide="6">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-4xl font-bold mb-8 text-center">Data Flow</h2>
-                <div class="data-flow-container relative h-96 mb-8">
-                    <!-- 3D data flow visualization will be rendered here by Three.js -->
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold mb-4 text-blue-400">Request Creation</h3>
-                        <ol class="text-gray-300 space-y-2 list-decimal pl-5">
-                            <li>User submits blood request form</li>
-                            <li>Frontend validates input</li>
-                            <li>API endpoint creates request in MongoDB</li>
-                            <li>Matching algorithm finds potential donors</li>
-                            <li>Notifications sent to matching donors</li>
-                        </ol>
+    <!-- Slide 7: Frontend Architecture -->
+    <section class="slide flex items-center justify-center h-screen" data-slide="7">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8 text-center">Frontend Architecture</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <div class="bg-gray-800 p-6 rounded-lg mb-6">
+                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Component Structure</h3>
+                        <p class="text-gray-300">Our frontend uses a modular approach with reusable components and
+                            services
+                            for API communication, authentication, and UI utilities.</p>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold mb-4 text-green-400">Donor Matching</h3>
-                        <ol class="text-gray-300 space-y-2 list-decimal pl-5">
-                            <li>System identifies compatible blood types</li>
-                            <li>Location-based filtering applied</li>
-                            <li>Donor availability checked</li>
-                            <li>Matched donors notified</li>
-                            <li>Donor confirms willingness to donate</li>
-                        </ol>
-                    </div>
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold mb-4 text-purple-400">Contact Form</h3>
-                        <ol class="text-gray-300 space-y-2 list-decimal pl-5">
-                            <li>User submits contact form</li>
-                            <li>Auth middleware verifies user</li>
-                            <li>Data validated by backend</li>
-                            <li>Message stored in Supabase</li>
-                            <li>Confirmation shown to user</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Slide 7: Frontend Architecture -->
-        <section class="slide flex items-center justify-center h-screen" data-slide="7">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-4xl font-bold mb-8 text-center">Frontend Architecture</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div>
-                        <div class="bg-gray-800 p-6 rounded-lg mb-6">
-                            <h3 class="text-2xl font-semibold mb-4 text-red-400">Component Structure</h3>
-                            <p class="text-gray-300">Our frontend uses a modular approach with reusable components and
-                                services
-                                for API communication, authentication, and UI utilities.</p>
-                        </div>
-                        <div class="frontend-structure">
-                            <!-- Frontend Structure Tree -->
-                            <div class="bg-gray-800 p-4 rounded-lg">
-                                <pre class="text-gray-300 text-sm overflow-auto" style="max-height: 300px;">
+                    <div class="frontend-structure">
+                        <!-- Frontend Structure Tree -->
+                        <div class="bg-gray-800 p-4 rounded-lg">
+                            <pre class="text-gray-300 text-sm overflow-auto" style="max-height: 300px;">
                                                     frontend/
                                                     ├── assets/
                                                     │   ├── css/
@@ -394,12 +393,12 @@
                                                     ├── profile.html
                                                     └── how-it-works.html
                                                                                     </pre>
-                            </div>
                         </div>
                     </div>
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Auth Service Implementation</h3>
-                        <pre><code class="language-javascript rounded-lg text-sm">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Auth Service Implementation</h3>
+                    <pre><code class="language-javascript rounded-lg text-sm">
                                                     class AuthService extends API {
                                                         constructor(baseURL) {
                                                             super(baseURL);
@@ -445,20 +444,20 @@
                                                         }
                                                     }
                                                                             </code></pre>
-                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Slide 8: Backend Architecture -->
-        <section class="slide flex items-center justify-center h-screen" data-slide="8">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-4xl font-bold mb-8 text-center">Backend Architecture</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Server Structure</h3>
-                        <div class="bg-gray-800 p-4 rounded-lg">
-                            <pre class="text-gray-300 text-sm overflow-auto" style="max-height: 300px;">
+    <!-- Slide 8: Backend Architecture -->
+    <section class="slide flex items-center justify-center h-screen" data-slide="8">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8 text-center">Backend Architecture</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Server Structure</h3>
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <pre class="text-gray-300 text-sm overflow-auto" style="max-height: 300px;">
                                                     backend/
                                                     ├── src/
                                                     │   ├── controllers/
@@ -488,11 +487,11 @@
                                                     ├── .env
                                                     └── package.json
                                                                                 </pre>
-                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Express Server Setup</h3>
-                        <pre><code class="language-javascript rounded-lg text-sm">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Express Server Setup</h3>
+                    <pre><code class="language-javascript rounded-lg text-sm">
                                                     // Initialize Express app
                                                     const app = express();
                                                     
@@ -538,51 +537,51 @@
                                                     res.status(500).json({ message: 'Something went wrong!' });
                                                     });
                                                     </code></pre>
-                        <div class="bg-gray-800 p-6 rounded-lg mt-6">
-                            <h3 class="text-xl font-semibold mb-2 text-blue-400">Key Features</h3>
-                            <ul class="text-gray-300 space-y-2">
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Modular route organization</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Centralized error handling</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Rate limiting for security</span>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="bg-gray-800 p-6 rounded-lg mt-6">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-400">Key Features</h3>
+                        <ul class="text-gray-300 space-y-2">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Modular route organization</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Centralized error handling</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Rate limiting for security</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Slide 9: Database Models -->
-        <section class="slide flex items-center justify-center h-screen" data-slide="9">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-4xl font-bold mb-8 text-center">Database Models</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4 text-red-400">MongoDB Schema Design</h3>
-                        <pre><code class="language-javascript rounded-lg text-sm">
+    <!-- Slide 9: Database Models -->
+    <section class="slide flex items-center justify-center h-screen" data-slide="9">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8 text-center">Database Models</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">MongoDB Schema Design</h3>
+                    <pre><code class="language-javascript rounded-lg text-sm">
                                                     // User Model
                                                     const userSchema = new mongoose.Schema({
                                                       supabaseId: {
@@ -624,10 +623,10 @@
                                                       }
                                                     }, { timestamps: true });
                                                                             </code></pre>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Request Model</h3>
-                        <pre><code class="language-javascript rounded-lg text-sm">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Request Model</h3>
+                    <pre><code class="language-javascript rounded-lg text-sm">
                                                     // Blood Request Model
                                                     const requestSchema = new mongoose.Schema({
                                                       requester: {
@@ -693,111 +692,111 @@
                                                       }
                                                     }, { timestamps: true });
                                                                             </code></pre>
-                    </div>
                 </div>
-                <div class="mt-8">
-                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Supabase Tables</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-gray-800 p-6 rounded-lg">
-                            <h4 class="text-xl font-semibold mb-2 text-purple-400">auth.users</h4>
-                            <p class="text-gray-300">Managed by Supabase Auth, stores user credentials and
-                                authentication data.
-                            </p>
-                        </div>
-                        <div class="bg-gray-800 p-6 rounded-lg">
-                            <h4 class="text-xl font-semibold mb-2 text-purple-400">contact_messages</h4>
-                            <p class="text-gray-300">Stores user contact form submissions with fields for name, email,
-                                subject,
-                                message, and status.</p>
-                        </div>
+            </div>
+            <div class="mt-8">
+                <h3 class="text-2xl font-semibold mb-4 text-red-400">Supabase Tables</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold mb-2 text-purple-400">auth.users</h4>
+                        <p class="text-gray-300">Managed by Supabase Auth, stores user credentials and
+                            authentication data.
+                        </p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold mb-2 text-purple-400">contact_messages</h4>
+                        <p class="text-gray-300">Stores user contact form submissions with fields for name, email,
+                            subject,
+                            message, and status.</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Slide 10: Security Features -->
-        <section class="slide flex items-center justify-center h-screen" data-slide="10">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-4xl font-bold mb-8 text-center">Security Features</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                            <h3 class="text-xl font-semibold text-red-400">JWT Authentication</h3>
-                        </div>
-                        <p class="text-gray-300">Secure JSON Web Tokens for authentication with proper expiration and
-                            signature
-                            verification.</p>
-                        <ul class="mt-4 text-gray-300 space-y-2">
-                            <li class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <span>Token-based authentication</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <span>Secure storage in localStorage</span>
-                            </li>
-                        </ul>
+    <!-- Slide 10: Security Features -->
+    <section class="slide flex items-center justify-center h-screen" data-slide="10">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8 text-center">Security Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">JWT Authentication</h3>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    <p class="text-gray-300">Secure JSON Web Tokens for authentication with proper expiration and
+                        signature
+                        verification.</p>
+                    <ul class="mt-4 text-gray-300 space-y-2">
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
                             </svg>
-                            <h3 class="text-xl font-semibold text-red-400">Input Validation</h3>
-                        </div>
-                        <p class="text-gray-300">Comprehensive validation on both client and server side to prevent
-                            malicious
-                            inputs.</p>
-                        <ul class="mt-4 text-gray-300 space-y-2">
-                            <li class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <span>Form validation middleware</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <span>Sanitization of user inputs</span>
-                            </li>
-                        </ul>
+                            <span>Token-based authentication</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span>Secure storage in localStorage</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">Input Validation</h3>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <p class="text-gray-300">Comprehensive validation on both client and server side to prevent
+                        malicious
+                        inputs.</p>
+                    <ul class="mt-4 text-gray-300 space-y-2">
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
                             </svg>
-                            <h3 class="text-xl font-semibold text-red-400">Rate Limiting</h3>
-                        </div>
-                        <p class="text-gray-300">Protection against brute force attacks and API abuse with rate limiting
-                            middleware.</p>
-                        <pre><code class="language-javascript text-sm">
+                            <span>Form validation middleware</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span>Sanitization of user inputs</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">Rate Limiting</h3>
+                    </div>
+                    <p class="text-gray-300">Protection against brute force attacks and API abuse with rate limiting
+                        middleware.</p>
+                    <pre><code class="language-javascript text-sm">
                                                                         const apiLimiter = rateLimit({
                                                                           windowMs: 15 * 60 * 1000, // 15 minutes
                                                                           max: 100, // limit each IP to 100 requests per windowMs
@@ -810,47 +809,47 @@
                                                                           message: { message: 'Too many authentication attempts, please try again later.' }
                                                                         });
                                                                                                 </code></pre>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                            </svg>
-                            <h3 class="text-xl font-semibold text-red-400">Row Level Security</h3>
-                        </div>
-                        <p class="text-gray-300">Supabase's Row Level Security ensures users can only access their own
-                            data, providing
-                            an additional layer of protection.</p>
-                    </div>
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            <h3 class="text-xl font-semibold text-red-400">CORS Protection</h3>
-                        </div>
-                        <p class="text-gray-300">Cross-Origin Resource Sharing is properly configured to prevent
-                            unauthorized access
-                            from different domains.</p>
-                    </div>
                 </div>
             </div>
-        </section>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">Row Level Security</h3>
+                    </div>
+                    <p class="text-gray-300">Supabase's Row Level Security ensures users can only access their own
+                        data, providing
+                        an additional layer of protection.</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">CORS Protection</h3>
+                    </div>
+                    <p class="text-gray-300">Cross-Origin Resource Sharing is properly configured to prevent
+                        unauthorized access
+                        from different domains.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Slide 11: Contact Form Implementation -->
-        <section class="slide flex items-center justify-center h-screen" data-slide="11">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-4xl font-bold mb-8 text-center">Contact Form Implementation</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Frontend Implementation</h3>
-                        <pre><code class="language-javascript rounded-lg text-sm">
+    <!-- Slide 11: Contact Form Implementation -->
+    <section class="slide flex items-center justify-center h-screen" data-slide="11">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8 text-center">Contact Form Implementation</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Frontend Implementation</h3>
+                    <pre><code class="language-javascript rounded-lg text-sm">
                                                                         document.addEventListener('DOMContentLoaded', function () {
                                                                             const contactForm = document.getElementById('contactForm');
                                                                             const authRequired = document.getElementById('auth-required');
@@ -935,10 +934,10 @@
                                                                             }
                                                                         });
                                                                                                 </code></pre>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4 text-red-400">Backend Controller</h3>
-                        <pre><code class="language-javascript rounded-lg text-sm">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Backend Controller</h3>
+                    <pre><code class="language-javascript rounded-lg text-sm">
                                                                         const { supabase } = require('../utils/supabase');
                                                                         
                                                                         // Submit contact form
@@ -980,153 +979,152 @@
                                                                             }
                                                                         };
                                                                                                 </code></pre>
-                        <div class="bg-gray-800 p-6 rounded-lg mt-6">
-                            <h3 class="text-xl font-semibold mb-2 text-blue-400">Key Features</h3>
-                            <ul class="text-gray-300 space-y-2">
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Authentication required</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Input validation</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Error handling</span>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="bg-gray-800 p-6 rounded-lg mt-6">
+                        <h3 class="text-xl font-semibold mb-2 text-blue-400">Key Features</h3>
+                        <ul class="text-gray-300 space-y-2">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Authentication required</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Input validation</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>Error handling</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Slide 12: Future Enhancements -->
-        <section class="slide flex items-center justify-center h-screen" data-slide="12">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-4xl font-bold mb-8 text-center">Future Enhancements</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                            </svg>
-                            <h3 class="text-xl font-semibold text-red-400">Real-time Chat</h3>
-                        </div>
-                        <p class="text-gray-300">Implement real-time chat between donors and recipients using WebSockets
-                            for
-                            immediate communication.</p>
+    <!-- Slide 12: Future Enhancements -->
+    <section class="slide flex items-center justify-center h-screen" data-slide="12">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold mb-8 text-center">Future Enhancements</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">Real-time Chat</h3>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <h3 class="text-xl font-semibold text-red-400">Advanced Geolocation</h3>
-                        </div>
-                        <p class="text-gray-300">Implement advanced geolocation features with distance-based matching
-                            and map visualization for
-                            donors and requests.</p>
-                    </div>
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                            <h3 class="text-xl font-semibold text-red-400">Mobile App</h3>
-                        </div>
-                        <p class="text-gray-300">Develop native mobile applications using React Native for improved
-                            accessibility and push
-                            notifications.</p>
-                    </div>
+                    <p class="text-gray-300">Implement real-time chat between donors and recipients using WebSockets
+                        for
+                        immediate communication.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                            </svg>
-                            <h3 class="text-xl font-semibold text-red-400">Hospital Integration</h3>
-                        </div>
-                        <p class="text-gray-300">Create API integrations with hospital systems for direct request
-                            creation and
-                            verification of donation completion.</p>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">Advanced Geolocation</h3>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                            <h3 class="text-xl font-semibold text-red-400">Blockchain Verification</h3>
-                        </div>
-                        <p class="text-gray-300">Implement blockchain technology for transparent and immutable
-                            record-keeping of
-                            donations and requests.</p>
+                    <p class="text-gray-300">Implement advanced geolocation features with distance-based matching
+                        and map visualization for
+                        donors and requests.</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">Mobile App</h3>
                     </div>
+                    <p class="text-gray-300">Develop native mobile applications using React Native for improved
+                        accessibility and push
+                        notifications.</p>
                 </div>
             </div>
-        </section>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">Hospital Integration</h3>
+                    </div>
+                    <p class="text-gray-300">Create API integrations with hospital systems for direct request
+                        creation and
+                        verification of donation completion.</p>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-red-400">Blockchain Verification</h3>
+                    </div>
+                    <p class="text-gray-300">Implement blockchain technology for transparent and immutable
+                        record-keeping of
+                        donations and requests.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Slide 13: Conclusion -->
-        <section class="slide flex items-center justify-center h-screen" data-slide="13">
-            <div class="max-w-4xl mx-auto px-4 text-center">
-                <h2 class="text-4xl font-bold mb-8">Thank You!</h2>
-                <div class="bg-gray-800 p-8 rounded-lg mb-8">
-                    <h3 class="text-2xl font-semibold mb-4 text-red-400">Project Summary</h3>
-                    <p class="text-gray-300 text-lg mb-6">
-                        BloodConnect is a comprehensive platform that leverages modern web technologies to connect blood
-                        donors
-                        with recipients in need. Our hybrid architecture combines the best of MongoDB and Supabase to
-                        create a
-                        secure, scalable, and user-friendly experience.
-                    </p>
-                    <p class="text-gray-300 text-lg">
-                        With features like authentication, blood request management, donor matching, and secure contact
-                        forms,
-                        we're building a solution that can help save lives by addressing the critical problem of blood
-                        shortage.
-                    </p>
-                </div>
-                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="index.html"
-                        class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">
-                        Back to Home
-                    </a>
-                    <a href="https://github.com/tarun1sisodia/Tarun" target="_blank"
-                        class="border border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-600 hover:text-white">
-                        View Source Code
-                    </a>
-                </div>
+    <!-- Slide 13: Conclusion -->
+    <section class="slide flex items-center justify-center h-screen" data-slide="13">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-8">Thank You!</h2>
+            <div class="bg-gray-800 p-8 rounded-lg mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-red-400">Project Summary</h3>
+                <p class="text-gray-300 text-lg mb-6">
+                    BloodConnect is a comprehensive platform that leverages modern web technologies to connect blood
+                    donors
+                    with recipients in need. Our hybrid architecture combines the best of MongoDB and Supabase to
+                    create a
+                    secure, scalable, and user-friendly experience.
+                </p>
+                <p class="text-gray-300 text-lg">
+                    With features like authentication, blood request management, donor matching, and secure contact
+                    forms,
+                    we're building a solution that can help save lives by addressing the critical problem of blood
+                    shortage.
+                </p>
             </div>
-        </section>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="index.html" class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">
+                    Back to Home
+                </a>
+                <a href="https://github.com/tarun1sisodia/Tarun" target="_blank"
+                    class="border border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-600 hover:text-white">
+                    View Source Code
+                </a>
+            </div>
+        </div>
+    </section>
     </div>
 
     <!-- Scripts -->
@@ -1136,44 +1134,100 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/three-animations.js"></script>
     <script src="assets/js/presentation.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM fully loaded');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Debug script loaded');
 
-    // Check if libraries are loaded
-    console.log('Three.js loaded:', typeof THREE !== 'undefined');
-    console.log('GSAP loaded:', typeof gsap !== 'undefined');
-    console.log('Highlight.js loaded:', typeof hljs !== 'undefined');
+            // Check if libraries are loaded
+            console.log('Three.js loaded:', typeof THREE !== 'undefined');
+            console.log('GSAP loaded:', typeof gsap !== 'undefined');
+            console.log('Highlight.js loaded:', typeof hljs !== 'undefined');
 
-    // Check if our scripts are loaded
-    console.log('Presentation.js loaded:', typeof Presentation !== 'undefined');
+            // Check if slides exist
+            const slides = document.querySelectorAll('.slide');
+            console.log(`Found ${slides.length} slides`);
 
-    // Force show the first slide if nothing is visible
-    setTimeout(function () {
-    const firstSlide = document.querySelector('.slide[data-slide="1"]');
-    if (firstSlide) {
-    console.log('Forcing first slide visibility');
-    document.querySelectorAll('.slide').forEach(slide => {
-    slide.style.opacity = '0';
-    slide.style.position = 'absolute';
-    });
-    firstSlide.style.opacity = '1';
-    firstSlide.style.position = 'relative';
-    firstSlide.style.zIndex = '10';
-    } else {
-    console.error('No slides found with data-slide attribute');
-    }
-    }, 1000);
+            // List all slides
+            slides.forEach((slide, index) => {
+                console.log(`Slide ${index + 1}: data-slide="${slide.getAttribute('data-slide')}", classes: ${slide.className}`);
+            });
 
-    // Initialize presentation manually
-    try {
-    console.log('Attempting to initialize presentation manually');
-    new Presentation();
-    } catch (e) {
-    console.error('Error initializing presentation:', e);
-    }
-    });
+            // Check if first slide is visible
+            const firstSlide = document.querySelector('.slide[data-slide="1"]');
+            if (firstSlide) {
+                console.log('First slide found');
+
+                // Force first slide to be visible
+                setTimeout(() => {
+                    firstSlide.style.opacity = '1';
+                    firstSlide.style.visibility = 'visible';
+                    firstSlide.style.position = 'relative';
+                    firstSlide.style.zIndex = '10';
+                    console.log('First slide visibility enforced');
+                }, 500);
+            } else {
+                console.error('First slide not found!');
+            }
+
+            // Check navigation buttons
+            const prevButton = document.getElementById('prev-slide');
+            const nextButton = document.getElementById('next-slide');
+            console.log('Prev button found:', !!prevButton);
+            console.log('Next button found:', !!nextButton);
+
+            // Check progress bar
+            const progressBar = document.getElementById('progress-bar');
+            console.log('Progress bar found:', !!progressBar);
+
+            // Check 3D visualization containers
+            const techStackContainer = document.getElementById('tech-stack-container');
+            const dataFlowContainer = document.querySelector('.data-flow-container');
+            console.log('Tech stack container found:', !!techStackContainer);
+            console.log('Data flow container found:', !!dataFlowContainer);
+
+            // Add manual navigation buttons if needed
+            if (!prevButton || !nextButton) {
+                console.log('Adding manual navigation buttons');
+                const controls = document.createElement('div');
+                controls.className = 'fixed bottom-4 left-0 right-0 flex justify-center space-x-4 z-50';
+
+                const prevBtn = document.createElement('button');
+                prevBtn.innerHTML = '&larr; Previous';
+                prevBtn.className = 'bg-white px-4 py-2 rounded shadow';
+                prevBtn.onclick = function () {
+                    if (window.presentation) {
+                        window.presentation.prevSlide();
+                    }
+                };
+
+                const nextBtn = document.createElement('button');
+                nextBtn.innerHTML = 'Next &rarr;';
+                nextBtn.className = 'bg-white px-4 py-2 rounded shadow';
+                nextBtn.onclick = function () {
+                    if (window.presentation) {
+                        window.presentation.nextSlide();
+                    }
+                };
+
+                controls.appendChild(prevBtn);
+                controls.appendChild(nextBtn);
+                document.body.appendChild(controls);
+            }
+
+            // Check if presentation is initialized
+            setTimeout(() => {
+                if (!window.presentation) {
+                    console.warn('Presentation not initialized, trying to initialize manually');
+                    try {
+                        window.presentation = new Presentation();
+                    } catch (e) {
+                        console.error('Error initializing presentation:', e);
+                    }
+                }
+            }, 1000);
+        });
     </script>
+
 
 </body>
 
