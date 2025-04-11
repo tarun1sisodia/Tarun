@@ -16,13 +16,13 @@
     pointer-events: none;
   }
   
-  /* Default for the first slide */
+  /* Default for the first slide
   .slide[data-slide="1"] {
     opacity: 1;
     visibility: visible;
     position: relative;
     z-index: 10;
-  }
+  } */
   
   /* Active slide */
   .slide.active {
