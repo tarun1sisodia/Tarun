@@ -13,90 +13,83 @@
     transition: opacity 0.5s ease, visibility 0.5s ease;
     overflow-y: auto;
     z-index: 1;
-}
-
-/* Make sure the first slide is visible by default */
-.slide[data-slide="1"] {
+    pointer-events: none;
+  }
+  
+  /* Default for the first slide */
+  .slide[data-slide="1"] {
     opacity: 1;
     visibility: visible;
     position: relative;
     z-index: 10;
-}
-
-/* Active slide */
-.slide.active {
+  }
+  
+  /* Active slide */
+  .slide.active {
     opacity: 1;
     visibility: visible;
     position: relative;
     z-index: 10;
-}
-
-/* Hide scrollbar */
-.slide::-webkit-scrollbar {
+    pointer-events: auto;
+  }
+  
+  /* Hide scrollbar */
+  .slide::-webkit-scrollbar {
     display: none;
-}
-
-.slide {
+  }
+  .slide {
     -ms-overflow-style: none;
-    /* IE and Edge */
     scrollbar-width: none;
-    /* Firefox */
-}
-
-/* Slide Content Styles */
-.slide h1 {
+  }
+  
+  /* Slide Content Styles */
+  .slide h1 {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
     color: #1a202c;
-}
-
-.slide h2 {
+  }
+  .slide h2 {
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 1.25rem;
     color: #1a202c;
-}
-
-.slide h3 {
+  }
+  .slide h3 {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1rem;
     color: #2d3748;
-}
-
-.slide p {
+  }
+  .slide p {
     margin-bottom: 1rem;
     line-height: 1.6;
-}
-
-.slide ul,
-.slide ol {
+  }
+  .slide ul,
+  .slide ol {
     margin-bottom: 1.5rem;
     padding-left: 1.5rem;
-}
-
-.slide li {
+  }
+  .slide li {
     margin-bottom: 0.5rem;
     line-height: 1.5;
-}
-
-/* Code Blocks */
-.slide pre {
+  }
+  
+  /* Code Blocks */
+  .slide pre {
     margin: 1.5rem 0;
     border-radius: 0.5rem;
     overflow: hidden;
-}
-
-.slide code {
+  }
+  .slide code {
     font-family: 'Fira Code', monospace;
     font-size: 0.9rem;
     line-height: 1.5;
-}
-
-/* 3D Visualization Containers */
-#tech-stack-container,
-.data-flow-container {
+  }
+  
+  /* 3D Visualization Containers */
+  #tech-stack-container,
+  .data-flow-container {
     width: 100%;
     height: 400px;
     position: relative;
@@ -104,137 +97,115 @@
     border-radius: 0.5rem;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Architecture Diagram */
-.architecture-diagram {
+  }
+  
+  /* Architecture Diagram */
+  .architecture-diagram {
     width: 100%;
     max-width: 800px;
     margin: 2rem auto;
     position: relative;
-}
-
-.architecture-element {
+  }
+  .architecture-element {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.architecture-element.active {
+  }
+  .architecture-element.active {
     opacity: 1;
     transform: translateY(0);
-}
-
-.architecture-connection {
+  }
+  .architecture-connection {
     opacity: 0;
     transition: opacity 0.8s ease;
-}
-
-.architecture-connection.active {
+  }
+  .architecture-connection.active {
     opacity: 1;
-}
-
-/* Auth Flow Steps */
-.auth-flow-step {
+  }
+  
+  /* Auth Flow Steps */
+  .auth-flow-step {
     opacity: 0;
     transform: translateX(-20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.auth-flow-step.active {
+  }
+  .auth-flow-step.active {
     opacity: 1;
     transform: translateX(0);
-}
-
-/* Problem Cards */
-.problem-card {
+  }
+  
+  /* Problem Cards */
+  .problem-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.problem-card:hover {
+  }
+  .problem-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-/* Tech Items */
-.tech-item {
+  }
+  
+  /* Tech Items */
+  .tech-item {
     transition: transform 0.3s ease;
-}
-
-.tech-item:hover {
+  }
+  .tech-item:hover {
     transform: scale(1.05);
-}
-
-/* Feature Cards */
-.feature-card {
+  }
+  
+  /* Feature Cards */
+  .feature-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
+  }
+  .feature-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-/* Progress Bar Animation */
-@keyframes progress {
-    from {
-        width: 0;
-    }
-
-    to {
-        width: 100%;
-    }
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
+  }
+  
+  /* Progress Bar Animation */
+  @keyframes progress {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
     .slide {
-        padding: 1.5rem;
+      padding: 1.5rem;
     }
-
     .slide h1 {
-        font-size: 2rem;
+      font-size: 2rem;
     }
-
     .slide h2 {
-        font-size: 1.75rem;
+      font-size: 1.75rem;
     }
-
     .slide h3 {
-        font-size: 1.25rem;
+      font-size: 1.25rem;
     }
-
     #tech-stack-container,
     .data-flow-container {
-        height: 300px;
+      height: 300px;
     }
-}
-
-@media (max-width: 640px) {
+  }
+  @media (max-width: 640px) {
     .slide {
-        padding: 1rem;
+      padding: 1rem;
     }
-
     .slide h1 {
-        font-size: 1.75rem;
+      font-size: 1.75rem;
     }
-
     .slide h2 {
-        font-size: 1.5rem;
+      font-size: 1.5rem;
     }
-
     .slide h3 {
-        font-size: 1.25rem;
+      font-size: 1.25rem;
     }
-
     #tech-stack-container,
     .data-flow-container {
-        height: 250px;
+      height: 250px;
     }
-}
-
-/* Navigation Controls */
-.presentation-controls {
+  }
+  
+  /* Navigation Controls */
+  .presentation-controls {
     position: fixed;
     bottom: 1rem;
     left: 0;
@@ -243,9 +214,8 @@
     justify-content: center;
     align-items: center;
     z-index: 50;
-}
-
-.control-button {
+  }
+  .control-button {
     background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
@@ -258,31 +228,27 @@
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.control-button:hover {
+  }
+  .control-button:hover {
     background-color: rgba(255, 255, 255, 1);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.control-button:active {
+  }
+  .control-button:active {
     transform: translateY(0);
-}
-
-.control-button svg {
+  }
+  .control-button svg {
     width: 1.5rem;
     height: 1.5rem;
     color: #4a5568;
-}
-
-.control-button.disabled {
+  }
+  .control-button.disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-/* Progress Bar */
-.progress-container {
+  }
+  
+  /* Progress Bar */
+  .progress-container {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -290,149 +256,87 @@
     height: 4px;
     background-color: rgba(0, 0, 0, 0.1);
     z-index: 50;
-}
-
-.progress-bar {
+  }
+  .progress-bar {
     height: 100%;
     background-color: #e53e3e;
     width: 0;
     transition: width 0.3s ease;
-}
-
-/* Slide Indicators */
-.slide-indicators {
+  }
+  
+  /* Slide Indicators */
+  .slide-indicators {
     position: fixed;
     bottom: 1rem;
     right: 1rem;
     display: flex;
     flex-direction: column;
     z-index: 40;
-}
-
-.slide-indicator {
+  }
+  .slide-indicator {
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.2);
     margin: 4px 0;
     transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.slide-indicator.active {
+  }
+  .slide-indicator.active {
     background-color: #e53e3e;
     transform: scale(1.5);
-}
-
-/* Animation Classes */
-.fade-in {
+  }
+  
+  /* Animation Classes */
+  .fade-in {
     animation: fadeIn 0.5s ease forwards;
-}
-
-.fade-in-up {
+  }
+  .fade-in-up {
     animation: fadeInUp 0.5s ease forwards;
-}
-
-.fade-in-down {
+  }
+  .fade-in-down {
     animation: fadeInDown 0.5s ease forwards;
-}
-
-.fade-in-left {
+  }
+  .fade-in-left {
     animation: fadeInLeft 0.5s ease forwards;
-}
-
-.fade-in-right {
+  }
+  .fade-in-right {
     animation: fadeInRight 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Slide-specific styles */
-.title-slide {
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  /* Slide-specific styles (if any additional customizations are needed) */
+  .title-slide {
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.title-slide h1 {
+  }
+  .title-slide h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
     background: linear-gradient(to right, #e53e3e, #dd6b20);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-
-.title-slide p {
-    font-size: 1.5rem;
-    max-width: 800px;
-    margin: 0 auto 2rem;
-}
-
-/* Code highlighting theme overrides */
-.hljs {
-    background: #1a202c !important;
-    border-radius: 0.5rem;
-    padding: 1.5rem !important;
-}
-
-/* Fix for GSAP animations */
-.gsap-target {
-    opacity: 0;
-}
+  }
+  
