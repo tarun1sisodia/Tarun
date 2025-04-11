@@ -39,7 +39,8 @@ BloodConnect is a comprehensive web application designed to connect blood donors
 │   ├── index.html             # Homepage
 │   ├── login.html             # Login page
 │   ├── register.html          # Registration page
-│   └── requests.html          # Blood requests page
+│   └── requests.html           # Blood requests page
+|   |__ ..etc      
 │
 ├── backend/                   # Backend code
 │   ├── src/                   # Source code
