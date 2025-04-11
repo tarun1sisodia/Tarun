@@ -2,7 +2,7 @@
  * Three.js animations for the technical presentation
  */
 
-const THREE = require('three');
+// const THREE = require('three');
 
 // Tech Stack 3D Visualization
 function initTechStackVisualization() {
