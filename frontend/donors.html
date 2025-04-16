@@ -20,7 +20,7 @@
                 <a href="index.html" class="text-gray-700 hover:text-red-600">Home</a>
                 <a href="donors.html" class="text-gray-700 hover:text-red-600 font-semibold">Donors</a>
                 <a href="requests.html" class="text-gray-700 hover:text-red-600">Requests</a>
-                <a href="about.html" class="text-gray-700 hover:text-red-600">About</a>
+                <a href="donation-centers.html" class="text-gray-700 hover:text-red-600">Donation Centers</a>
                 <a href="faq.html" class="text-gray-700 hover:text-red-600">FAQ</a>
             </div>
 
@@ -67,6 +67,7 @@
             <a href="index.html" class="block py-2 text-gray-700">Home</a>
             <a href="donors.html" class="block py-2 text-gray-700">Donors</a>
             <a href="requests.html" class="block py-2 text-gray-700">Requests</a>
+            <a href='donation-centers.html' class="block py-2 text-gray-700">Donation Centers</a>
             <a href="about.html" class="block py-2 text-gray-700">About</a>
             <a href="faq.html" class="block py-2 text-gray-700">FAQ</a>
         </div>
@@ -293,6 +294,7 @@
                         <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
                         <li><a href="donors.html" class="text-gray-400 hover:text-white">Donors</a></li>
                         <li><a href="requests.html" class="text-gray-400 hover:text-white">Requests</a></li>
+                        <li><a href="donation-centers.html" class="text-gray-400 hover:text-white">Contact Us</a></li>
                         <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
                         <li><a href="faq.html" class="text-gray-400 hover:text-white">FAQ</a></li>
                     </ul>
@@ -435,7 +437,7 @@
                     const toast = new Toast();
                     toast.info('Please login to view all blood requests');
                     setTimeout(() => {
-                        window.location.href = 'login.html?redirect=' + encodeURIComponent('requests.html');
+                        window.location.href = 'login.html?redirect=' + encodeURIComponent('requests.html,donation-centers.html');
                     }, 1500);
                 });
             }

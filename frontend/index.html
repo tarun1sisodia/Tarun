@@ -83,8 +83,7 @@
                    <p class="text-xl mb-6">Connect with blood donors and recipients in your area. Every donation can save up to three lives.</p>
                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                        <a href="register.html" id="become-donor-btn" class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 text-center">Become a Donor</a>
-                       <a href="donation-centers.html"
-                    class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">Donate
+                       <a href="donation-centers.html" id="donate-now-btn" class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">Donate
                     Now</a>
                 </div>
                </div>
@@ -551,6 +550,43 @@
             // Initialize the index page
             new IndexPage();
         });
+    
+        // Add event listener to Donate Now button
+const donateNowBtn = document.getElementById('donate-now-btn');
+if (donateNowBtn) {
+    donateNowBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (authService.isAuthenticated()) {
+            window.location.href = 'donation-centers.html';
+        } else {
+            toast.warning('Please log in to access donation centers');
+            setTimeout(() => {
+                window.location.href = 'login.html?redirect=' + encodeURIComponent('donation-centers.html');
+            }, 1500);
+        }
+    });
+}
+// Check if there's a redirect parameter in the URL
+const urlParams = new URLSearchParams(window.location.search);
+const redirectUrl = urlParams.get('redirect');
+
+// Store the redirect URL in localStorage if it exists
+if (redirectUrl) {
+    localStorage.setItem('redirectAfterLogin', redirectUrl);
+}
+
+// In the login success handler
+function handleLoginSuccess() {
+    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+    if (redirectUrl) {
+        localStorage.removeItem('redirectAfterLogin');
+        window.location.href = redirectUrl;
+    } else {
+        window.location.href = 'index.html';
+    }
+}
+
+
     </script>
 
 
