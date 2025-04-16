@@ -66,11 +66,34 @@ const profileUpdateValidation = [
   handleValidationErrors
 ];
 
+// Donation center validation
+const donationCenterValidation = [
+  check('name', 'Name is required').not().isEmpty(),
+  check('address', 'Address is required').not().isEmpty(),
+  check('city', 'City is required').not().isEmpty(),
+  check('state', 'State is required').not().isEmpty(),
+  check('phone', 'Valid phone number is required').isMobilePhone(),
+  check('email', 'Valid email is required').optional().isEmail(),
+  check('operatingHours', 'Operating hours must be an object').optional().isObject(),
+  handleValidationErrors
+];
+
+// Appointment validation
+const appointmentValidation = [
+  check('donationCenter', 'Donation center ID is required').isMongoId(),
+  check('date', 'Valid date is required').isISO8601(),
+  check('timeSlot', 'Time slot is required').not().isEmpty(),
+  handleValidationErrors
+];
+
+
 module.exports = {
   registerValidation,
   loginValidation,
   requestValidation,
   donationValidation,
   profileUpdateValidation,
+  donationCenterValidation,
+  appointmentValidation,
   handleValidationErrors
 };

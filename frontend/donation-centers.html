@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Centers - BloodConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-red-600 font-bold text-2xl">BloodConnect</a>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-gray-700 hover:text-red-600">Home</a>
+                <a href="donors.html" class="text-gray-700 hover:text-red-600">Donors</a>
+                <a href="requests.html" class="text-gray-700 hover:text-red-600">Requests</a>
+                <a href="donation-centers.html" class="text-red-600 font-semibold">Donate</a>
+                <a href="about.html" class="text-gray-700 hover:text-red-600">About</a>
+                <a href="faq.html" class="text-gray-700 hover:text-red-600">FAQ</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <!-- Auth buttons - will be toggled by JS -->
+                <div id="auth-buttons">
+                    <a href="login.html" class="text-gray-700 hover:text-red-600">Login</a>
+                    <a href="register.html"
+                        class="ml-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Register</a>
+                </div>
+
+                <!-- User menu - hidden by default, shown when logged in -->
+                <div id="user-menu" class="hidden relative">
+                    <button id="user-menu-button" class="flex items-center text-gray-700 hover:text-red-600">
+                        <span id="user-name">User</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <div id="user-dropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                        <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="#" id="logout-button"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobile menu - hidden by default -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 py-2 bg-white">
+            <a href="index.html" class="block py-2 text-gray-700">Home</a>
+            <a href="donors.html" class="block py-2 text-gray-700">Donors</a>
+            <a href="requests.html" class="block py-2 text-gray-700">Requests</a>
+            <a href="donation-centers.html" class="block py-2 text-gray-700 font-semibold">Donate</a>
+            <a href="about.html" class="block py-2 text-gray-700">About</a>
+            <a href="faq.html" class="block py-2 text-gray-700">FAQ</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-red-60 text-white py-20 bg-cover bg-center relative" style="background-image: url('./assets/images/mainpage.jpg');">
+        <!-- Add an overlay to ensure text is readable -->
+        <div class="absolute inset-0 bg-red-60 bg-opacity-60"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Donation Centers</h1>
+                <p class="text-xl mb-6">Find a convenient location and time to donate blood and save lives.</p>
+                <div id="auth-required-banner" class="bg-white bg-opacity-20 p-4 rounded-lg mb-6 hidden">
+                    <p class="text-white">Please <a href="login.html" class="underline font-bold">login</a> or <a href="register.html" class="underline font-bold">register</a> to book appointments.</p>
+                </div>
+                <div id="view-appointments-button" class="hidden">
+                    <button class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+                        View My Appointments
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-8 bg-white shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center">Find Donation Locations</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- City Filter -->
+                    <div>
+                        <label for="city-filter" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                        <select id="city-filter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500">
+                            <option value="">All Cities</option>
+                            <!-- Cities will be loaded dynamically -->
+                        </select>
+                    </div>
+                    
+                    <!-- Date Filter -->
+                    <div>
+                        <label for="date-filter" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                        <input type="date" id="date-filter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    
+                    <!-- Time Slot Filter -->
+                    <div>
+                        <label for="time-slot-filter" class="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
+                        <select id="time-slot-filter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500">
+                            <option value="">Any Time</option>
+                            <option value="morning">Morning (8 AM - 12 PM)</option>
+                            <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
+                            <option value="evening">Evening (4 PM - 8 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button id="search-button" class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Search Locations
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results-container" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-2xl font-bold mb-6">Available Donation Centers</h2>
+                
+                <div id="loading-indicator" class="text-center py-8 hidden">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+                    <p class="mt-2 text-gray-600">Searching for donation centers...</p>
+                </div>
+                
+                <div id="no-results" class="text-center py-8 bg-white rounded-lg shadow-sm hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-gray-600">No donation centers found matching your criteria.</p>
+                    <p class="text-gray-500 mt-2">Try adjusting your filters or selecting a different date.</p>
+                </div>
+                
+                <div id="results-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Results will be populated here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Appointments Section (hidden by default) -->
+    <section id="appointments-section" class="py-12 bg-gray-50 hidden">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">My Appointments</h2>
+                    <button id="back-to-centers-button" class="text-red-600 hover:text-red-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Back to Centers
+                    </button>
+                </div>
+                
+                <div id="appointments-loading" class="text-center py-8 hidden">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+                    <p class="mt-2 text-gray-600">Loading your appointments...</p>
+                </div>
+                
+                <div id="no-appointments" class="text-center py-8 bg-white rounded-lg shadow-sm hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-gray-600">You don't have any appointments yet.</p>
+                    <p class="text-gray-500 mt-2">Book an appointment at one of our donation centers.</p>
+                </div>
+                
+                <div id="appointments-list" class="grid grid-cols-1 gap-4">
+                    <!-- Appointments will be populated here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <!-- Modal Loading State -->
+            <div id="modal-loading" class="p-6 text-center hidden">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mb-4"></div>
+                <p class="text-gray-600">Processing your appointment...</p>
+            </div>
+            
+            <!-- Modal Content -->
+            <div id="modal-content">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h3 id="modal-title" class="text-lg font-bold text-gray-900">Book Appointment</h3>
+                        <button id="close-modal-button" class="text-gray-400 hover:text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-900 mb-2">Donation Center</h4>
+                        <p id="modal-center-name" class="text-gray-700 font-medium"></p>
+                        <p id="modal-center-address" class="text-gray-600 text-sm"></p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="appointment-date" class="block text-sm font-medium text-gray-700 mb-1">Select Date</label>
+                        <input type="date" id="appointment-date" class="w-full p-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="appointment-time" class="block text-sm font-medium text-gray-700 mb-1">Select Time Slot</label>
+                        <select id="appointment-time" class="w-full p-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500">
+                            <option value="">Select a time slot</option>
+                            <!-- Time slots will be loaded dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="text-sm text-gray-600 mb-6">
+                        <p class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Appointments can be cancelled up to 24 hours before the scheduled time.</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-4 rounded-b-lg">
+                    <button id="cancel-booking-button" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button id="confirm-booking-button" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                        Book Appointment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        <!-- Information Section -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-8 text-center">Blood Donation Information</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                            <h3 class="text-xl font-bold mb-4 text-red-600">Eligibility Requirements</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Age between 18-65 years</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Weight at least 45 kg</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Hemoglobin level of at least 12.5 g/dL</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>No major health issues or infections</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Wait at least 3 months between donations</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                            <h3 class="text-xl font-bold mb-4 text-red-600">What to Expect</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 mt-0.5">1</span>
+                                    <span>Registration and basic health check</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 mt-0.5">2</span>
+                                    <span>Brief medical history questionnaire</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 mt-0.5">3</span>
+                                    <span>Quick hemoglobin test (finger prick)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 mt-0.5">4</span>
+                                    <span>Blood donation (takes about 10-15 minutes)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-red-100 text-red-600 rounded-full w-5 h-5 flex items-center justify-center mr-2 mt-0.5">5</span>
+                                    <span>Rest and refreshments (15-20 minutes)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-red-50 p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-bold mb-4 text-red-600">Preparation Tips</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-semibold mb-2">Before Donation:</h4>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>Get a good night's sleep</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>Eat a healthy meal 2-3 hours before</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>Drink plenty of water</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">After Donation:</h4>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>Rest for at least 15 minutes</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-                                        rule="evenodd" />
+                                        </svg>
+                                        <span>Drink extra fluids for 24-48 hours</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>Avoid heavy lifting for 24 hours</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">BloodConnect</h3>
+                        <p class="text-gray-400">Connecting blood donors with recipients since 2025. Our mission is to
+                            ensure that no one suffers due to blood shortage.</p>
+                    </div>
+    
+                    <div>
+                        <h4 class="font-bold mb-4">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                            <li><a href="donors.html" class="text-gray-400 hover:text-white">Donors</a></li>
+                            <li><a href="requests.html" class="text-gray-400 hover:text-white">Requests</a></li>
+                            <li><a href="donation-centers.html" class="text-gray-400 hover:text-white">Donate</a></li>
+                            <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+                            <li><a href="faq.html" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        </ul>
+                    </div>
+    
+                    <div>
+                        <h4 class="font-bold mb-4">Contact Us</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span>123 Main Street, New Delhi, India</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <span>info@bloodconnect.org</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                                <span>+91 123-456-7890</span>
+                            </li>
+                        </ul>
+                    </div>
+    
+                    <div>
+                        <h4 class="font-bold mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                    <p>&copy; 2025 BloodConnect. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    
+        <!-- Toast Container -->
+        <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
+    
+        <!-- Include scripts -->
+        <script src="assets/js/config.js"></script>
+        <script src="assets/js/utils/toast.js"></script>
+        <script src="assets/js/services/api.js"></script>
+        <script src="assets/js/services/auth.js"></script>
+        <script src="assets/js/utils/authcheck.js"></script>
+        <script src="assets/js/scripts.js"></script>
+        <script src="assets/js/main.js"></script>
+    
+        <!-- Donation centers page specific script -->
+        <script>
+                   document.addEventListener('DOMContentLoaded', () => {
+            class DonationCentersPage {
+                constructor() {
+                    // Auth elements
+                    this.authRequiredBanner = document.getElementById('auth-required-banner');
+                    this.viewAppointmentsButton = document.getElementById('view-appointments-button');
+                    
+                    // Filter elements
+                    this.cityFilter = document.getElementById('city-filter');
+                    this.dateFilter = document.getElementById('date-filter');
+                    this.timeSlotFilter = document.getElementById('time-slot-filter');
+                    this.searchButton = document.getElementById('search-button');
+                    
+                    // Results elements
+                    this.resultsContainer = document.getElementById('results-container');
+                    this.loadingIndicator = document.getElementById('loading-indicator');
+                    this.noResults = document.getElementById('no-results');
+                    this.resultsList = document.getElementById('results-list');
+                    
+                    // Appointments elements
+                    this.appointmentsSection = document.getElementById('appointments-section');
+                    this.backToCentersButton = document.getElementById('back-to-centers-button');
+                    this.appointmentsLoading = document.getElementById('appointments-loading');
+                    this.noAppointments = document.getElementById('no-appointments');
+                    this.appointmentsList = document.getElementById('appointments-list');
+                    
+                    // Modal elements
+                    this.bookingModal = document.getElementById('booking-modal');
+                    this.modalLoading = document.getElementById('modal-loading');
+                    this.modalContent = document.getElementById('modal-content');
+                    this.modalTitle = document.getElementById('modal-title');
+                    this.modalCenterName = document.getElementById('modal-center-name');
+                    this.modalCenterAddress = document.getElementById('modal-center-address');
+                    this.appointmentDate = document.getElementById('appointment-date');
+                    this.appointmentTime = document.getElementById('appointment-time');
+                    this.closeModalButton = document.getElementById('close-modal-button');
+                    this.cancelBookingButton = document.getElementById('cancel-booking-button');
+                    this.confirmBookingButton = document.getElementById('confirm-booking-button');
+                    
+                    // Current center being booked
+                    this.currentCenter = null;
+                    
+                    // Toast utility
+                    this.toast = new Toast();
+                    
+                    // Set default date to today
+                    const today = new Date().toISOString().split('T')[0];
+                    if (this.dateFilter) this.dateFilter.value = today;
+                    
+                    this.init();
+                }
+                
+                init() {
+                    // Check authentication status
+                    this.checkAuth();
+                    
+                    // Load cities for filter
+                    this.loadCities();
+                    
+                    // Set up event listeners
+                    this.setupEventListeners();
+                    
+                    // Load initial results
+                    this.loadDonationCenters();
+                }
+                
+                checkAuth() {
+                    if (authService.isAuthenticated()) {
+                        // User is logged in, hide auth required banner, show appointments button
+                        if (this.authRequiredBanner) this.authRequiredBanner.classList.add('hidden');
+                        if (this.viewAppointmentsButton) this.viewAppointmentsButton.classList.remove('hidden');
+                    } else {
+                        // User is not logged in, show auth required banner, hide appointments button
+                        if (this.authRequiredBanner) this.authRequiredBanner.classList.remove('hidden');
+                        if (this.viewAppointmentsButton) this.viewAppointmentsButton.classList.add('hidden');
+                    }
+                }
+                
+                setupEventListeners() {
+                    // Search button
+                    if (this.searchButton) {
+                        this.searchButton.addEventListener('click', () => this.handleSearch());
+                    }
+                    
+                    // View appointments button
+                    if (this.viewAppointmentsButton) {
+                        this.viewAppointmentsButton.addEventListener('click', () => this.showAppointments());
+                    }
+                    
+                    // Back to centers button
+                    if (this.backToCentersButton) {
+                        this.backToCentersButton.addEventListener('click', () => this.showCenters());
+                    }
+                    
+                    // Modal close button
+                    if (this.closeModalButton) {
+                        this.closeModalButton.addEventListener('click', () => this.closeModal());
+                    }
+                    
+                    // Modal cancel button
+                    if (this.cancelBookingButton) {
+                        this.cancelBookingButton.addEventListener('click', () => this.closeModal());
+                    }
+                    
+                    // Modal confirm button
+                    if (this.confirmBookingButton) {
+                        this.confirmBookingButton.addEventListener('click', () => this.bookAppointment());
+                    }
+                    
+                    // Date change in modal
+                    if (this.appointmentDate) {
+                        this.appointmentDate.addEventListener('change', () => {
+                            if (this.currentCenter) {
+                                this.loadTimeSlots(this.currentCenter.id, this.appointmentDate.value);
+                            }
+                        });
+                    }
+                }
+                
+                async loadCities() {
+                    try {
+                        const response = await fetch(`${API_URL}/api/donation-centers/cities`);
+                        const data = await response.json();
+                        
+                        if (data.cities && data.cities.length > 0) {
+                            // Populate city filter
+                            if (this.cityFilter) {
+                                data.cities.forEach(city => {
+                                    const option = document.createElement('option');
+                                    option.value = city;
+                                    option.textContent = city;
+                                    this.cityFilter.appendChild(option);
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error loading cities:', error);
+                    }
+                }
+                
+                handleSearch() {
+                    const city = this.cityFilter ? this.cityFilter.value : '';
+                    const date = this.dateFilter ? this.dateFilter.value : '';
+                    const timeSlot = this.timeSlotFilter ? this.timeSlotFilter.value : '';
+                    
+                    this.loadDonationCenters(city, date, timeSlot);
+                }
+                
+                async loadDonationCenters(city = '', date = '', timeSlot = '') {
+                    try {
+                        // Show loading indicator
+                        if (this.loadingIndicator) this.loadingIndicator.classList.remove('hidden');
+                        if (this.noResults) this.noResults.classList.add('hidden');
+                        if (this.resultsList) this.resultsList.innerHTML = '';
+                        
+                        // Build query parameters
+                        let url = `${API_URL}/api/donation-centers`;
+                        const params = new URLSearchParams();
+                        if (city) params.append('city', city);
+                        if (date) params.append('date', date);
+                        if (timeSlot) params.append('timeSlot', timeSlot);
+                        
+                        const queryString = params.toString();
+                        if (queryString) {
+                            url += `?${queryString}`;
+                        }
+                        
+                        // Fetch donation centers
+                        const response = await fetch(url, {
+                            headers: {
+                                'Authorization': authService.getToken() ? `Bearer ${authService.getToken()}` : ''
+                            }
+                        });
+                        
+                        const data = await response.json();
+                        
+                        // Hide loading indicator
+                        if (this.loadingIndicator) this.loadingIndicator.classList.add('hidden');
+                        
+                        // Display results
+                        if (data.centers && data.centers.length > 0) {
+                            this.displayDonationCenters(data.centers);
+                        } else {
+                            if (this.noResults) this.noResults.classList.remove('hidden');
+                        }
+                    } catch (error) {
+                        console.error('Error loading donation centers:', error);
+                        this.toast.error('Failed to load donation centers. Please try again.');
+                        
+                        // Hide loading indicator
+                        if (this.loadingIndicator) this.loadingIndicator.classList.add('hidden');
+                    }
+                }
+                
+                displayDonationCenters(centers) {
+                    if (!this.resultsList) return;
+                    
+                    // Clear previous results
+                    this.resultsList.innerHTML = '';
+                    
+                    // Add each center to the results list
+                    centers.forEach(center => {
+                        const centerElement = document.createElement('div');
+                        centerElement.className = 'bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500';
+                        
+                        // Format available slots
+                        let availableSlotsHtml = '';
+                        if (center.availableSlots && center.availableSlots.length > 0) {
+                            const firstDaySlots = center.availableSlots[0];
+                            availableSlotsHtml = firstDaySlots.slots.map(slot => {
+                                return `<span class="inline-block px-2 py-1 bg-green-100 text-green-800 rounded text-sm mr-2 mb-2">${slot}</span>`;
+                            }).join('');
+                        } else {
+                            availableSlotsHtml = '<span class="text-gray-500">No available slots</span>';
+                        }
+                        
+                        centerElement.innerHTML = `
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="font-bold text-lg">${center.name}</h3>
+                                    <p class="text-gray-600">${center.address}, ${center.city}</p>
+                                </div>
+                                ${center.distance ? `<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-semibold">${center.distance} km away</span>` : ''}
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-2"><span class="font-semibold">Phone:</span> ${center.phone}</p>
+                                <p class="text-gray-700 mb-2"><span class="font-semibold">Hours:</span> ${center.hours || 'Not available'}</p>
+                                <p class="text-gray-700"><span class="font-semibold">Available Slots:</span></p>
+                                <div class="mt-2 flex flex-wrap">
+                                    ${availableSlotsHtml}
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <a href="https://maps.google.com/?q=${encodeURIComponent(`${center.address}, ${center.city}`)}" target="_blank" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                    <span class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                        </svg>
+                                        View on Map
+                                    </span>
+                                </a>
+                                <button class="book-appointment-btn bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" data-center-id="${center.id}">
+                                    Book Appointment
+                                </button>
+                            </div>
+                        `;
+                        
+                        // Add event listener to book appointment button
+                        const bookButton = centerElement.querySelector('.book-appointment-btn');
+                        if (bookButton) {
+                            bookButton.addEventListener('click', () => this.openBookingModal(center));
+                        }
+                        
+                        this.resultsList.appendChild(centerElement);
+                    });
+                }
+                
+                openBookingModal(center) {
+                    // Check if user is authenticated
+                    if (!authService.isAuthenticated()) {
+                        this.toast.warning('Please log in to book an appointment');
+                        setTimeout(() => {
+                            window.location.href = 'login.html?redirect=' + encodeURIComponent('donation-centers.html');
+                        }, 1500);
+                        return;
+                    }
+                    
+                    // Set current center
+                    this.currentCenter = center;
+                    
+                    // Set modal content
+                    this.modalCenterName.textContent = center.name;
+                    this.modalCenterAddress.textContent = `${center.address}, ${center.city}, ${center.state}`;
+                    
+                    // Set default date to today
+                    const today = new Date().toISOString().split('T')[0];
+                    this.appointmentDate.value = today;
+                    this.appointmentDate.min = today;
+                    
+                    // Load time slots for today
+                    this.loadTimeSlots(center.id, today);
+                    
+                    // Show modal
+                    this.bookingModal.classList.remove('hidden');
+                }
+                
+                closeModal() {
+                    this.bookingModal.classList.add('hidden');
+                    this.currentCenter = null;
+                }
+                
+                async loadTimeSlots(centerId, date) {
+                    try {
+                        // Clear current time slots
+                        this.appointmentTime.innerHTML = '<option value="">Select a time slot</option>';
+                        
+                        // Show loading in dropdown
+                        const loadingOption = document.createElement('option');
+                        loadingOption.disabled = true;
+                        loadingOption.selected = true;
+                        loadingOption.textContent = 'Loading time slots...';
+                        this.appointmentTime.appendChild(loadingOption);
+                        
+                        // Fetch available slots
+                        const response = await fetch(`${API_URL}/api/donation-centers/${centerId}/slots?date=${date}`, {
+                            headers: {
+                                'Authorization': `Bearer ${authService.getToken()}`
+                            }
+                        });
+                        
+                        const data = await response.json();
+                        
+                        // Clear loading option
+                        this.appointmentTime.innerHTML = '<option value="">Select a time slot</option>';
+                        
+                        // Add time slots to dropdown
+                        if (data.slots && data.slots.length > 0) {
+                            data.slots.forEach(slot => {
+                                const option = document.createElement('option');
+                                option.value = slot;
+                                option.textContent = slot;
+                                this.appointmentTime.appendChild(option);
+                            });
+                        } else {
+                            const noSlotsOption = document.createElement('option');
+                            noSlotsOption.disabled = true;
+                            noSlotsOption.textContent = 'No available slots for this date';
+                            this.appointmentTime.appendChild(noSlotsOption);
+                        }
+                    } catch (error) {
+                        console.error('Error loading time slots:', error);
+                        this.appointmentTime.innerHTML = '<option value="">Error loading time slots</option>';
+                    }
+                }
+                async bookAppointment() {
+                    // Validate inputs
+                    if (!this.currentCenter) {
+                        this.toast.error('No donation center selected');
+                        return;
+                    }
+                    
+                    const date = this.appointmentDate.value;
+                    const timeSlot = this.appointmentTime.value;
+                    
+                    if (!date) {
+                        this.toast.error('Please select a date');
+                        return;
+                    }
+                    
+                    if (!timeSlot) {
+                        this.toast.error('Please select a time slot');
+                        return;
+                    }
+                    
+                    try {
+                        // Show loading state
+                        this.modalContent.classList.add('hidden');
+                        this.modalLoading.classList.remove('hidden');
+                        
+                        // Book appointment
+                        const response = await fetch(`${API_URL}/api/donation-centers/appointments`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${authService.getToken()}`
+                            },
+                            body: JSON.stringify({
+                                donationCenter: this.currentCenter.id,
+                                date: date,
+                                timeSlot: timeSlot
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        // Hide loading state
+                        this.modalContent.classList.remove('hidden');
+                        this.modalLoading.classList.add('hidden');
+                        
+                        if (response.ok) {
+                            // Close modal
+                            this.closeModal();
+                            
+                            // Show success message
+                            this.toast.success('Appointment booked successfully');
+                            
+                            // Show appointments section
+                            this.showAppointments();
+                        } else {
+                            throw new Error(data.message || 'Failed to book appointment');
+                        }
+                    } catch (error) {
+                        console.error('Error booking appointment:', error);
+                        
+                        // Hide loading state
+                        this.modalContent.classList.remove('hidden');
+                        this.modalLoading.classList.add('hidden');
+                        
+                        // Show error message
+                        this.toast.error(error.message || 'Failed to book appointment. Please try again.');
+                    }
+                }
+                
+                showCenters() {
+                    // Show centers section, hide appointments section
+                    if (this.resultsContainer) this.resultsContainer.classList.remove('hidden');
+                    if (this.appointmentsSection) this.appointmentsSection.classList.add('hidden');
+                }
+                
+                async showAppointments() {
+                    // Check if user is authenticated
+                    if (!authService.isAuthenticated()) {
+                        this.toast.warning('Please log in to view your appointments');
+                        setTimeout(() => {
+                            window.location.href = 'login.html?redirect=' + encodeURIComponent('donation-centers.html');
+                        }, 1500);
+                        return;
+                    }
+                    
+                    // Show appointments section, hide centers section
+                    if (this.resultsContainer) this.resultsContainer.classList.add('hidden');
+                    if (this.appointmentsSection) this.appointmentsSection.classList.remove('hidden');
+                    
+                    // Load appointments
+                    await this.loadAppointments();
+                }
+                
+                async loadAppointments() {
+                    try {
+                        // Show loading indicator
+                        if (this.appointmentsLoading) this.appointmentsLoading.classList.remove('hidden');
+                        if (this.noAppointments) this.noAppointments.classList.add('hidden');
+                        if (this.appointmentsList) this.appointmentsList.innerHTML = '';
+                        
+                        // Fetch appointments
+                        const response = await fetch(`${API_URL}/api/donation-centers/appointments/me`, {
+                            headers: {
+                                'Authorization': `Bearer ${authService.getToken()}`
+                            }
+                        });
+                        
+                        const data = await response.json();
+                        
+                        // Hide loading indicator
+                        if (this.appointmentsLoading) this.appointmentsLoading.classList.add('hidden');
+                        
+                        // Display appointments
+                        if (data.appointments && data.appointments.length > 0) {
+                            this.displayAppointments(data.appointments);
+                        } else {
+                            if (this.noAppointments) this.noAppointments.classList.remove('hidden');
+                        }
+                    } catch (error) {
+                        console.error('Error loading appointments:', error);
+                        this.toast.error('Failed to load appointments. Please try again.');
+                        
+                        // Hide loading indicator
+                        if (this.appointmentsLoading) this.appointmentsLoading.classList.add('hidden');
+                    }
+                }
+                
+                displayAppointments(appointments) {
+                    if (!this.appointmentsList) return;
+                    
+                    // Clear previous appointments
+                    this.appointmentsList.innerHTML = '';
+                    
+                    // Sort appointments by date (upcoming first)
+                    appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    
+                    // Add each appointment to the list
+                    appointments.forEach(appointment => {
+                        const appointmentDate = new Date(appointment.date);
+                        const formattedDate = appointmentDate.toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        
+                        const appointmentElement = document.createElement('div');
+                        appointmentElement.className = 'bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500 mb-4';
+                        
+                        // Determine status color
+                        let statusColor = '';
+                        switch (appointment.status) {
+                            case 'scheduled':
+                                statusColor = 'blue';
+                                break;
+                            case 'completed':
+                                statusColor = 'green';
+                                break;
+                            case 'cancelled':
+                                statusColor = 'gray';
+                                break;
+                            case 'no-show':
+                                statusColor = 'red';
+                                break;
+                            default:
+                                statusColor = 'blue';
+                        }
+                        
+                        appointmentElement.innerHTML = `
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="font-bold text-lg">${appointment.center.name}</h3>
+                                    <p class="text-gray-600">${appointment.center.address}, ${appointment.center.city}</p>
+                                </div>
+                                <span class="bg-${statusColor}-100 text-${statusColor}-800 px-2 py-1 rounded text-sm font-semibold">
+                                    ${appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                                </span>
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-gray-700 mb-2"><span class="font-semibold">Date:</span> ${formattedDate}</p>
+                                <p class="text-gray-700 mb-2"><span class="font-semibold">Time:</span> ${appointment.timeSlot}</p>
+                                <p class="text-gray-700"><span class="font-semibold">Phone:</span> ${appointment.center.phone}</p>
+                            </div>
+                            ${appointment.canCancel ? `
+                            <div class="flex justify-end">
+                                <button class="cancel-appointment-btn text-red-600 hover:text-red-700 font-semibold" data-appointment-id="${appointment.id}">
+                                    Cancel Appointment
+                                </button>
+                            </div>
+                            ` : ''}
+                        `;
+                        
+                        // Add event listener to cancel button if present
+                        const cancelButton = appointmentElement.querySelector('.cancel-appointment-btn');
+                        if (cancelButton) {
+                            cancelButton.addEventListener('click', () => this.cancelAppointment(appointment.id));
+                        }
+                        
+                        this.appointmentsList.appendChild(appointmentElement);
+                    });
+                }
+                
+                async cancelAppointment(appointmentId) {
+                    if (!confirm('Are you sure you want to cancel this appointment?')) {
+                        return;
+                    }
+                    
+                    try {
+                        // Send cancel request
+                        const response = await fetch(`${API_URL}/api/donation-centers/appointments/${appointmentId}/cancel`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${authService.getToken()}`
+                            }
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (response.ok) {
+                            this.toast.success('Appointment cancelled successfully');
+                            // Reload appointments
+                            await this.loadAppointments();
+                        } else {
+                            throw new Error(data.message || 'Failed to cancel appointment');
+                        }
+                    } catch (error) {
+                        console.error('Error cancelling appointment:', error);
+                        this.toast.error(error.message || 'Failed to cancel appointment. Please try again.');
+                    }
+                }
+            }
+            
+            // Initialize the donation centers page
+            const donationCentersPage = new DonationCentersPage();
+            
+            // Add event listeners to mobile menu button
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Add event listeners to user menu button
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+            
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', () => {
+                    userDropdown.classList.toggle('hidden');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (event) => {
+                    if (!userMenuButton.contains(event.target) && !userDropdown.contains(event.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // Add event listener to logout button
+            const logoutButton = document.getElementById('logout-button');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    authService.logout();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+            
+    

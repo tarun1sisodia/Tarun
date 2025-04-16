@@ -12,6 +12,7 @@ const donationRoutes = require('./routes/donationRoutes');
 const matchRoutes = require('./routes/matchRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const donationCenterRoutes = require('./routes/donationCenterRoutes');
 
 // Import middleware
 const { apiLimiter } = require('./middleware/rateLimit');
@@ -37,6 +38,8 @@ app.use('/api/donations', donationRoutes);
 app.use('/api/match', matchRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/donation-centers', donationCenterRoutes);
+
 
 // Health check route
 app.get('/health', (req, res) => {

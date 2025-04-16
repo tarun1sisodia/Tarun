@@ -255,7 +255,65 @@ class ContactAPI extends API {
   }
 }
 
-// Initialize API services
+// Add this to your api.js file
+class DonationCentersAPI extends API {
+  constructor(baseURL) {
+    super(baseURL);
+  }
+
+  // Get all donation centers
+  async getAllCenters(filters = {}) {
+    const queryParams = new URLSearchParams();
+    
+    if (filters.city) queryParams.append('city', filters.city);
+    if (filters.date) queryParams.append('date', filters.date);
+    if (filters.timeSlot) queryParams.append('timeSlot', filters.timeSlot);
+    
+    const queryString = queryParams.toString();
+    return this.get(`api/donation-centers${queryString ? '?' + queryString : ''}`);
+  }
+
+  // Get nearby donation centers
+  async getNearbyDonationCenters(distance) {
+    const queryParams = new URLSearchParams();
+    if (distance) queryParams.append('distance', distance);
+    
+    return this.get(`api/donation-centers/nearby?${queryParams.toString()}`);
+  }
+
+  // Get donation center by ID
+  async getDonationCenterById(id) {
+    return this.get(`api/donation-centers/${id}`);
+  }
+
+  // Get available slots for a donation center
+  async getAvailableSlots(centerId, date) {
+    return this.get(`api/donation-centers/${centerId}/slots?date=${date}`);
+  }
+
+  // Book an appointment
+  async bookAppointment(data) {
+    return this.post('api/donation-centers/appointments', data);
+  }
+
+  // Get user appointments
+  async getUserAppointments() {
+    return this.get('api/donation-centers/appointments/me');
+  }
+
+  // Cancel an appointment
+  async cancelAppointment(id) {z``
+    return this.put(`api/donation-centers/appointments/${id}/cancel`);
+  }
+
+  // Get all cities with donation centers
+  async getAllCities() {
+    return this.get('api/donation-centers/cities');
+  }
+}
+
+// Initialize the donation centers API
+const donationCentersAPI = new DonationCentersAPI(API_URL);
 const usersAPI = new UsersAPI(API_URL);
 const requestsAPI = new RequestsAPI(API_URL);
 const donationsAPI = new DonationsAPI(API_URL);
