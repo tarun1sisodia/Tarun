@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/routes/donationRoutes.js</title>
+    <title>Code coverage report for src/routes/donationCenterRoutes.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/routes</a> donationRoutes.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/routes</a> donationCenterRoutes.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -84,9 +84,37 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -106,24 +134,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const express = require('express');
-const donationController = require('../controllers/donationController');
-const { donationValidation } = require('../middleware/validation');
+const donationCenterController = require('../controllers/donationCenterController');
 const { auth } = require('../middleware/auth');
-&nbsp;
+const { appointmentValidation } = require('../middleware/validation');
 &nbsp;
 const router = express.Router();
 &nbsp;
-// Record a new donation
-router.post('/', auth, donationValidation, donationController.createDonation);
+// Get all cities with donation centers (should come BEFORE the /:id route)
+router.get('/cities', donationCenterController.getAllCities);
 &nbsp;
-// Get donations by current user
-router.get('/me', auth, donationController.getUserDonations);
+// Get all donation centers (public)
+router.get('/', donationCenterController.getAllCenters);
 &nbsp;
-// Get donation by ID
-router.get('/:id', auth, donationController.getDonationById);
+// Get donation centers near user (requires auth)
+router.get('/nearby', auth, donationCenterController.getNearbyDonationCenters);
 &nbsp;
-// Verify a donation (admin only)
-router.put('/:id/verify', auth, donationController.verifyDonation);
+// Get available slots for a specific donation center and date
+router.get('/:id/slots', donationCenterController.getAvailableSlots);
+&nbsp;
+// Get a single donation center by ID (public)
+router.get('/:id', donationCenterController.getDonationCenterById);
+&nbsp;
+// Book an appointment (requires auth)
+router.post('/appointments', auth, appointmentValidation, donationCenterController.bookAppointment);
+&nbsp;
+// Get user's appointments (requires auth)
+router.get('/appointments/me', auth, donationCenterController.getUserAppointments);
+&nbsp;
+// Cancel an appointment (requires auth)
+router.put('/appointments/:id/cancel', auth, donationCenterController.cancelAppointment);
+&nbsp;
+// Complete an appointment (admin only - would need admin middleware)
+router.put('/appointments/:id/complete', auth, donationCenterController.completeAppointment);
 &nbsp;
 module.exports = router;
 &nbsp;</pre></td></tr></table></pre>
