@@ -271,22 +271,21 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-16 bg-red-600 text-white">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold mb-6">Ready to Make a Difference?</h2>
-            <p class="text-xl mb-8 max-w-2xl mx-auto">Join our community of donors and recipients today. Your
-                contribution can save lives.</p>
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="register.html"
-                    class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">Register Now</a>
-                <a href="about.html"
-                    class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">Learn
-                    More</a>
-                
-            </div>
+    <!-- Add an ID to the CTA section -->
+<section id="cta-section" class="py-16 bg-red-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-6">Ready to Make a Difference?</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">Join our community of donors and recipients today. Your
+            contribution can save lives.</p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="register.html"
+                class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">Register Now</a>
+            <a href="about.html"
+                class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700">Learn
+                More</a>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
@@ -402,7 +401,7 @@
                     this.becomeDonorBtn = document.getElementById('become-donor-btn');
                     this.emergencyRequestsContainer = document.getElementById('emergency-requests');
                     this.viewAllRequestsBtn = document.querySelector('a[href="requests.html"]');
-
+                    this.ctaSection = document.getElementById('cta-section');
                     this.init();
                 }
 
@@ -412,8 +411,14 @@
                     this.fetchEmergencyRequests();
                     this.setupEventListeners();
                     this.initCounters();
+                    this.toggleCtaSection(); 
                 }
-
+                toggleCtaSection() {
+        // Hide CTA section if user is authenticated
+        if (this.ctaSection && authService.isAuthenticated()) {
+            this.ctaSection.classList.add('hidden');
+        }
+    }
                 updateDonorButton() {
                     // Check if user is logged in
                     if (authService.isAuthenticated()) {
