@@ -417,7 +417,8 @@
                         <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
                         <li><a href="donors.html" class="text-gray-400 hover:text-white">Donors</a></li>
                         <li><a href="requests.html" class="text-gray-400 hover:text-white">Requests</a></li>
-                        <li><a href="donation-centers.html" class="text-gray-400 hover:text-white">Donation Centers</a></a></li>
+                        <li><a href="donation-centers.html" class="text-gray-400 hover:text-white">Donation
+                                Centers</a></a></li>
                         <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
                         <li><a href="faq.html" class="text-gray-400 hover:text-white">FAQ</a></li>
                     </ul>
@@ -502,21 +503,59 @@
     <!-- Scripts -->
     <script src="assets/js/config.js"></script>
     <script src="assets/js/utils/toast.js"></script>
-    <script src="assets/js/utils/authCheck.js"></script>
+    <script src="assets/js/utils/authcheck.js"></script>
     <script src="assets/js/services/api.js"></script>
     <script src="assets/js/services/auth.js"></script>
     <script src="assets/js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Check if user is authenticated and update UI
-            updateAuthUI();
-            
-           // Check if user is authenticated before loading requests
-    if (!authService.isAuthenticated()) {
-        // User is not authenticated, show login prompt
-        const requestsContainer = document.getElementById('requests-container');
-        if (requestsContainer) {
-            requestsContainer.innerHTML = `
+            // Define updateAuthUI if it doesn't exist
+            if (typeof updateAuthUI !== 'function') {
+                function updateAuthUI() {
+                    // Basic implementation
+                    const token = localStorage.getItem('token');
+                    const isAuthenticated = !!token;
+
+                    // Update UI based on authentication status
+                    const authButtons = document.getElementById('auth-buttons');
+                    const userMenu = document.getElementById('user-menu');
+
+                    if (authButtons && userMenu) {
+                        if (isAuthenticated) {
+                            authButtons.classList.add('hidden');
+                            userMenu.classList.remove('hidden');
+
+                            // Update user name
+                            const userNameElement = document.getElementById('user-name');
+                            if (userNameElement) {
+                                const userStr = localStorage.getItem('user');
+                                const user = userStr ? JSON.parse(userStr) : {name: 'User'};
+                                userNameElement.textContent = user.name || 'User';
+                            }
+
+                            // Show elements that require authentication
+                            document.querySelectorAll('.auth-required').forEach(el => {
+                                el.classList.remove('hidden');
+                            });
+                        } else {
+                            authButtons.classList.remove('hidden');
+                            userMenu.classList.add('hidden');
+
+                            // Hide elements that require authentication
+                            document.querySelectorAll('.auth-required').forEach(el => {
+                                el.classList.add('hidden');
+                            });
+                        }
+                    }
+                }
+            }
+
+            // Check if user is authenticated before loading requests
+            if (!authService.isAuthenticated()) {
+                // User is not authenticated, show login prompt
+                const requestsContainer = document.getElementById('requests-container');
+                if (requestsContainer) {
+                    requestsContainer.innerHTML = `
                 <div class="text-center py-12">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -529,19 +568,19 @@
                     </div>
                 </div>
             `;
-        }
-        
-        // Hide other elements that shouldn't be visible to unauthenticated users
-        document.querySelectorAll('.auth-required').forEach(el => el.classList.add('hidden'));
-        
-        // Hide filters section
-        const filtersSection = document.querySelector('.py-8.bg-white.shadow-sm');
-        if (filtersSection) {
-            filtersSection.classList.add('hidden');
-        }
-        
-        return; // Stop further execution
-    }
+                }
+
+                // Hide other elements that shouldn't be visible to unauthenticated users
+                document.querySelectorAll('.auth-required').forEach(el => el.classList.add('hidden'));
+
+                // Hide filters section
+                const filtersSection = document.querySelector('.py-8.bg-white.shadow-sm');
+                if (filtersSection) {
+                    filtersSection.classList.add('hidden');
+                }
+
+                return; // Stop further execution
+            }
             // Initialize variables
             let currentPage = 1;
             const pageSize = 9;
@@ -937,7 +976,7 @@
                     closeRequestDetailModal();
                 }
             }
-          
+
             async function findMatchingDonors(requestId) {
                 try {
                     // Show loading state
@@ -1143,7 +1182,7 @@
 
                 try {
                     // Call API to update request status to cancelled
-                    const response = await requestsAPI.updateRequest(requestId, { status: 'cancelled' });
+                    const response = await requestsAPI.updateRequest(requestId, {status: 'cancelled'});
 
                     // Show success message
                     const toast = new Toast();
@@ -1265,7 +1304,7 @@
             }
 
             function formatDate(dateString) {
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 return new Date(dateString).toLocaleDateString(undefined, options);
             }
 

@@ -384,20 +384,19 @@
     <!-- Toast Container -->
     <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
 
-    <!-- Include these scripts in your index.html in this order -->
-<script src="assets/js/config.js"></script>
-<script src="assets/js/utils/toast.js"></script>
-<script src="assets/js/services/api.js"></script>
-<script src="assets/js/services/auth.js"></script>
-<script src="assets/js/utils/authcheck.js"></script>
-<script src="assets/js/scripts.js"></script>
-<script src="assets/js/main.js"></script>
-++
-    <!-- Add this script tag at the end of your index.html file, before the closing </body> tag -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/utils/toast.js"></script>
+    <script src="assets/js/services/api.js"></script>
+    <script src="assets/js/services/auth.js"></script>
+    <script src="assets/js/utils/authcheck.js"></script>
+    <script src="assets/js/main.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const api = new API(API_URL);
             class IndexPage {
                 constructor() {
+                    this.api = api;
                     this.becomeDonorBtn = document.getElementById('become-donor-btn');
                     this.emergencyRequestsContainer = document.getElementById('emergency-requests');
                     this.viewAllRequestsBtn = document.querySelector('a[href="requests.html"]');
