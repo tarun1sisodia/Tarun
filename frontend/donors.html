@@ -186,43 +186,14 @@
         </div>
     </section>
 
-    <!-- Donors List -->
+    <!-- Donors List  -->
+    <!-- Donors List  -->
     <section class="py-8">
         <div class="container mx-auto px-4">
             <h2 class="text-2xl font-bold mb-6">Available Donors</h2>
 
             <div id="donors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Donors will be loaded here -->
-                <div class="animate-pulse">
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
-                        <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
-                        <div class="h-8 bg-gray-200 rounded w-1/3"></div>
-                    </div>
-                </div>
-                <div class="animate-pulse">
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
-                        <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
-                        <div class="h-8 bg-gray-200 rounded w-1/3"></div>
-                    </div>
-                </div>
-                <div class="animate-pulse">
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
-                        <div class="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-                        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                        <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
-                        <div class="h-8 bg-gray-200 rounded w-1/3"></div>
-                    </div>
-                </div>
+                <!-- Donors will be loaded here dynamically via JavaScript -->
             </div>
 
             <div id="no-donors" class="text-center py-8 hidden">
@@ -236,6 +207,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- Donor Detail Modal -->
     <div id="donor-detail-modal"
@@ -295,7 +267,8 @@
                         <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
                         <li><a href="donors.html" class="text-gray-400 hover:text-white">Donors</a></li>
                         <li><a href="requests.html" class="text-gray-400 hover:text-white">Requests</a></li>
-                        <li><a href="donation-centers.html" class="text-gray-400 hover:text-white">Donation Centers</a></li>
+                        <li><a href="donation-centers.html" class="text-gray-400 hover:text-white">Donation Centers</a>
+                        </li>
                         <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
                         <li><a href="faq.html" class="text-gray-400 hover:text-white">FAQ</a></li>
                     </ul>
@@ -380,48 +353,57 @@
     <!-- Scripts -->
     <script src="assets/js/config.js"></script>
     <script src="assets/js/utils/toast.js"></script>
-    <script src="assets/js/utils/authCheck.js"></script>
+    <script src="assets/js/utils/authcheck.js"></script>
     <script src="assets/js/services/api.js"></script>
     <script src="assets/js/services/auth.js"></script>
     <script src="assets/js/main.js"></script>
     <script>
-   document.addEventListener('DOMContentLoaded', function () {
-    // Initialize toast
-    const toast = new Toast();
-    
-    // DOM elements
-    const donorsContainer = document.getElementById('donors-container');
-    const noDonorsMessage = document.getElementById('no-donors');
-    const loadMoreButton = document.getElementById('load-more');
-    const bloodTypeFilter = document.getElementById('blood-type-filter');
-    const locationFilter = document.getElementById('location-filter');
-    const applyFiltersBtn = document.getElementById('apply-filters');
-    
-    // Pagination variables
-    let currentPage = 1;
-    let hasMoreDonors = false;
-    
-    // Load donors on page load - we'll load donors regardless of authentication status
-    loadDonors();
-    
-    // Apply filters
-    applyFiltersBtn.addEventListener('click', function() {
-        currentPage = 1;
-        loadDonors(true);
-    });
-    
-    // Load more donors
-    loadMoreButton.addEventListener('click', function() {
-        currentPage++;
-        loadDonors(false);
-    });
-    
-    // Load donors function
-    async function loadDonors(reset = false) {
-        try {
-            // Show loading state
-            if (reset) {
-                donorsContainer.innerHTML = `
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize toast
+            const toast = new Toast();
+            // Check if the function exists first
+            if (typeof updateAuthUI === 'function') {
+                updateAuthUI();
+            } else if (typeof authService !== 'undefined' && typeof authService.updateUI === 'function') {
+                authService.updateUI();
+            } else {
+                console.error('Auth UI update function not found');
+            }
+
+
+            // DOM elements
+            const donorsContainer = document.getElementById('donors-container');
+            const noDonorsMessage = document.getElementById('no-donors');
+            const loadMoreButton = document.getElementById('load-more');
+            const bloodTypeFilter = document.getElementById('blood-type-filter');
+            const locationFilter = document.getElementById('location-filter');
+            const applyFiltersBtn = document.getElementById('apply-filters');
+
+            // Pagination variables
+            let currentPage = 1;
+            let hasMoreDonors = false;
+
+            // Load donors on page load - we'll load donors regardless of authentication status
+            loadDonors();
+
+            // Apply filters
+            applyFiltersBtn.addEventListener('click', function () {
+                currentPage = 1;
+                loadDonors(true);
+            });
+
+            // Load more donors
+            loadMoreButton.addEventListener('click', function () {
+                currentPage++;
+                loadDonors(false);
+            });
+
+            // Load donors function
+            async function loadDonors(reset = false) {
+                try {
+                    // Show loading state
+                    if (reset) {
+                        donorsContainer.innerHTML = `
                     <div class="animate-pulse">
                         <div class="bg-white p-6 rounded-lg shadow-sm">
                             <div class="h-16 w-16 bg-gray-200 rounded-full mb-4"></div>
@@ -433,67 +415,67 @@
                         </div>
                     </div>
                 `;
-            }
-            
-            // Build filters
-            const filters = {
-                page: currentPage,
-                limit: 9
-            };
-            
-            if (bloodTypeFilter.value) filters.bloodType = bloodTypeFilter.value;
-            if (locationFilter.value) filters.location = locationFilter.value;
-            
-            // Fetch donors using the UsersAPI
-            // We'll make a direct fetch request to avoid authentication issues
-            const queryParams = new URLSearchParams();
-            if (filters.bloodType) queryParams.append('bloodType', filters.bloodType);
-            if (filters.location) queryParams.append('location', filters.location);
-            if (filters.page) queryParams.append('page', filters.page.toString());
-            if (filters.limit) queryParams.append('limit', filters.limit.toString());
-            
-            const queryString = queryParams.toString();
-            const apiUrl = `${API_URL}/api/users/donors${queryString ? '?' + queryString : ''}`;
-            
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error('Failed to fetch donors');
-            }
-            
-            const data = await response.json();
-            const donors = data.donors || [];
-            
-            // Check if there are more donors
-            hasMoreDonors = donors.length === filters.limit;
-            
-            // Update UI
-            if (reset) {
-                donorsContainer.innerHTML = '';
-            }
-            
-            if (donors.length === 0 && currentPage === 1) {
-                noDonorsMessage.classList.remove('hidden');
-                loadMoreButton.classList.add('hidden');
-                return;
-            } else {
-                noDonorsMessage.classList.add('hidden');
-            }
-            
-            // Show/hide load more button
-            loadMoreButton.classList.toggle('hidden', !hasMoreDonors);
-            
-            // Render donors
-            donors.forEach(donor => {
-                const donorCard = document.createElement('div');
-                donorCard.className = 'bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow';
-                
-                // Get initials for avatar
-                const initials = donor.name ? donor.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-                
-                // Get blood type badge color
-                const bloodTypeColor = getBloodTypeColor(donor.bloodType);
-                
-                donorCard.innerHTML = `
+                    }
+
+                    // Build filters
+                    const filters = {
+                        page: currentPage,
+                        limit: 9
+                    };
+
+                    if (bloodTypeFilter.value) filters.bloodType = bloodTypeFilter.value;
+                    if (locationFilter.value) filters.location = locationFilter.value;
+
+                    // Fetch donors using the UsersAPI
+                    // We'll make a direct fetch request to avoid authentication issues
+                    const queryParams = new URLSearchParams();
+                    if (filters.bloodType) queryParams.append('bloodType', filters.bloodType);
+                    if (filters.location) queryParams.append('location', filters.location);
+                    if (filters.page) queryParams.append('page', filters.page.toString());
+                    if (filters.limit) queryParams.append('limit', filters.limit.toString());
+
+                    const queryString = queryParams.toString();
+                    const apiUrl = `${API_URL}/api/users/donors${queryString ? '?' + queryString : ''}`;
+
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch donors');
+                    }
+
+                    const data = await response.json();
+                    const donors = data.donors || [];
+
+                    // Check if there are more donors
+                    hasMoreDonors = donors.length === filters.limit;
+
+                    // Update UI
+                    if (reset) {
+                        donorsContainer.innerHTML = '';
+                    }
+
+                    if (donors.length === 0 && currentPage === 1) {
+                        noDonorsMessage.classList.remove('hidden');
+                        loadMoreButton.classList.add('hidden');
+                        return;
+                    } else {
+                        noDonorsMessage.classList.add('hidden');
+                    }
+
+                    // Show/hide load more button
+                    loadMoreButton.classList.toggle('hidden', !hasMoreDonors);
+
+                    // Render donors
+                    donors.forEach(donor => {
+                        const donorCard = document.createElement('div');
+                        donorCard.className = 'bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow';
+
+                        // Get initials for avatar
+                        const initials = donor.name ? donor.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+
+                        // Get blood type badge color
+                        const bloodTypeColor = getBloodTypeColor(donor.bloodType);
+
+                        donorCard.innerHTML = `
                     <div class="flex items-center mb-4">
                         <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xl font-bold mr-4">
                             ${initials}
@@ -522,22 +504,22 @@
                         View Profile →
                     </button>
                 `;
-                
-                donorsContainer.appendChild(donorCard);
-                
-                // Add event listener to view details button
-                const viewDetailsBtn = donorCard.querySelector('.view-donor-details');
-                viewDetailsBtn.addEventListener('click', () => {
-                    openDonorDetails(donor._id);
-                });
-            });
-        } catch (error) {
-            console.error('Error loading donors:', error);
-            toast.error('Failed to load donors. Please try again later.');
-            
-            // Show a message in the donors container
-            if (reset) {
-                donorsContainer.innerHTML = `
+
+                        donorsContainer.appendChild(donorCard);
+
+                        // Add event listener to view details button
+                        const viewDetailsBtn = donorCard.querySelector('.view-donor-details');
+                        viewDetailsBtn.addEventListener('click', () => {
+                            openDonorDetails(donor._id);
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error loading donors:', error);
+                    toast.error('Failed to load donors. Please try again later.');
+
+                    // Show a message in the donors container
+                    if (reset) {
+                        donorsContainer.innerHTML = `
                     <div class="text-center py-12">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -546,18 +528,18 @@
                         <p class="text-gray-600 mb-6">We're having trouble loading the donor list. Please try again later.</p>
                     </div>
                 `;
+                    }
+                }
             }
-        }
-    }
-    
-    // Open donor details modal
-    async function openDonorDetails(donorId) {
-        try {
-            const donorDetailModal = document.getElementById('donor-detail-modal');
-            const donorDetails = document.getElementById('donor-details');
-            
-            // Show loading state
-            donorDetails.innerHTML = `
+
+            // Open donor details modal
+            async function openDonorDetails(donorId) {
+                try {
+                    const donorDetailModal = document.getElementById('donor-detail-modal');
+                    const donorDetails = document.getElementById('donor-details');
+
+                    // Show loading state
+                    donorDetails.innerHTML = `
                 <div class="animate-pulse">
                     <div class="flex items-center mb-4">
                         <div class="h-16 w-16 bg-gray-200 rounded-full mr-4"></div>
@@ -571,37 +553,37 @@
                     <div class="h-4 bg-gray-200 rounded w-4/5 mb-2"></div>
                 </div>
             `;
-            
-            // Show modal
-            donorDetailModal.classList.remove('hidden');
-            document.body.classList.add('overflow-hidden');
-            
-            // Fetch donor details - direct fetch to avoid auth issues
-            const apiUrl = `${API_URL}/api/users/${donorId}`;
-            const response = await fetch(apiUrl);
-            
-            if (!response.ok) {
-                throw new Error('Failed to fetch donor details');
-            }
-            
-            const donor = await response.json();
-            
-            // Get initials for avatar
-            const initials = donor.name ? donor.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-            
-            // Get blood type badge color
-            const bloodTypeColor = getBloodTypeColor(donor.bloodType);
-            
-            // Format join date
-            const joinDate = new Date(donor.createdAt);
-            const formattedJoinDate = joinDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            
-            // Update donor details
-            donorDetails.innerHTML = `
+
+                    // Show modal
+                    donorDetailModal.classList.remove('hidden');
+                    document.body.classList.add('overflow-hidden');
+
+                    // Fetch donor details - direct fetch to avoid auth issues
+                    const apiUrl = `${API_URL}/api/users/${donorId}`;
+                    const response = await fetch(apiUrl);
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch donor details');
+                    }
+
+                    const donor = await response.json();
+
+                    // Get initials for avatar
+                    const initials = donor.name ? donor.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+
+                    // Get blood type badge color
+                    const bloodTypeColor = getBloodTypeColor(donor.bloodType);
+
+                    // Format join date
+                    const joinDate = new Date(donor.createdAt);
+                    const formattedJoinDate = joinDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    // Update donor details
+                    donorDetails.innerHTML = `
                 <div class="flex items-center mb-6">
                     <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xl font-bold mr-4">
                         ${initials}
@@ -652,26 +634,26 @@
                     </p>
                 </div>
             `;
-            
-            // Update modal title
-            document.getElementById('detail-title').textContent = `${donor.name}'s Profile`;
-            
-            // Update contact button based on authentication
-            const contactDonorButton = document.getElementById('contact-donor-button');
-            if (contactDonorButton) {
-                contactDonorButton.textContent = 'Contact Donor';
-                contactDonorButton.onclick = function() {
-                    contactDonor(donor._id, donor.name);
-                };
-            }
-            
-        } catch (error) {
-            console.error('Error loading donor details:', error);
-            toast.error('Failed to load donor details. Please try again later.');
-            
-            // Show error in the modal
-            const donorDetails = document.getElementById('donor-details');
-            donorDetails.innerHTML = `
+
+                    // Update modal title
+                    document.getElementById('detail-title').textContent = `${donor.name}'s Profile`;
+
+                    // Update contact button based on authentication
+                    const contactDonorButton = document.getElementById('contact-donor-button');
+                    if (contactDonorButton) {
+                        contactDonorButton.textContent = 'Contact Donor';
+                        contactDonorButton.onclick = function () {
+                            contactDonor(donor._id, donor.name);
+                        };
+                    }
+
+                } catch (error) {
+                    console.error('Error loading donor details:', error);
+                    toast.error('Failed to load donor details. Please try again later.');
+
+                    // Show error in the modal
+                    const donorDetails = document.getElementById('donor-details');
+                    donorDetails.innerHTML = `
                 <div class="text-center py-6">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -680,88 +662,88 @@
                     <p class="text-gray-600">We couldn't load this donor's details. Please try again later.</p>
                 </div>
             `;
-            
-            // Keep the modal open to show the error
-        }
-    }
-    
-    // Contact donor function
-    function contactDonor(donorId, donorName) {
-        // Check if user is authenticated
-        if (!authService.isAuthenticated()) {
-            toast.warning('Please login to contact donors');
-            setTimeout(() => {
-                window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
-            }, 2000);
-            return;
-        }
-        
-        // In a real app, this would open a contact form or messaging system
-        toast.info(`Contact functionality for ${donorName} will be implemented in a future update.`);
-    }
-    
-    // Close donor detail modal
-    const closeDonorModalBtn = document.getElementById('close-donor-modal');
-    if (closeDonorModalBtn) {
-        closeDonorModalBtn.addEventListener('click', function() {
-            const donorDetailModal = document.getElementById('donor-detail-modal');
-            donorDetailModal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        });
-    }
-    
-    // Close modal when clicking outside
-    const donorDetailModal = document.getElementById('donor-detail-modal');
-    window.addEventListener('click', function(event) {
-        if (event.target === donorDetailModal) {
-            donorDetailModal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        }
-    });
-    
-    // Helper function to get blood type color
-    function getBloodTypeColor(bloodType) {
-        switch (bloodType) {
-            case 'A+':
-            case 'A-':
-                return 'bg-red-100 text-red-800';
-            case 'B+':
-            case 'B-':
-                return 'bg-blue-100 text-blue-800';
-            case 'AB+':
-            case 'AB-':
-                return 'bg-purple-100 text-purple-800';
-            case 'O+':
-            case 'O-':
-                return 'bg-green-100 text-green-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
-    }
-    
-    // Helper function to format date
-    function formatDate(dateString) {
-        if (!dateString) return 'N/A';
-        
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        if (diffDays <= 30) {
-            return `${diffDays} days ago`;
-        } else {
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
-    }
-});
-    
 
-         </script>
+                    // Keep the modal open to show the error
+                }
+            }
+
+            // Contact donor function
+            function contactDonor(donorId, donorName) {
+                // Check if user is authenticated
+                if (!authService.isAuthenticated()) {
+                    toast.warning('Please login to contact donors');
+                    setTimeout(() => {
+                        window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
+                    }, 2000);
+                    return;
+                }
+
+                // In a real app, this would open a contact form or messaging system
+                toast.info(`Contact functionality for ${donorName} will be implemented in a future update.`);
+            }
+
+            // Close donor detail modal
+            const closeDonorModalBtn = document.getElementById('close-donor-modal');
+            if (closeDonorModalBtn) {
+                closeDonorModalBtn.addEventListener('click', function () {
+                    const donorDetailModal = document.getElementById('donor-detail-modal');
+                    donorDetailModal.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                });
+            }
+
+            // Close modal when clicking outside
+            const donorDetailModal = document.getElementById('donor-detail-modal');
+            window.addEventListener('click', function (event) {
+                if (event.target === donorDetailModal) {
+                    donorDetailModal.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }
+            });
+
+            // Helper function to get blood type color
+            function getBloodTypeColor(bloodType) {
+                switch (bloodType) {
+                    case 'A+':
+                    case 'A-':
+                        return 'bg-red-100 text-red-800';
+                    case 'B+':
+                    case 'B-':
+                        return 'bg-blue-100 text-blue-800';
+                    case 'AB+':
+                    case 'AB-':
+                        return 'bg-purple-100 text-purple-800';
+                    case 'O+':
+                    case 'O-':
+                        return 'bg-green-100 text-green-800';
+                    default:
+                        return 'bg-gray-100 text-gray-800';
+                }
+            }
+
+            // Helper function to format date
+            function formatDate(dateString) {
+                if (!dateString) return 'N/A';
+
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffTime = Math.abs(now - date);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays <= 30) {
+                    return `${diffDays} days ago`;
+                } else {
+                    return date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            }
+        });
+
+
+    </script>
 </body>
 
 </html>

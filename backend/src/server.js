@@ -32,7 +32,8 @@ app.use('/api', apiLimiter);
 
 // API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/users', usersRoutes);
+// app.use('/api/users', usersRoutes);
+app.use('/api/users', require('./routes/usersRoutes'));
 app.use('/api/requests', requestsRoutes);
 app.use('/api/donations', donationRoutes);
 app.use('/api/match', matchRoutes);
