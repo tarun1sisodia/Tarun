@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Donation - BloodConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-red-600 font-bold text-2xl">BloodConnect</a>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-gray-700 hover:text-red-600">Home</a>
+                <a href="donors.html" class="text-gray-700 hover:text-red-600">Donors</a>
+                <a href="requests.html" class="text-gray-700 hover:text-red-600">Requests</a>
+                <a href="donation-centers.html" class="text-gray-700 hover:text-red-600">Donation Centers</a>
+                <a href="about.html" class="text-gray-700 hover:text-red-600">About</a>
+                <a href="faq.html" class="text-gray-700 hover:text-red-600">FAQ</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div id="user-menu" class="relative">
+                    <button id="user-menu-button" class="flex items-center text-gray-700 hover:text-red-600">
+                        <span id="user-name">User</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <div id="user-dropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                        <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="#" id="logout-button"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobile menu - hidden by default -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 py-2 bg-white">
+            <a href="index.html" class="block py-2 text-gray-700">Home</a>
+            <a href="donors.html" class="block py-2 text-gray-700">Donors</a>
+            <a href="requests.html" class="block py-2 text-gray-700">Requests</a>
+            <a href="donation-centers.html" class="block py-2 text-gray-700">Donation Centers</a>
+            <a href="about.html" class="block py-2 text-gray-700">About</a>
+            <a href="faq.html" class="block py-2 text-gray-700">FAQ</a>
+        </div>
+    </header>
+
+    <!-- Record Donation Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto">
+                <div class="flex items-center mb-8">
+                    <a href="profile.html" class="text-red-600 hover:text-red-700 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    <h1 class="text-3xl font-bold text-gray-800">Record Blood Donation</h1>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="p-6">
+                        <form id="donation-form" class="space-y-6">
+                            <div>
+                                <label for="donation-date" class="block text-sm font-medium text-gray-700 mb-1">Donation
+                                    Date</label>
+                                <input type="date" id="donation-date" name="donationDate"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"
+                                    required>
+                            </div>
+
+                            <div>
+                                <label for="hospital-name"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Hospital/Blood Bank
+                                    Name</label>
+                                <input type="text" id="hospital-name" name="hospital.name"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"
+                                    required>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="hospital-city"
+                                        class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                    <input type="text" id="hospital-city" name="hospital.city"
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"
+                                        required>
+                                </div>
+
+                                <div>
+                                    <label for="hospital-state"
+                                        class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                    <input type="text" id="hospital-state" name="hospital.state"
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="donation-units" class="block text-sm font-medium text-gray-700 mb-1">Units
+                                    Donated</label>
+                                <input type="number" id="donation-units" name="units" min="1" value="1"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"
+                                    required>
+                            </div>
+
+                            <div>
+                                <label for="donation-notes" class="block text-sm font-medium text-gray-700 mb-1">Notes
+                                    (Optional)</label>
+                                <textarea id="donation-notes" name="notes" rows="3"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"></textarea>
+                            </div>
+
+                            <div class="flex justify-end space-x-3">
+                                <a href="profile.html"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</a>
+                                <button type="submit"
+                                    class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700">Record
+                                    Donation</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
+
+    <!-- Scripts -->
+    <script>
+        // API URL configuration
+        const API_URL = 'http://localhost:5000';
+
+        // Simple toast notification system
+        const toast = {
+            container: document.getElementById('toast-container'),
+
+            show(message, type = 'info', duration = 3000) {
+                const colors = {
+                    success: 'bg-green-500',
+                    error: 'bg-red-500',
+                    info: 'bg-blue-500',
+                    warning: 'bg-yellow-500'
+                };
+
+                const toast = document.createElement('div');
+                toast.className = `${colors[type]} text-white px-4 py-3 rounded shadow-lg mb-3 flex items-center justify-between`;
+
+                let icon = '';
+                switch (type) {
+                    case 'success':
+                        icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>';
+                        break;
+                    case 'error':
+                        icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>';
+                        break;
+                    case 'info':
+                        icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>';
+                        break;
+                    case 'warning':
+                        icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>';
+                        break;
+                }
+
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        ${icon}
+                        <div>${message}</div>
+                    </div>
+                    <button class="ml-4 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                `;
+
+                this.container.appendChild(toast);
+
+                // Add click event to close button
+                toast.querySelector('button').addEventListener('click', () => {
+                    toast.remove();
+                });
+
+                // Auto remove after duration
+                setTimeout(() => {
+                    toast.remove();
+                }, duration);
+            },
+
+            success(message, duration = 3000) {
+                this.show(message, 'success', duration);
+            },
+
+            error(message, duration = 4000) {
+                this.show(message, 'error', duration);
+            },
+
+            info(message, duration = 3000) {
+                this.show(message, 'info', duration);
+            },
+
+            warning(message, duration = 3000) {
+                this.show(message, 'warning', duration);
+            }
+        };
+
+        // Authentication helper
+        const auth = {
+            getToken() {
+                return localStorage.getItem('token');
+            },
+
+            isAuthenticated() {
+                return this.getToken() !== null;
+            },
+
+            logout() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            }
+        };
+
+        // Simple API client
+        const api = {
+            async request(endpoint, options = {}) {
+                const url = `${API_URL}${endpoint}`;
+
+                // Default headers
+                const headers = {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                };
+
+                // Add auth token if available
+                const token = auth.getToken();
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                try {
+                    console.log(`API Request: ${options.method || 'GET'} ${url}`);
+
+                    const response = await fetch(url, {
+                        ...options,
+                        headers
+                    });
+
+                    // Handle non-JSON responses
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Something went wrong');
+                        }
+
+                        return data;
+                    } else {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+
+                        return {success: true};
+                    }
+                } catch (error) {
+                    console.error('API Error:', error);
+                    throw error;
+                }
+            },
+
+            get(endpoint) {
+                return this.request(endpoint);
+            },
+
+            post(endpoint, data) {
+                return this.request(endpoint, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+            },
+
+            put(endpoint, data) {
+                return this.request(endpoint, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+            },
+
+            delete(endpoint) {
+                return this.request(endpoint, {
+                    method: 'DELETE'
+                });
+            }
+        };
+
+        // Setup user dropdown
+        function setupUserDropdown() {
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', function () {
+                    userDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Setup mobile menu
+        function setupMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        }
+
+        // Setup logout button
+        function setupLogoutButton() {
+            const logoutButton = document.getElementById('logout-button');
+
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    auth.logout();
+                });
+            }
+        }
+
+        // Set default date to today
+        function setDefaultDate() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('donation-date').value = formattedDate;
+        }
+
+        // Handle form submission
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            try {
+                const form = e.target;
+                const formData = new FormData(form);
+
+                // Prepare data for API
+                const donationData = {
+                    donationDate: formData.get('donationDate'),
+                    hospital: {
+                        name: formData.get('hospital.name'),
+                        city: formData.get('hospital.city'),
+                        state: formData.get('hospital.state')
+                    },
+                    units: Number(formData.get('units')),
+                    notes: formData.get('notes')
+                };
+
+                // Submit to API
+                const response = await api.post('/api/donations', donationData);
+
+                // Show success message
+                toast.success('Donation recorded successfully');
+
+                // Redirect back to profile page after a short delay
+                setTimeout(() => {
+                    window.location.href = 'profile.html';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error recording donation:', error);
+                toast.error(`Failed to record donation: ${error.message}`);
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if user is authenticated
+            if (!auth.isAuthenticated()) {
+                window.location.href = 'login.html?redirect=record-donation.html';
+                return;
+            }
+
+            // Setup UI interactions
+            setupUserDropdown();
+            setupMobileMenu();
+            setupLogoutButton();
+
+            // Set default date
+            setDefaultDate();
+
+            // Setup form submission
+            const donationForm = document.getElementById('donation-form');
+            if (donationForm) {
+                donationForm.addEventListener('submit', handleFormSubmit);
+            }
+
+            // Update user name in header
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                const userNameElement = document.getElementById('user-name');
+                if (userNameElement && user) {
+                    userNameElement.textContent = user.name || 'User';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
