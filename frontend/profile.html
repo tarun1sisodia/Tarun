@@ -7,7 +7,6 @@
     <title>My Profile - BloodConnect</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="bg-gray-50">
@@ -20,20 +19,12 @@
                 <a href="index.html" class="text-gray-700 hover:text-red-600">Home</a>
                 <a href="donors.html" class="text-gray-700 hover:text-red-600">Donors</a>
                 <a href="requests.html" class="text-gray-700 hover:text-red-600">Requests</a>
-                <a href="donation-centers.html" class="text-gray-700 hover:text-red-600">Donation Centers</a></a>
+                <a href="donation-centers.html" class="text-gray-700 hover:text-red-600">Donation Centers</a>
                 <a href="about.html" class="text-gray-700 hover:text-red-600">About</a>
                 <a href="faq.html" class="text-gray-700 hover:text-red-600">FAQ</a>
             </div>
 
             <div class="flex items-center space-x-4">
-                <!-- Auth buttons - will be toggled by JS -->
-                <div id="auth-buttons" class="hidden">
-                    <a href="login.html" class="text-gray-700 hover:text-red-600">Login</a>
-                    <a href="register.html"
-                        class="ml-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Register</a>
-                </div>
-
-                <!-- User menu - hidden by default, shown when logged in -->
                 <div id="user-menu" class="relative">
                     <button id="user-menu-button" class="flex items-center text-gray-700 hover:text-red-600">
                         <span id="user-name">User</span>
@@ -74,8 +65,35 @@
         </div>
     </header>
 
+    <!-- Loading Indicator -->
+    <div id="loading-indicator" class="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+            <p class="text-gray-700">Loading your profile...</p>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message" class="hidden fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+        <div class="text-center max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-red-600 mx-auto mb-4" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Error Loading Profile</h3>
+            <p id="error-text" class="text-gray-700 mb-4">Unable to load your profile data. Please try again later.</p>
+            <div class="flex justify-center">
+                <button id="retry-button"
+                    class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Retry</button>
+                <a href="index.html" class="ml-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">Go
+                    Home</a>
+            </div>
+        </div>
+    </div>
+
     <!-- Profile Section -->
-    <section class="py-16">
+    <section id="profile-content" class="py-16 hidden">
         <div class="container mx-auto px-4">
             <div class="max-w-5xl mx-auto">
                 <h1 class="text-3xl font-bold mb-8 text-gray-800">My Profile</h1>
@@ -121,64 +139,40 @@
                     <div class="p-6">
                         <!-- Personal Info Tab -->
                         <div id="content-personal" class="tab-content">
-                            <form id="profile-form" class="space-y-6">
+                            <div class="space-y-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full
-                                            Name</label>
-                                        <input type="text" id="name" name="name"
-                                            class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="text-sm font-medium text-gray-500 mb-1">Full Name</h3>
+                                        <p id="display-name" class="text-lg font-medium text-gray-800">-</p>
                                     </div>
 
-                                    <div>
-                                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone
-                                            Number</label>
-                                        <input type="tel" id="phone" name="phone"
-                                            class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="text-sm font-medium text-gray-500 mb-1">Email</h3>
+                                        <p id="display-email" class="text-lg font-medium text-gray-800">-</p>
                                     </div>
 
-                                    <div>
-                                        <label for="blood-type"
-                                            class="block text-sm font-medium text-gray-700 mb-1">Blood Type</label>
-                                        <select id="blood-type" name="bloodType"
-                                            class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
-                                            <option value="A+">A+</option>
-                                            <option value="A-">A-</option>
-                                            <option value="B+">B+</option>
-                                            <option value="B-">B-</option>
-                                            <option value="AB+">AB+</option>
-                                            <option value="AB-">AB-</option>
-                                            <option value="O+">O+</option>
-                                            <option value="O-">O-</option>
-                                        </select>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="text-sm font-medium text-gray-500 mb-1">Phone Number</h3>
+                                        <p id="display-phone" class="text-lg font-medium text-gray-800">-</p>
                                     </div>
 
-                                    <div>
-                                        <label for="is-donor" class="block text-sm font-medium text-gray-700 mb-1">Donor
-                                            Status</label>
-                                        <select id="is-donor" name="isDonor"
-                                            class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
-                                            <option value="true">Active Donor</option>
-                                            <option value="false">Inactive</option>
-                                        </select>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h3 class="text-sm font-medium text-gray-500 mb-1">Blood Type</h3>
+                                        <p id="display-blood-type" class="text-lg font-medium text-gray-800">-</p>
                                     </div>
                                 </div>
 
                                 <div>
                                     <h3 class="text-lg font-medium text-gray-800 mb-3">Location</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label for="city"
-                                                class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                                            <input type="text" id="city" name="location.city"
-                                                class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <h3 class="text-sm font-medium text-gray-500 mb-1">City</h3>
+                                            <p id="display-city" class="text-lg font-medium text-gray-800">-</p>
                                         </div>
 
-                                        <div>
-                                            <label for="state"
-                                                class="block text-sm font-medium text-gray-700 mb-1">State</label>
-                                            <input type="text" id="state" name="location.state"
-                                                class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <h3 class="text-sm font-medium text-gray-500 mb-1">State</h3>
+                                            <p id="display-state" class="text-lg font-medium text-gray-800">-</p>
                                         </div>
                                     </div>
                                 </div>
@@ -186,48 +180,31 @@
                                 <div>
                                     <h3 class="text-lg font-medium text-gray-800 mb-3">Medical Information</h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label for="weight"
-                                                class="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
-                                            <input type="number" id="weight" name="medicalInfo.weight"
-                                                class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <h3 class="text-sm font-medium text-gray-500 mb-1">Weight</h3>
+                                            <p id="display-weight" class="text-lg font-medium text-gray-800">-</p>
                                         </div>
 
-                                        <div>
-                                            <label for="height"
-                                                class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
-                                            <input type="number" id="height" name="medicalInfo.height"
-                                                class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <h3 class="text-sm font-medium text-gray-500 mb-1">Height</h3>
+                                            <p id="display-height" class="text-lg font-medium text-gray-800">-</p>
                                         </div>
 
-                                        <div class="md:col-span-2">
-                                            <div class="flex items-center">
-                                                <input type="checkbox" id="has-medical-conditions"
-                                                    name="medicalInfo.hasMedicalConditions"
-                                                    class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                                                <label for="has-medical-conditions"
-                                                    class="ml-2 block text-sm text-gray-700">I have medical conditions
-                                                    that might affect blood donation</label>
-                                            </div>
-
-                                            <div id="medical-conditions-details" class="mt-3 hidden">
-                                                <label for="medical-conditions"
-                                                    class="block text-sm font-medium text-gray-700 mb-1">Please specify
-                                                    your medical conditions</label>
-                                                <textarea id="medical-conditions"
-                                                    name="medicalInfo.medicalConditionsDetails" rows="3"
-                                                    class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"></textarea>
-                                            </div>
+                                        <div class="md:col-span-2 bg-gray-50 p-4 rounded-lg">
+                                            <h3 class="text-sm font-medium text-gray-500 mb-1">Medical Conditions</h3>
+                                            <p id="display-medical-conditions"
+                                                class="text-lg font-medium text-gray-800">-</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <button type="submit"
-                                        class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700">Save
-                                        Changes</button>
+                                    <a href="edit-profile.html"
+                                        class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700">
+                                        Edit Profile
+                                    </a>
                                 </div>
-                            </form>
+                            </div>
                         </div>
 
                         <!-- Donation History Tab -->
@@ -256,7 +233,7 @@
                                 </div>
                             </div>
 
-                            <div class="overflow-x-auto">
+                            <div id="donations-table-container" class="overflow-x-auto">
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
@@ -272,17 +249,10 @@
                                             <th scope="col"
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Request</th>
-                                            <th scope="col"
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="donations-table-body" class="bg-white divide-y divide-gray-200">
                                         <!-- Donation records will be loaded here -->
-                                        <tr class="text-center">
-                                            <td colspan="5" class="px-6 py-4 text-gray-500">Loading donation history...
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -306,7 +276,6 @@
 
                             <div class="space-y-4" id="requests-container">
                                 <!-- Requests will be loaded here -->
-                                <p class="text-center text-gray-500 py-8">Loading your requests...</p>
                             </div>
 
                             <div id="no-requests" class="hidden text-center py-8">
@@ -321,79 +290,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Record Donation Modal -->
-    <div id="donation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium text-gray-800">Record Blood Donation</h3>
-                    <button id="close-donation-modal" class="text-gray-400 hover:text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <form id="donation-form" class="space-y-4">
-                    <div>
-                        <label for="donation-date" class="block text-sm font-medium text-gray-700 mb-1">Donation
-                            Date</label>
-                        <input type="date" id="donation-date" name="donationDate"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
-                    </div>
-
-                    <div>
-                        <label for="hospital-name" class="block text-sm font-medium text-gray-700 mb-1">Hospital/Blood
-                            Bank Name</label>
-                        <input type="text" id="hospital-name" name="hospital.name"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="hospital-city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                            <input type="text" id="hospital-city" name="hospital.city"
-                                class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"
-                                required>
-                        </div>
-
-                        <div>
-                            <label for="hospital-state"
-                                class="block text-sm font-medium text-gray-700 mb-1">State</label>
-                            <input type="text" id="hospital-state" name="hospital.state"
-                                class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"
-                                required>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="donation-units" class="block text-sm font-medium text-gray-700 mb-1">Units
-                            Donated</label>
-                        <input type="number" id="donation-units" name="units" min="1" value="1"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
-                    </div>
-
-                    <div>
-                        <label for="donation-notes" class="block text-sm font-medium text-gray-700 mb-1">Notes
-                            (Optional)</label>
-                        <textarea id="donation-notes" name="notes" rows="3"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500"></textarea>
-                    </div>
-
-                    <div class="flex justify-end">
-                        <button type="button" id="cancel-donation"
-                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 mr-2 hover:bg-gray-50">Cancel</button>
-                        <button type="submit"
-                            class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700">Record
-                            Donation</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12 mt-16">
@@ -470,8 +366,25 @@
                         <a href="#" class="text-gray-400 hover:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor"
                                 viewBox="0 0 24 24">
-                                <path
-                                    d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
+                                d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333
+                                4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072
+                                7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558
+                                2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499
+                                2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262
+                                2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335
+                                1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319
+                                1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0
+                                2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477
+                                1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07
+                                4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899
+                                1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211
+                                0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844
+                                0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689
+                                1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0
+                                3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76
+                                6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4
+                                4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44
+                                0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
                             </svg>
                         </a>
                         <a href="#" class="text-gray-400 hover:text-white">
@@ -495,21 +408,191 @@
     <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
 
     <!-- Scripts -->
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/utils/toast.js"></script>
-    <script src="assets/js/utils/authcheck.js"></script>
-    <script src="assets/js/services/api.js"></script>
-    <script src="assets/js/services/auth.js"></script>
-    <script src="assets/js/main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Check if user is authenticated
-            if (!authService.isAuthenticated()) {
-                window.location.href = 'login.html?redirect=profile.html';
-                return;
-            }
+        // API URL configuration
+        const API_URL = 'http://localhost:5000';
 
-            // Tab switching functionality
+        // Simple toast notification system
+        const toast = {
+            container: document.getElementById('toast-container'),
+
+            show(message, type = 'info', duration = 3000) {
+                const colors = {
+                    success: 'bg-green-500',
+                    error: 'bg-red-500',
+                    info: 'bg-blue-500',
+                    warning: 'bg-yellow-500'
+                };
+
+                const toast = document.createElement('div');
+                toast.className = `${colors[type]} text-white px-4 py-3 rounded shadow-lg mb-3 flex items-center justify-between`;
+
+                let icon = '';
+                switch (type) {
+                    case 'success':
+                        icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>';
+                        break;
+                    case 'error':
+                        icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>';
+                        break;
+                    case 'info':
+                        icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>';
+                        break;
+                    case 'warning':
+                        icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>';
+                        break;
+                }
+
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        ${icon}
+                        <div>${message}</div>
+                    </div>
+                    <button class="ml-4 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                `;
+
+                this.container.appendChild(toast);
+
+                // Add click event to close button
+                toast.querySelector('button').addEventListener('click', () => {
+                    toast.remove();
+                });
+
+                // Auto remove after duration
+                setTimeout(() => {
+                    toast.remove();
+                }, duration);
+            },
+
+            success(message, duration = 3000) {
+                this.show(message, 'success', duration);
+            },
+
+            error(message, duration = 4000) {
+                this.show(message, 'error', duration);
+            },
+
+            info(message, duration = 3000) {
+                this.show(message, 'info', duration);
+            },
+
+            warning(message, duration = 3000) {
+                this.show(message, 'warning', duration);
+            }
+        };
+
+        // Authentication helper
+        const auth = {
+            getToken() {
+                return localStorage.getItem('token');
+            },
+
+            isAuthenticated() {
+                return this.getToken() !== null;
+            },
+
+            logout() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            }
+        };
+
+        // Simple API client
+        const api = {
+            async request(endpoint, options = {}) {
+                const url = `${API_URL}${endpoint}`;
+
+                // Default headers
+                const headers = {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                };
+
+                // Add auth token if available
+                const token = auth.getToken();
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                try {
+                    console.log(`API Request: ${options.method || 'GET'} ${url}`);
+
+                    const response = await fetch(url, {
+                        ...options,
+                        headers
+                    });
+
+                    // Handle non-JSON responses
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Something went wrong');
+                        }
+
+                        return data;
+                    } else {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+
+                        return {success: true};
+                    }
+                } catch (error) {
+                    console.error('API Error:', error);
+                    throw error;
+                }
+            },
+
+            get(endpoint) {
+                return this.request(endpoint);
+            },
+
+            post(endpoint, data) {
+                return this.request(endpoint, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+            },
+
+            put(endpoint, data) {
+                return this.request(endpoint, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+            },
+
+            delete(endpoint) {
+                return this.request(endpoint, {
+                    method: 'DELETE'
+                });
+            }
+        };
+
+        // DOM manipulation helpers
+        function showElement(id) {
+            const element = document.getElementById(id);
+            if (element) element.classList.remove('hidden');
+        }
+
+        function hideElement(id) {
+            const element = document.getElementById(id);
+            if (element) element.classList.add('hidden');
+        }
+
+        function setText(id, text) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = text || '-';
+        }
+
+        // Tab switching functionality
+        function setupTabs() {
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
 
@@ -535,173 +618,34 @@
                     document.getElementById(tabId).classList.remove('hidden');
                 });
             });
+        }
 
-            // Medical conditions checkbox toggle
-            const hasMedicalConditions = document.getElementById('has-medical-conditions');
-            const medicalConditionsDetails = document.getElementById('medical-conditions-details');
-
-            hasMedicalConditions.addEventListener('change', function () {
-                if (this.checked) {
-                    medicalConditionsDetails.classList.remove('hidden');
-                } else {
-                    medicalConditionsDetails.classList.add('hidden');
-                }
-            });
-
-            // Donation modal functionality
-            const donationModal = document.getElementById('donation-modal');
-            const recordDonationBtn = document.getElementById('record-donation-btn');
-            const recordFirstDonationBtn = document.getElementById('record-first-donation-btn');
-            const closeDonationModal = document.getElementById('close-donation-modal');
-            const cancelDonation = document.getElementById('cancel-donation');
-
-            function openDonationModal() {
-                donationModal.classList.remove('hidden');
-                document.body.classList.add('overflow-hidden');
-            }
-
-            function closeDonationModal() {
-                donationModal.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden');
-            }
-
-            recordDonationBtn.addEventListener('click', openDonationModal);
-            recordFirstDonationBtn.addEventListener('click', openDonationModal);
-            closeDonationModal.addEventListener('click', closeDonationModal);
-            cancelDonation.addEventListener('click', closeDonationModal);
-
-            // Close modal when clicking outside
-            donationModal.addEventListener('click', function (e) {
-                if (e.target === donationModal) {
-                    closeDonationModal();
-                }
-            });
-
-            // Load user profile data
-            loadUserProfile();
-
-            // Load donation history
-            loadDonationHistory();
-
-            // Load user requests
-            loadUserRequests();
-
-            // Handle profile form submission
-            const profileForm = document.getElementById('profile-form');
-            profileForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                updateUserProfile();
-            });
-
-            // Handle donation form submission
-            const donationForm = document.getElementById('donation-form');
-            donationForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                recordDonation();
-            });
-        });
-
-        // Ensure the profile image has a fallback
+        // Load user profile data
         async function loadUserProfile() {
             try {
-                const response = await fetch(`${API_URL}/api/users/profile`, {
-                    headers: {
-                        'Authorization': `Bearer ${authService.getToken()}`
-                    }
-                });
+                console.log('Loading user profile...');
+                hideElement('profile-content');
+                showElement('loading-indicator');
+                hideElement('error-message');
 
-                if (!response.ok) {
-                    throw new Error('Failed to load profile');
+                // Try to get the user profile
+                const data = await api.get('/api/users/profile');
+                console.log('Profile data:', data);
+
+                if (!data || !data.user) {
+                    throw new Error('No user data returned from API');
                 }
 
-                const data = await response.json();
-                console.log('Profile API response', data);
                 const user = data.user;
 
                 // Update profile header
-                document.getElementById('profile-name').textContent = user.name || 'No Name';
-                document.getElementById('profile-email').textContent = user.email || 'No Email';
-                document.getElementById('profile-blood-type').textContent = user.bloodType || 'No Blood Type';
-
-                // Log the profile API response
-                console.log('Profile API response', data);
-
-                // Update profile image with fallback
-                document.getElementById('profile-image').src = user.profilePicture || 'assets/images/medical.png';
-
-                // Populate form fields
-                document.getElementById('name').value = user.name || 'No Name';
-                document.getElementById('phone').value = user.phone || 'No Phone';
-                document.getElementById('blood-type').value = user.bloodType || 'No Blood Type';
-                document.getElementById('is-donor').value = user.isDonor ? 'true' : 'false';
-
-                if (user.location) {
-                    document.getElementById('city').value = user.location.city || 'No City';
-                    document.getElementById('state').value = user.location.state || 'No State';
-                }
-
-                if (user.medicalInfo) {
-                    document.getElementById('weight').value = user.medicalInfo.weight || 'No Weight';
-                    document.getElementById('height').value = user.medicalInfo.height || 'No Height';
-
-                    const hasMedicalConditions = user.medicalInfo.hasMedicalConditions || false;
-                    document.getElementById('has-medical-conditions').checked = hasMedicalConditions;
-
-                    if (hasMedicalConditions) {
-                        document.getElementById('medical-conditions-details').classList.remove('hidden');
-                        document.getElementById('medical-conditions').value = user.medicalInfo.medicalConditionsDetails || '';
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading profile:', error);
-                showToast('error', 'Failed to load profile data');
-            }
-        }
-
-        // Update user profile
-        async function updateUserProfile() {
-            try {
-                const formData = new FormData(document.getElementById('profile-form'));
-                const userData = {
-                    name: formData.get('name'),
-                    phone: formData.get('phone'),
-                    bloodType: formData.get('bloodType'),
-                    isDonor: formData.get('isDonor') === 'true',
-                    location: {
-                        city: formData.get('location.city'),
-                        state: formData.get('location.state')
-                    },
-                    medicalInfo: {
-                        weight: formData.get('medicalInfo.weight') ? Number(formData.get('medicalInfo.weight')) : null,
-                        height: formData.get('medicalInfo.height') ? Number(formData.get('medicalInfo.height')) : null,
-                        hasMedicalConditions: document.getElementById('has-medical-conditions').checked,
-                        medicalConditionsDetails: formData.get('medicalInfo.medicalConditionsDetails') || ''
-                    }
-                };
-
-                const response = await fetch(`${API_URL}/api/users/me`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authService.getToken()}`
-                    },
-                    body: JSON.stringify(userData)
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to update profile');
-                }
-
-                const data = await response.json();
-                showToast('success', 'Profile updated successfully');
-
-                // Update profile header with new data
-                document.getElementById('profile-name').textContent = data.user.name;
-                document.getElementById('profile-blood-type').textContent = data.user.bloodType;
+                setText('profile-name', user.name || 'No Name');
+                setText('profile-email', user.email || 'No Email');
+                setText('profile-blood-type', user.bloodType || 'Unknown');
 
                 // Update donor status badge
                 const donorStatusBadge = document.getElementById('profile-donor-status');
-                if (data.user.isDonor) {
+                if (user.isDonor) {
                     donorStatusBadge.textContent = 'Active Donor';
                     donorStatusBadge.classList.add('bg-green-500');
                     donorStatusBadge.classList.remove('bg-gray-500');
@@ -711,30 +655,71 @@
                     donorStatusBadge.classList.remove('bg-green-500');
                 }
 
+                // Update profile image with fallback
+                const profileImage = document.getElementById('profile-image');
+                profileImage.src = user.profilePicture || 'assets/images/medical.png';
+                profileImage.onerror = function () {
+                    this.src = 'assets/images/medical.png';
+                };
+
+                // Update personal info tab
+                setText('display-name', user.name || 'Not provided');
+                setText('display-email', user.email || 'Not provided');
+                setText('display-phone', user.phone || 'Not provided');
+                setText('display-blood-type', user.bloodType || 'Not provided');
+
+                // Update location info
+                if (user.location) {
+                    setText('display-city', user.location.city || 'Not provided');
+                    setText('display-state', user.location.state || 'Not provided');
+                }
+
+                // Update medical info
+                if (user.medicalInfo) {
+                    setText('display-weight', user.medicalInfo.weight ? `${user.medicalInfo.weight} kg` : 'Not provided');
+                    setText('display-height', user.medicalInfo.height ? `${user.medicalInfo.height} cm` : 'Not provided');
+
+                    if (user.medicalInfo.hasMedicalConditions) {
+                        setText('display-medical-conditions', user.medicalInfo.medicalConditionsDetails || 'Has medical conditions (no details provided)');
+                    } else {
+                        setText('display-medical-conditions', 'No medical conditions');
+                    }
+                }
+
+                // Load donation history if available
+                if (data.donations) {
+                    loadDonationHistory(data.donations);
+                } else {
+                    // Try to fetch donations separately
+                    loadDonationHistory([]);
+                }
+
+                // Show the profile content
+                hideElement('loading-indicator');
+                showElement('profile-content');
+
             } catch (error) {
-                console.error('Error updating profile:', error);
-                showToast('error', 'Failed to update profile');
+                console.error('Error loading profile:', error);
+                hideElement('loading-indicator');
+                showElement('error-message');
+                setText('error-text', `Failed to load profile: ${error.message}`);
+
+                // Show toast notification
+                toast.error('Failed to load profile data');
             }
         }
 
         // Load donation history
-        async function loadDonationHistory() {
+        async function loadDonationHistory(donations = null) {
             try {
-                const response = await fetch(`${API_URL}/api/donations/me`, {
-                    headers: {
-                        'Authorization': `Bearer ${authService.getToken()}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to load donations');
+                // If donations weren't passed, fetch them
+                if (donations === null) {
+                    const response = await api.get('/api/donations/me');
+                    donations = response.donations || [];
                 }
 
-                const data = await response.json();
-                const donations = data.donations || [];
-
                 // Update donation stats
-                document.getElementById('total-donations').textContent = donations.length;
+                setText('total-donations', donations.length);
 
                 if (donations.length > 0) {
                     // Sort donations by date (newest first)
@@ -742,7 +727,7 @@
 
                     // Format last donation date
                     const lastDonationDate = new Date(donations[0].donationDate);
-                    document.getElementById('last-donation').textContent = lastDonationDate.toLocaleDateString();
+                    setText('last-donation', lastDonationDate.toLocaleDateString());
 
                     // Check eligibility (3 months since last donation)
                     const threeMonthsAgo = new Date();
@@ -779,97 +764,36 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 ${donation.request ? `<a href="requests.html?id=${donation.request}" class="text-red-600 hover:underline">View Request</a>` : 'N/A'}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <button class="text-blue-600 hover:text-blue-800 mr-3" onclick="viewDonationDetails('${donation._id}')">
-                                    View
-                                </button>
-                            </td>
                         `;
 
                         tableBody.appendChild(row);
                     });
 
                     // Show table, hide empty state
-                    document.getElementById('no-donations').classList.add('hidden');
+                    showElement('donations-table-container');
+                    hideElement('no-donations');
                 } else {
                     // No donations, show empty state
-                    document.getElementById('donations-table-body').innerHTML = '';
-                    document.getElementById('no-donations').classList.remove('hidden');
-                    document.getElementById('last-donation').textContent = 'Never';
+                    setText('last-donation', 'Never');
 
                     const donationStatus = document.getElementById('donation-status');
                     donationStatus.textContent = 'Eligible';
                     donationStatus.classList.add('text-green-600');
                     donationStatus.classList.remove('text-red-600');
-                }
 
+                    hideElement('donations-table-container');
+                    showElement('no-donations');
+                }
             } catch (error) {
                 console.error('Error loading donations:', error);
-                showToast('error', 'Failed to load donation history');
-            }
-        }
-
-        // Record a new donation
-        async function recordDonation() {
-            try {
-                const formData = new FormData(document.getElementById('donation-form'));
-                const donationData = {
-                    donationDate: formData.get('donationDate'),
-                    hospital: {
-                        name: formData.get('hospital.name'),
-                        city: formData.get('hospital.city'),
-                        state: formData.get('hospital.state')
-                    },
-                    units: Number(formData.get('units')),
-                    notes: formData.get('notes')
-                };
-
-                const response = await fetch(`${API_URL}/api/donations`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authService.getToken()}`
-                    },
-                    body: JSON.stringify(donationData)
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to record donation');
-                }
-
-                // Close modal
-                document.getElementById('donation-modal').classList.add('hidden');
-                document.body.classList.remove('overflow-hidden');
-
-                // Reset form
-                document.getElementById('donation-form').reset();
-
-                // Show success message
-                showToast('success', 'Donation recorded successfully');
-
-                // Reload donation history
-                loadDonationHistory();
-
-            } catch (error) {
-                console.error('Error recording donation:', error);
-                showToast('error', 'Failed to record donation');
+                toast.error('Failed to load donation history');
             }
         }
 
         // Load user's blood requests
         async function loadUserRequests() {
             try {
-                const response = await fetch(`${API_URL}/api/requests/me`, {
-                    headers: {
-                        'Authorization': `Bearer ${authService.getToken()}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to load requests');
-                }
-
-                const data = await response.json();
+                const data = await api.get('/api/requests/me');
                 const requests = data.requests || [];
 
                 const requestsContainer = document.getElementById('requests-container');
@@ -919,7 +843,7 @@
                                 </div>
                                 
                                 <div class="flex justify-end space-x-2">
-                                       <a href="requests.html?id=${request._id}" class="text-blue-600 hover:text-blue-800 font-medium">View Details</a>
+                                    <a href="requests.html?id=${request._id}" class="text-blue-600 hover:text-blue-800 font-medium">View Details</a>
                                     ${request.status !== 'fulfilled' && request.status !== 'cancelled' ?
                                 `<button onclick="findDonors('${request._id}')" class="ml-4 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">Find Donors</button>` : ''}
                                 </div>
@@ -930,88 +854,127 @@
                     });
 
                     // Hide empty state
-                    document.getElementById('no-requests').classList.add('hidden');
+                    hideElement('no-requests');
                 } else {
                     // No requests, show empty state
                     requestsContainer.innerHTML = '';
-                    document.getElementById('no-requests').classList.remove('hidden');
+                    showElement('no-requests');
                 }
-
             } catch (error) {
                 console.error('Error loading requests:', error);
-                showToast('error', 'Failed to load blood requests');
+                toast.error('Failed to load blood requests');
             }
-        }
-
-        // View donation details
-        function viewDonationDetails(donationId) {
-            // Redirect to donation details page
-            window.location.href = `donation-details.html?id=${donationId}`;
         }
 
         // Find donors for a request
         async function findDonors(requestId) {
             try {
-                const response = await fetch(`${API_URL}/api/match/${requestId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${authService.getToken()}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to find donors');
-                }
-
-                const data = await response.json();
-                showToast('success', data.message || 'Donor matching initiated');
+                const data = await api.post(`/api/match/${requestId}`);
+                toast.success(data.message || 'Donor matching initiated');
 
                 // Redirect to request details page
                 window.location.href = `requests.html?id=${requestId}`;
-
             } catch (error) {
                 console.error('Error finding donors:', error);
-                showToast('error', 'Failed to find matching donors');
+                toast.error('Failed to find matching donors');
             }
         }
 
-        // Show toast notification
-        function showToast(type, message) {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type} animate-fade-in-up`;
+        // Setup user dropdown
+        function setupUserDropdown() {
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
 
-            const icon = type === 'success' ?
-                '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>' :
-                '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>';
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', function () {
+                    userDropdown.classList.toggle('hidden');
+                });
 
-            toast.innerHTML = `
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">${icon}</div>
-                    <div class="ml-3 font-medium">${message}</div>
-                </div>
-                <button class="ml-4 flex-shrink-0">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                </button>
-            `;
-
-            const toastContainer = document.getElementById('toast-container');
-            toastContainer.appendChild(toast);
-
-            // Add click event to close button
-            toast.querySelector('button').addEventListener('click', function () {
-                toast.remove();
-            });
-
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                toast.classList.add('animate-fade-out-down');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 5000);
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
         }
+
+        // Setup mobile menu
+        function setupMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        }
+
+        // Setup logout button
+        function setupLogoutButton() {
+            const logoutButton = document.getElementById('logout-button');
+
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    auth.logout();
+                });
+            }
+        }
+
+        // Setup retry button
+        function setupRetryButton() {
+            const retryButton = document.getElementById('retry-button');
+
+            if (retryButton) {
+                retryButton.addEventListener('click', function () {
+                    hideElement('error-message');
+                    loadUserProfile();
+                });
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Page loaded');
+
+            // Check if user is authenticated
+            if (!auth.isAuthenticated()) {
+                console.log('User not authenticated, redirecting to login');
+                window.location.href = 'login.html?redirect=profile.html';
+                return;
+            }
+
+            // Setup UI interactions
+            setupTabs();
+            setupUserDropdown();
+            setupMobileMenu();
+            setupLogoutButton();
+            setupRetryButton();
+
+            // Load user data
+            loadUserProfile();
+
+            // Load user requests
+            loadUserRequests();
+
+            // Setup donation button
+            const recordDonationBtn = document.getElementById('record-donation-btn');
+            const recordFirstDonationBtn = document.getElementById('record-first-donation-btn');
+
+            if (recordDonationBtn) {
+                recordDonationBtn.addEventListener('click', function () {
+                    window.location.href = 'record-donation.html';
+                });
+            }
+
+            if (recordFirstDonationBtn) {
+                recordFirstDonationBtn.addEventListener('click', function () {
+                    window.location.href = 'record-donation.html';
+                });
+            }
+        });
     </script>
 </body>
 
